@@ -12,6 +12,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	int a;
 	int b;
 	int c;
+	int d;
 
 	
 	@Override
