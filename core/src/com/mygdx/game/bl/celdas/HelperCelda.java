@@ -6,8 +6,8 @@ public class HelperCelda {
 
     public static int getX(int id, int ancho, int posInicial) {
         int xPos;
-        if (id > 9) {
-            xPos = posInicial + (id % 10 * ancho);
+        if (id > 19) {
+            xPos = posInicial + (id % 20 * ancho);
         }
         else {
             xPos = posInicial + (id * ancho);
@@ -18,8 +18,8 @@ public class HelperCelda {
     public static int getY(int id, int alto, int posInicial, int idInicialTablero, int idInicialCastillo) {
         int yPos;
         if (id <= idInicialTablero + 399) {
-            if (id > 9) {
-                yPos = posInicial + (id / 10 * alto);
+            if (id > 19) {
+                yPos = posInicial + (id / 20 * alto);
             }
             else {
                 yPos = posInicial + (id * alto);
@@ -29,7 +29,7 @@ public class HelperCelda {
             yPos = posInicial - alto;
         }
         else {
-            yPos = posInicial + (alto*21);
+            yPos = posInicial + (alto*20);
         }
 
         return yPos;
@@ -38,7 +38,7 @@ public class HelperCelda {
     public static int randomCastilloRed(int idInicialCastillo) {
         int seleccion;
         Random rand = new Random();
-        seleccion = rand.nextInt(20);
+        seleccion = rand.nextInt(21);
         return idInicialCastillo+seleccion-1;
     }
 
