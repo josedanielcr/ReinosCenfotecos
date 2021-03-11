@@ -4,12 +4,14 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.bl.celdas.iPrototipo.Celda;
 
-
-
 public class Celda_Castillo extends Celda {
     final static TextureAtlas cellAtlas = new TextureAtlas("cells.atlas");
     private int lifePoints;
     private boolean castillo;
+
+    //***********************************************************************************************
+    // CONSTRUCTORES
+    //***********************************************************************************************
 
     public Celda_Castillo(int id, int lifePoints) {
         this.setId(id);
@@ -19,6 +21,10 @@ public class Celda_Castillo extends Celda {
         this.setCellTextureRegion(cellAtlas.findRegion("emptyCastleCell"));
         this.lifePoints = lifePoints;
     }
+
+    //***********************************************************************************************
+    // GETS & SETTERS
+    //***********************************************************************************************
 
     public boolean isCastillo() {
         return castillo;
@@ -36,22 +42,29 @@ public class Celda_Castillo extends Celda {
         this.lifePoints = lifePoints;
     }
 
+
+    //***********************************************************************************************
+    // IMPLEMENTACIÓN DE MÉTODOS ABSTRACTOS
+    //***********************************************************************************************
+
     @Override
     public Celda clone() {
         return new Celda_Castillo(this.getId(),this.getLifePoints());
     }
 
-    public void setTextureCastleCell(String color) {
+    @Override
+    public void setObjectCell(String codigo) {
         if (lifePoints>1) {
-            if (color.equals("blue")) {
+            if (codigo.equals("blue")) {
                 setCellTextureRegion(cellAtlas.findRegion("blueCastleCell"));
             }
             else {
                 setCellTextureRegion(cellAtlas.findRegion("redCastleCell"));
             }
+            this.castillo = true;
         }
         else if (lifePoints==1) {
-            if (color.equals("blue")) {
+            if (codigo.equals("blue")) {
                 setCellTextureRegion(cellAtlas.findRegion("blueCastleCell1"));
             } else {
                 setCellTextureRegion(cellAtlas.findRegion("redCastleCell1"));
