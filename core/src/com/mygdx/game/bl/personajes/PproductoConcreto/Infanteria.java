@@ -1,8 +1,8 @@
 package com.mygdx.game.bl.personajes.PproductoConcreto;
 
-import com.mygdx.game.bl.personajes.Iprototipo.AtaqueEspeciali;
-import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
 
+import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
+//componente concreto
 public class Infanteria extends Personaje implements PersonajeAbstracto {
 
     private static final String TIPO = "Infanteria";
@@ -14,6 +14,25 @@ public class Infanteria extends Personaje implements PersonajeAbstracto {
         this.defensa = 5;
     }
 
+    @Override
+    public int getVida() {
+        return 5;
+    }
+
+    @Override
+    public int getAtaque() {
+        return 3;
+    }
+
+    @Override
+    public int getDefensa() {
+        return 5;
+    }
+
+    @Override
+    public int getMovimiento() {
+        return super.movimiento;
+    }
 
     public static String getTIPO() {
         return TIPO;

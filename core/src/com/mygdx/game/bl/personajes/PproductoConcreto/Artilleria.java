@@ -1,9 +1,9 @@
 package com.mygdx.game.bl.personajes.PproductoConcreto;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.mygdx.game.bl.personajes.Iprototipo.AtaqueEspecialA;
-import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
 
+import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
+//componente concreto
 public class Artilleria extends Personaje implements PersonajeAbstracto {
 
     private static final String TIPO = "Artilleria";
@@ -14,6 +14,26 @@ public class Artilleria extends Personaje implements PersonajeAbstracto {
         this.vida = 4;
         this.ataque = 6;
         this.defensa = 10;
+    }
+
+    @Override
+    public int getVida() {
+        return 4;
+    }
+
+    @Override
+    public int getAtaque() {
+        return 6;
+    }
+
+    @Override
+    public int getDefensa() {
+        return 10;
+    }
+
+    @Override
+    public int getMovimiento() {
+        return super.movimiento;
     }
 
     public static String getTIPO() {
