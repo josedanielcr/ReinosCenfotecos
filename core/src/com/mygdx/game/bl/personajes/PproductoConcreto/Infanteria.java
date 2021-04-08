@@ -1,6 +1,6 @@
 package com.mygdx.game.bl.personajes.PproductoConcreto;
 
-import com.mygdx.game.bl.personajes.Iprototipo.AtaqueEspeciali;
+
 import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
 
 public class Infanteria extends Personaje implements PersonajeAbstracto {
