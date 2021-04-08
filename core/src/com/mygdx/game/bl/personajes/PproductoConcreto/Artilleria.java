@@ -1,7 +1,6 @@
 package com.mygdx.game.bl.personajes.PproductoConcreto;
 
-import com.badlogic.gdx.math.Rectangle;
-import com.mygdx.game.bl.personajes.Iprototipo.AtaqueEspecialA;
+
 import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
 
 public class Artilleria extends Personaje implements PersonajeAbstracto {
