@@ -1,5 +1,7 @@
 package com.mygdx.game.bl.dados.producto;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 public abstract class Dado {
 
     private String lado1;
@@ -9,10 +11,13 @@ public abstract class Dado {
     private String lado5;
     private String lado6;
     private String tipo;
+    TextureRegion dadoTextureRegion;
 
     //CONSTRUCTOR
 
-    public Dado(String tipo) {
+    public Dado(String tipo, TextureRegion pdadoTextureRegion) {
+        this.tipo = tipo;
+        this.dadoTextureRegion = pdadoTextureRegion;
     }
 
     public Dado(String lado1, String lado2, String lado3, String lado4, String lado5, String lado6, String tipo) {

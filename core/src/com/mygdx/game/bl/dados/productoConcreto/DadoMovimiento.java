@@ -1,11 +1,12 @@
 package com.mygdx.game.bl.dados.productoConcreto;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.bl.dados.producto.Dado;
 
 public class DadoMovimiento extends Dado {
 
-    public DadoMovimiento(String tipo) {
-        super(tipo);
+    public DadoMovimiento(String tipo, TextureRegion dadoTextureRegion) {
+        super(tipo,dadoTextureRegion);
     }
 
     public DadoMovimiento(String lado1, String lado2, String lado3, String lado4, String lado5, String lado6, String tipo) {
