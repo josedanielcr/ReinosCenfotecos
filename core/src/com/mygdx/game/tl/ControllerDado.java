@@ -2,6 +2,7 @@ package com.mygdx.game.tl;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mygdx.game.bl.cofre.Cofre;
 import com.mygdx.game.bl.dados.creadorConcreto.FabricaDados;
 import com.mygdx.game.bl.dados.producto.Dado;
 
@@ -9,9 +10,11 @@ public class ControllerDado {
 
     private static final String[] rollsInvocacion = new String[2];
     private static String rollsAccion="";
-    private static  int rollMovimiento=0;
+    private static int rollMovimiento=0;
     private static TextureAtlas textureAtlas = new TextureAtlas("dados.atlas");
     private static TextureRegion[] dadoTexture;
+    //para probar
+    private static Cofre cofre = new Cofre();
 
     public static void rodarDado() {
         crearDado(1);
@@ -66,4 +69,7 @@ public class ControllerDado {
         return msj;
     }
 
+    private static void guardarRoll(String prol) {
+        cofre.guardarRoll(prol); //TODO este metodo devuelve un boolean para saber si se guard o no y traducir eso a un msj de error.
+    }
 }

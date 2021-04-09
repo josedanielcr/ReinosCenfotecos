@@ -36,11 +36,11 @@ public class DadoInvocacion extends Dado {
 
     @Override
     public void asignarLados() {
-        setLado1("Infantería");
-        setLado2("Infantería");
-        setLado3("Infantería");
-        setLado4("Artillería");
-        setLado5("Artillería");
+        setLado1("Infanteria");
+        setLado2("Infanteria");
+        setLado3("Infanteria");
+        setLado4("Artilleria");
+        setLado5("Artilleria");
         setLado6("Tanque");
     }
 }
