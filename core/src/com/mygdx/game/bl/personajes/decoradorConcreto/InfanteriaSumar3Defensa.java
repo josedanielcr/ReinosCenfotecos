@@ -1,41 +1,73 @@
 package com.mygdx.game.bl.personajes.decoradorConcreto;
 
-import com.mygdx.game.bl.personajes.PproductoConcreto.Personaje;
+import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.bl.personajes.componente.Personaje;
 import com.mygdx.game.bl.personajes.decorador.ObjetoDecorado;
+
+import java.util.ArrayList;
 
 public class InfanteriaSumar3Defensa extends ObjetoDecorado{
 
+
     @Override
     public int getVida() {
-        return this.vida;
+        return 0;
     }
 
     @Override
-    public void setVida(int vida) {}
+    public void setVida(int vida) {
+
+    }
 
     @Override
     public int getAtaque() {
-        return this.ataque;
+        return 0;
     }
 
     @Override
-    public void setAtaque(int ataque) {}
+    public void setAtaque(int ataque) {
+
+    }
 
     @Override
     public int getDefensa() {
-        return this.defensa;
+        return 0;
     }
 
     @Override
-    public void setDefensa(int defensa) {}
+    public void setDefensa(int defensa) {
+
+    }
 
     @Override
     public int getMovimiento() {
-        return this.movimiento;
+        return 0;
     }
 
     @Override
-    public void setMovimiento(int movimiento) {}
+    public void setMovimiento(int movimiento) {
+
+    }
+
+    @Override
+    public Rectangle getRectangle() {
+        return null;
+    }
+
+    @Override
+    public void setRectangle(Rectangle rectangle) {
+
+    }
+
+    @Override
+    public String getTipo() {
+        return null;
+    }
+
+    @Override
+    public void setTipo(String tipo) {
+
+    }
 
     @Override
     public String getAtaqueEspecial() {
@@ -43,7 +75,9 @@ public class InfanteriaSumar3Defensa extends ObjetoDecorado{
     }
 
     @Override
-    public void setAtaqueEspecial(String ataqueEspecial) {
-
+    public String aplicarAtaqueEspecial() {
+        return null;
     }
+
+
 }

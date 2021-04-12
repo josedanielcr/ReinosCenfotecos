@@ -6,11 +6,9 @@ import com.mygdx.game.bl.personajes.PfabricaConcreta.Fabrica_infanteria;
 import com.mygdx.game.bl.personajes.PfabricaConcreta.Fabrica_tanque;
 import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
 import com.mygdx.game.bl.personajes.PproductoConcreto.Infanteria;
-import com.mygdx.game.bl.personajes.PproductoConcreto.Personaje;
+import com.mygdx.game.bl.personajes.componente.Personaje;
 import com.mygdx.game.bl.personajes.decoradorConcreto.InfanteriaSumar3Ataque;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class ControllerPersonaje {
@@ -65,12 +63,13 @@ public class ControllerPersonaje {
 
     /**PRUEBAAAAA**/
     public void decorarPrueba() throws Exception {
+        Infanteria tmp = new Infanteria(3);
+        ArrayList<Personaje> ptmp = new ArrayList<>();
+        ptmp.add(tmp);
         PersonajeFA personaje;
         personaje = new Fabrica_infanteria();
         String hola = crearFabricaPersonaje(personaje);
         Personaje i = (Personaje) personajesArr.get(0);
-        i = new InfanteriaSumar3Ataque(i);
-        i.toString();
-
+        i = new InfanteriaSumar3Ataque(i,ptmp);
     }
 }

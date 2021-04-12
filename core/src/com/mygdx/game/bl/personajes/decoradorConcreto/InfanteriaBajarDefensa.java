@@ -1,8 +1,13 @@
 package com.mygdx.game.bl.personajes.decoradorConcreto;
 
+import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.bl.personajes.componente.Personaje;
 import com.mygdx.game.bl.personajes.decorador.ObjetoDecorado;
 
+import java.util.ArrayList;
+
 public class InfanteriaBajarDefensa extends ObjetoDecorado{
+
 
     @Override
     public int getVida() {
@@ -45,12 +50,32 @@ public class InfanteriaBajarDefensa extends ObjetoDecorado{
     }
 
     @Override
+    public Rectangle getRectangle() {
+        return null;
+    }
+
+    @Override
+    public void setRectangle(Rectangle rectangle) {
+
+    }
+
+    @Override
+    public String getTipo() {
+        return null;
+    }
+
+    @Override
+    public void setTipo(String tipo) {
+
+    }
+
+    @Override
     public String getAtaqueEspecial() {
         return null;
     }
 
     @Override
-    public void setAtaqueEspecial(String ataqueEspecial) {
-
+    public String aplicarAtaqueEspecial() {
+        return null;
     }
 }

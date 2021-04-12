@@ -1,72 +1,90 @@
 package com.mygdx.game.bl.personajes.PproductoConcreto;
 
 
+import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
+import com.mygdx.game.bl.personajes.componente.Personaje;
 
 import java.util.ArrayList;
 
 public class Infanteria extends Personaje implements PersonajeAbstracto{
 
 
+    protected int vida;
+    protected int ataque;
+    protected int defensa;
+    protected int movimiento;
+    protected Rectangle rectangle;
+    protected  String tipo;
+    protected String ataqueEspecial;
+
+
     public Infanteria(int movimiento) {
-        super(movimiento);
         this.vida = 5;
         this.ataque = 3;
         this.defensa = 5;
+        this.movimiento = movimiento;
+        this.rectangle = null;
         this.tipo = "Infanteria";
+        this.ataqueEspecial = null;
     }
 
-    @Override
     public int getVida() {
-        return this.vida;
+        return vida;
     }
 
-    @Override
     public void setVida(int vida) {
         this.vida = vida;
     }
 
-    @Override
     public int getAtaque() {
-        return this.ataque;
+        return ataque;
     }
 
-    @Override
     public void setAtaque(int ataque) {
         this.ataque = ataque;
     }
 
-    @Override
     public int getDefensa() {
-        return this.defensa;
+        return defensa;
     }
 
-    @Override
     public void setDefensa(int defensa) {
         this.defensa = defensa;
     }
 
-    @Override
     public int getMovimiento() {
-        return this.movimiento;
+        return movimiento;
     }
 
-    @Override
     public void setMovimiento(int movimiento) {
-        this.movimiento =  movimiento;
+        this.movimiento = movimiento;
     }
 
-    @Override
+    public Rectangle getRectangle() {
+        return rectangle;
+    }
+
+    public void setRectangle(Rectangle rectangle) {
+        this.rectangle = rectangle;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
     public String getAtaqueEspecial() {
-        return this.ataqueEspecial;
+        return ataqueEspecial;
     }
 
     @Override
-    public void setAtaqueEspecial(String ataqueEspecial) {
-        this.ataqueEspecial = ataqueEspecial;
+    public String aplicarAtaqueEspecial() {
+        return null;
     }
-
-
 
     //TODO: hacer estas funciones ahorita
     @Override
@@ -75,17 +93,12 @@ public class Infanteria extends Personaje implements PersonajeAbstracto{
                 "tiene un ataque de " + this.ataque+ ", y un movimiento de "+ this.movimiento;
     }
 
-    @Override
-    public String obtenerTipoPersonaje() {
-        return null;
-    }
 
-
-
+    //metodos adcionales
     public void infanteriaSumar3Ataque(Personaje personaje) {
-        this.setAtaque(getAtaque() + 3);
+        if(personaje.getClass().getSimpleName().equals("Infanteria")){
+            personaje.setAtaque(getAtaque() + 3);
+        }
     }
-
-
 }
 

@@ -1,30 +1,35 @@
 package com.mygdx.game.bl.personajes.decoradorConcreto;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.bl.personajes.PproductoConcreto.Infanteria;
-import com.mygdx.game.bl.personajes.PproductoConcreto.Personaje;
+import com.mygdx.game.bl.personajes.componente.Personaje;
 import com.mygdx.game.bl.personajes.decorador.ObjetoDecorado;
+
+import java.util.ArrayList;
 
 public class InfanteriaSumar3Ataque extends ObjetoDecorado{
 
-    public InfanteriaSumar3Ataque(Personaje pPersonaje) {
-        this.cPersonaje= pPersonaje;
-    }
+    private ArrayList<Personaje> personajes;
 
 
-    @Override
-    public int getAtaque() {
-        return this.cPersonaje.getAtaque() +3;
+    public InfanteriaSumar3Ataque(Personaje pPersonaje,ArrayList<Personaje> p) {
+        this.cPersonaje = pPersonaje;
+        this.personajes = p;
     }
 
     @Override
     public int getVida() {
-        System.out.println("hjkrgkhvkhk");
-        return this.cPersonaje.getVida();
+        return this.cPersonaje.getVida() + 1000;
     }
 
     @Override
     public void setVida(int vida) {
         this.cPersonaje.setVida(vida);
+    }
+
+    @Override
+    public int getAtaque() {
+        return this.cPersonaje.getAtaque();
     }
 
     @Override
@@ -34,7 +39,6 @@ public class InfanteriaSumar3Ataque extends ObjetoDecorado{
 
     @Override
     public int getDefensa() {
-        System.out.println("popo");
         return this.cPersonaje.getDefensa();
     }
 
@@ -54,17 +58,36 @@ public class InfanteriaSumar3Ataque extends ObjetoDecorado{
     }
 
     @Override
+    public Rectangle getRectangle() {
+        return this.cPersonaje.getRectangle();
+    }
+
+    @Override
+    public void setRectangle(Rectangle rectangle) {
+        this.cPersonaje.setRectangle(rectangle);
+    }
+
+    @Override
+    public String getTipo() {
+        return this.cPersonaje.getTipo();
+    }
+
+    @Override
+    public void setTipo(String tipo) {
+        this.cPersonaje.setTipo(tipo);
+    }
+
+    @Override
     public String getAtaqueEspecial() {
         return this.cPersonaje.getAtaqueEspecial();
     }
 
     @Override
-    public void setAtaqueEspecial(String ataqueEspecial) {
-//        Infanteria i = (Infanteria) this.getcPersonaje();
-//        i.infanteriaSumar3Ataque(i);
-//        i.setAtaqueEspecial("summar 3 de ataque");
-//        i.setAtaqueEspecial("holaaaaa");
+    public String aplicarAtaqueEspecial() {
+        Infanteria i = (Infanteria) this.getcPersonaje();
+        i.infanteriaSumar3Ataque(personajes.get(0));
+        personajes.get(0).setTipo("skdjfhsdklfhsdjkl");
+        System.out.println(personajes.get(0).getTipo());
+        return "aplicado";
     }
-
-
 }
