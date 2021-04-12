@@ -40,27 +40,12 @@ public class ArtilleriaDoblePoderDefensa extends ObjetoDecorado {
     public void setMovimiento(int movimiento) {}
 
     @Override
-    public void infanteriaHealer1(Personaje personaje) {
+    public String getAtaqueEspecial() {
+        return this.ataqueEspecial;
     }
 
     @Override
-    public void infanteriaSumar3Ataque(Personaje personaje) {
-
+    public void setAtaqueEspecial(String ataqueEspecial) {
     }
-
-    @Override
-    public void artilleriaHealer2(ArrayList<Personaje> personajes) {
-    }
-
-    @Override
-    public void infanteriaSumar3Defensa(Personaje personaje) {
-
-    }
-
-    @Override
-    public void infanteriaBajarDefensa(Personaje personaje) {
-
-    }
-
 
 }

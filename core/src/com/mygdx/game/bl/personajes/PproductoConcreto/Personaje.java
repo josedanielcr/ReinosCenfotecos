@@ -3,8 +3,6 @@ package com.mygdx.game.bl.personajes.PproductoConcreto;
 
 import com.badlogic.gdx.math.Rectangle;
 
-import java.util.ArrayList;
-
 public abstract class Personaje {
 
     protected int vida;
@@ -39,6 +37,8 @@ public abstract class Personaje {
 
     public abstract void setMovimiento(int movimiento);
 
+
+
     public Rectangle getRectangle() {
         return rectangle;
     }
@@ -55,25 +55,22 @@ public abstract class Personaje {
         this.tipo = tipo;
     }
 
-    public String getAtaqueEspecial() {
-        return ataqueEspecial;
+    public abstract String getAtaqueEspecial();
+
+    public abstract void setAtaqueEspecial(String ataqueEspecial);
+
+
+    //prueba
+    @Override
+    public String toString() {
+        return "Personaje{" +
+                "vida=" + vida +
+                ", ataque=" + ataque +
+                ", defensa=" + defensa +
+                ", movimiento=" + movimiento +
+                ", rectangle=" + rectangle +
+                ", tipo='" + tipo + '\'' +
+                ", ataqueEspecial='" + ataqueEspecial + '\'' +
+                '}';
     }
-
-    public void setAtaqueEspecial(String ataqueEspecial) {
-        this.ataqueEspecial = ataqueEspecial;
-    }
-
-    //--Metodos sobre ataques especiales--
-
-    //Infanteria
-    public abstract void infanteriaHealer1(Personaje personaje);
-    public abstract void infanteriaSumar3Ataque(Personaje personaje);
-    public abstract void infanteriaSumar3Defensa(Personaje personaje);
-    public abstract void infanteriaBajarDefensa(Personaje personaje);
-
-    //Artilleria
-    public abstract void artilleriaHealer2(ArrayList<Personaje> personajes);
-
-
-    //Tanque
 }

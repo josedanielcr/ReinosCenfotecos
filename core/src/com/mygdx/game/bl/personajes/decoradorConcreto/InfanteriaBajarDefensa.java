@@ -1,41 +1,48 @@
 package com.mygdx.game.bl.personajes.decoradorConcreto;
 
-import com.mygdx.game.bl.personajes.PproductoConcreto.Personaje;
 import com.mygdx.game.bl.personajes.decorador.ObjetoDecorado;
 
-public class InfanteriaSumar3Defensa extends ObjetoDecorado{
+public class InfanteriaBajarDefensa extends ObjetoDecorado{
 
     @Override
     public int getVida() {
-        return this.vida;
+        return 0;
     }
 
     @Override
-    public void setVida(int vida) {}
+    public void setVida(int vida) {
+
+    }
 
     @Override
     public int getAtaque() {
-        return this.ataque;
+        return 0;
     }
 
     @Override
-    public void setAtaque(int ataque) {}
+    public void setAtaque(int ataque) {
+
+    }
 
     @Override
     public int getDefensa() {
-        return this.defensa;
+        return 0;
     }
 
     @Override
-    public void setDefensa(int defensa) {}
+    public void setDefensa(int defensa) {
+
+    }
 
     @Override
     public int getMovimiento() {
-        return this.movimiento;
+        return 0;
     }
 
     @Override
-    public void setMovimiento(int movimiento) {}
+    public void setMovimiento(int movimiento) {
+
+    }
 
     @Override
     public String getAtaqueEspecial() {

@@ -1,9 +1,9 @@
 package com.mygdx.game.bl.personajes.decoradorConcreto;
 
+import com.mygdx.game.bl.personajes.PproductoConcreto.Artilleria;
 import com.mygdx.game.bl.personajes.PproductoConcreto.Personaje;
 import com.mygdx.game.bl.personajes.decorador.ObjetoDecorado;
 
-import java.util.ArrayList;
 
 public class ArtilleriaHealer2 extends ObjetoDecorado {
 
@@ -40,29 +40,12 @@ public class ArtilleriaHealer2 extends ObjetoDecorado {
     public void setMovimiento(int movimiento) {}
 
     @Override
-    public void infanteriaHealer1(Personaje personaje) {
+    public String getAtaqueEspecial() {
+        return this.ataqueEspecial;
     }
 
     @Override
-    public void infanteriaSumar3Ataque(Personaje personaje) {
-
-    }
-
-    @Override
-    public void artilleriaHealer2(ArrayList<Personaje> personajes) {
-        for(Personaje p: personajes){
-            p.setVida(getVida() + 1);
-        }
-    }
-
-    @Override
-    public void infanteriaSumar3Defensa(Personaje personaje) {
-
-    }
-
-    @Override
-    public void infanteriaBajarDefensa(Personaje personaje) {
-
+    public void setAtaqueEspecial(String ataqueEspecial) {
     }
 
 }

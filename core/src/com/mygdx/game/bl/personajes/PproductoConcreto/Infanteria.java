@@ -5,7 +5,8 @@ import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
 
 import java.util.ArrayList;
 
-public class Infanteria extends Personaje implements PersonajeAbstracto {
+public class Infanteria extends Personaje implements PersonajeAbstracto{
+
 
     public Infanteria(int movimiento) {
         super(movimiento);
@@ -56,24 +57,16 @@ public class Infanteria extends Personaje implements PersonajeAbstracto {
     }
 
     @Override
-    public void infanteriaHealer1(Personaje personaje) {
+    public String getAtaqueEspecial() {
+        return this.ataqueEspecial;
     }
 
     @Override
-    public void infanteriaSumar3Ataque(Personaje personaje) {
+    public void setAtaqueEspecial(String ataqueEspecial) {
+        this.ataqueEspecial = ataqueEspecial;
     }
 
-    @Override
-    public void infanteriaSumar3Defensa(Personaje personaje) {
-    }
 
-    @Override
-    public void infanteriaBajarDefensa(Personaje personaje) {
-    }
-
-    @Override
-    public void artilleriaHealer2(ArrayList<Personaje> personajes) {
-    }
 
     //TODO: hacer estas funciones ahorita
     @Override
@@ -86,5 +79,13 @@ public class Infanteria extends Personaje implements PersonajeAbstracto {
     public String obtenerTipoPersonaje() {
         return null;
     }
+
+
+
+    public void infanteriaSumar3Ataque(Personaje personaje) {
+        this.setAtaque(getAtaque() + 3);
+    }
+
+
 }
 

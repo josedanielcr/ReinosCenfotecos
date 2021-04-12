@@ -5,6 +5,9 @@ import com.mygdx.game.bl.personajes.PfabricaConcreta.Fabrica_artilleria;
 import com.mygdx.game.bl.personajes.PfabricaConcreta.Fabrica_infanteria;
 import com.mygdx.game.bl.personajes.PfabricaConcreta.Fabrica_tanque;
 import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
+import com.mygdx.game.bl.personajes.PproductoConcreto.Infanteria;
+import com.mygdx.game.bl.personajes.PproductoConcreto.Personaje;
+import com.mygdx.game.bl.personajes.decoradorConcreto.InfanteriaSumar3Ataque;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -52,10 +55,22 @@ public class ControllerPersonaje {
 
 
     public String retornarPersonajes(){
-        String infoPersonajes = "";
-        for(int i=0; i<personajesArr.size(); i++){
-            infoPersonajes += personajesArr.get(i).obtenerInformacionPersonaje()+ "\n";;
+        StringBuilder infoPersonajes = new StringBuilder();
+        for (PersonajeAbstracto personajeAbstracto : personajesArr) {
+            infoPersonajes.append(personajeAbstracto.obtenerInformacionPersonaje()).append("\n");
+            ;
         }
-        return infoPersonajes;
+        return infoPersonajes.toString();
+    }
+
+    /**PRUEBAAAAA**/
+    public void decorarPrueba() throws Exception {
+        PersonajeFA personaje;
+        personaje = new Fabrica_infanteria();
+        String hola = crearFabricaPersonaje(personaje);
+        Personaje i = (Personaje) personajesArr.get(0);
+        i = new InfanteriaSumar3Ataque(i);
+        i.toString();
+
     }
 }

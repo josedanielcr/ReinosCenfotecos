@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.util.concurrent.ExecutionException;
 
 public class Main {
 
@@ -15,7 +16,7 @@ public class Main {
     static ControllerJugadores controllerJugadores;
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         boolean salir = false;
         do {
             mostrarMenu();
@@ -24,7 +25,7 @@ public class Main {
         } while (!salir);
     }
 
-    private static boolean ejecutar(int opcion) {
+    private static boolean ejecutar(int opcion) throws Exception {
         ControllerPersonaje controllerPersonaje = new ControllerPersonaje();
         if(opcion == 4){
            out.println( controllerPersonaje.retornarPersonajes());
@@ -37,6 +38,10 @@ public class Main {
         }
         if(opcion == 6){
             System.out.println(controllerJugadores.obtenerTiempoRestanteTurno());
+        }
+
+        if(opcion == 7){
+            controllerPersonaje.decorarPrueba();
         }
         return false;
     }

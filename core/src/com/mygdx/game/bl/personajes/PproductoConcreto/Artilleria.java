@@ -56,23 +56,20 @@ public class Artilleria extends Personaje implements PersonajeAbstracto {
     }
 
     @Override
-    public void infanteriaHealer1(Personaje personaje) {
+    public String getAtaqueEspecial() {
+        return this.ataqueEspecial;
     }
 
     @Override
-    public void infanteriaSumar3Ataque(Personaje personaje) {
+    public void setAtaqueEspecial(String ataqueEspecial) {
+        this.ataqueEspecial = ataqueEspecial;
     }
 
-    @Override
-    public void infanteriaSumar3Defensa(Personaje personaje) {
-    }
 
-    @Override
-    public void infanteriaBajarDefensa(Personaje personaje) {
-    }
-
-    @Override
     public void artilleriaHealer2(ArrayList<Personaje> personajes) {
+        for(Personaje p: personajes){
+            p.setVida(getVida() + 1);
+        }
     }
 
     //TODO: hacer estas funciones ahorita
