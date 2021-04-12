@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.bl.celdas.iPrototipo.Celda;
+import com.mygdx.game.bl.cofre.Cofre;
 import com.mygdx.game.tl.ControllerCelda;
 import com.mygdx.game.ui.MyGdxGame;
 
@@ -37,6 +38,7 @@ public class GameScreen implements Screen {
     //game objects
 
     private ArrayList<Celda> tablero;
+    private Cofre cofre = new Cofre();
 
     //TextureAtlas
 
@@ -57,8 +59,6 @@ public class GameScreen implements Screen {
 
         //Inicializamos el gestor.
         gestorCelda = new ControllerCelda(numInicialCeldasNormales, numInicialCeldasCastillo, lifepointsCastillo);
-
-
 
         //Inicializar TextureRegions
 
@@ -84,8 +84,10 @@ public class GameScreen implements Screen {
             c.draw(batch);
         }
 
-        gestorCelda.variarCelda(50);
 
+        cofre.draw(batch);
+
+        gestorCelda.variarCelda(50);
 
         batch.end();
 

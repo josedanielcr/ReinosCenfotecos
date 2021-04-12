@@ -1,6 +1,5 @@
 package com.mygdx.game.bl.personajes.PproductoConcreto;
 
-import com.mygdx.game.bl.personajes.Iprototipo.AtaqueEspecialT;
 import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
 
 public class Tanque extends Personaje implements PersonajeAbstracto {
