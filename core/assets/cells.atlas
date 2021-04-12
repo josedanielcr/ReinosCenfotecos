@@ -1,0 +1,62 @@
+
+cells.png
+size: 2048, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+blueCastleCell
+  rotate: false
+  xy: 354, 2
+  size: 350, 352
+  orig: 350, 352
+  offset: 0, 0
+  index: -1
+blueCell1
+  rotate: false
+  xy: 706, 356
+  size: 350, 352
+  orig: 350, 352
+  offset: 0, 0
+  index: -1
+emptyCastleCell
+  rotate: false
+  xy: 706, 2
+  size: 350, 352
+  orig: 350, 352
+  offset: 0, 0
+  index: -1
+emptyCell1
+  rotate: false
+  xy: 1058, 356
+  size: 350, 352
+  orig: 350, 352
+  offset: 0, 0
+  index: -1
+emptyCell2
+  rotate: false
+  xy: 354, 356
+  size: 350, 352
+  orig: 350, 352
+  offset: 0, 0
+  index: -1
+emptyCell3
+  rotate: false
+  xy: 2, 356
+  size: 350, 352
+  orig: 350, 352
+  offset: 0, 0
+  index: -1
+redCastleCell
+  rotate: false
+  xy: 1058, 2
+  size: 350, 352
+  orig: 350, 352
+  offset: 0, 0
+  index: -1
+redCell1
+  rotate: false
+  xy: 2, 2
+  size: 350, 352
+  orig: 350, 352
+  offset: 0, 0
+  index: -1
