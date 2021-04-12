@@ -6,16 +6,20 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.bl.celdas.iPrototipo.Celda;
 import com.mygdx.game.bl.cofre.Cofre;
 import com.mygdx.game.tl.ControllerCelda;
+import com.mygdx.game.ui.MyGdxGame;
 
 import java.util.ArrayList;
 
 
 public class GameScreen implements Screen {
+    //Conexión con el orquestador
+    private MyGdxGame parent;
 
     //screen
     private Camera camera;
@@ -36,8 +40,13 @@ public class GameScreen implements Screen {
     private ArrayList<Celda> tablero;
     private Cofre cofre = new Cofre();
 
+    //TextureAtlas
 
-    public GameScreen() {
+    public static final TextureAtlas cellAtlas = new TextureAtlas("cells.atlas");
+
+
+    public GameScreen(MyGdxGame myGame) {
+        parent = myGame;
         camera = new OrthographicCamera();
         viewport = new StretchViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
 
@@ -75,7 +84,10 @@ public class GameScreen implements Screen {
             c.draw(batch);
         }
 
+
         cofre.draw(batch);
+
+        gestorCelda.variarCelda(50);
 
         batch.end();
 
@@ -105,6 +117,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+
 
     }
 

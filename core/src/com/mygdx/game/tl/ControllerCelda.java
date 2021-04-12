@@ -1,5 +1,6 @@
 package com.mygdx.game.tl;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.mygdx.game.bl.celdas.HelperCelda;
 import com.mygdx.game.bl.celdas.Prototipos.Celda_Castillo;
 import com.mygdx.game.bl.celdas.Prototipos.Celda_Tablero;
@@ -15,6 +16,7 @@ public class ControllerCelda {
     private final int idInicialCastillo;
     private final Celda prototipoCeldaCastillo;
     private final Celda prototipoCeldaTablero;
+    public static final TextureAtlas cellAtlas = new TextureAtlas("cells.atlas");
 
 
     //***********************************************************************************************
@@ -121,7 +123,11 @@ public class ControllerCelda {
      * @return El arreglo con las celdas del tablero.
      */
     public ArrayList<Celda> getCellArray() {
-        return arrCeldas;
+        return this.arrCeldas;
+    }
+
+    public void variarCelda(int id) {
+        arrCeldas.get(id).setCellTextureRegion(cellAtlas.findRegion("redCastleCell"));
     }
 
 }
