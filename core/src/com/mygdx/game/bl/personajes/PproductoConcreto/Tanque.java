@@ -6,9 +6,9 @@ import com.mygdx.game.bl.personajes.componente.Personaje;
 
 import java.util.ArrayList;
 
-public class Tanque extends Personaje implements PersonajeAbstracto {
+public class Tanque  extends Personaje {
 
-
+    protected int idPersonaje;
     protected int vida;
     protected int ataque;
     protected int defensa;
@@ -16,8 +16,10 @@ public class Tanque extends Personaje implements PersonajeAbstracto {
     protected Rectangle rectangle;
     protected  String tipo;
     protected String ataqueEspecial;
+    protected int rango;
 
-    public Tanque(int movimiento) {
+    public Tanque(int movimiento, int idPersonaje) {
+        this.idPersonaje= idPersonaje;
         this.vida = 2;
         this.ataque = 10;
         this.defensa = 10;
@@ -25,6 +27,16 @@ public class Tanque extends Personaje implements PersonajeAbstracto {
         this.rectangle = null;
         this.tipo = "Tanque";
         this.ataqueEspecial = null;
+        this.rango=1;
+    }
+
+
+    public int getIdPersonaje() {
+        return idPersonaje;
+    }
+
+    public void setIdPersonaje(int idPersonaje) {
+        this.idPersonaje = idPersonaje;
     }
 
     public int getVida() {
@@ -79,9 +91,12 @@ public class Tanque extends Personaje implements PersonajeAbstracto {
         return ataqueEspecial;
     }
 
-    @Override
-    public String aplicarAtaqueEspecial() {
-        return null;
+    public int getRango() {
+        return rango;
+    }
+
+    public void setRango(int rango) {
+        this.rango = rango;
     }
 
     public void setAtaqueEspecial(String ataqueEspecial) {
@@ -89,10 +104,10 @@ public class Tanque extends Personaje implements PersonajeAbstracto {
     }
 
     //TODO: hacer estas funciones ahorita
-    @Override
+
     public String obtenerInformacionPersonaje() {
-        return "Este personaje es un " +this.tipo+ " ,tiene una vida de " +this.vida + " ,tiene una defensa de " +this.defensa+ " ," +
-                "tiene un ataque de " + this.ataque+ ", y un movimiento de "+ this.movimiento;
+        return "Este personaje es un " +this.getTipo()+ " ,tiene una vida de " +this.getVida() + " ,tiene una defensa de " +this.getDefensa()+ " ," +
+                "tiene un ataque de " + this.getAtaque()+ ", y un movimiento de "+ this.getMovimiento() + " id: " + this.getIdPersonaje();
     }
 
 }

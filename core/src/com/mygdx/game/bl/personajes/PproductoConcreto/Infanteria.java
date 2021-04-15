@@ -7,9 +7,9 @@ import com.mygdx.game.bl.personajes.componente.Personaje;
 
 import java.util.ArrayList;
 
-public class Infanteria extends Personaje implements PersonajeAbstracto{
+public class Infanteria extends Personaje{
 
-
+    protected int idPersonaje;
     protected int vida;
     protected int ataque;
     protected int defensa;
@@ -17,9 +17,12 @@ public class Infanteria extends Personaje implements PersonajeAbstracto{
     protected Rectangle rectangle;
     protected  String tipo;
     protected String ataqueEspecial;
+    protected int rango;
 
 
-    public Infanteria(int movimiento) {
+
+    public Infanteria(int movimiento, int idPersonaje) {
+        this.idPersonaje=idPersonaje;
         this.vida = 5;
         this.ataque = 3;
         this.defensa = 5;
@@ -27,6 +30,19 @@ public class Infanteria extends Personaje implements PersonajeAbstracto{
         this.rectangle = null;
         this.tipo = "Infanteria";
         this.ataqueEspecial = null;
+        this.rango=1;
+    }
+
+    public int getIdPersonaje() {
+        return idPersonaje;
+    }
+
+    public void setIdPersonaje(int idPersonaje) {
+        this.idPersonaje = idPersonaje;
+    }
+
+    public void setAtaqueEspecial(String ataqueEspecial) {
+        this.ataqueEspecial = ataqueEspecial;
     }
 
     public int getVida() {
@@ -81,24 +97,26 @@ public class Infanteria extends Personaje implements PersonajeAbstracto{
         return ataqueEspecial;
     }
 
-    @Override
-    public String aplicarAtaqueEspecial() {
-        return null;
+    public int getRango() {
+        return rango;
     }
 
-    //TODO: hacer estas funciones ahorita
-    @Override
+    public void setRango(int rango) {
+        this.rango = rango;
+    }
+//TODO: hacer estas funciones ahorita
+
     public String obtenerInformacionPersonaje() {
-        return "Este personaje es un " +this.tipo+ " ,tiene una vida de " +this.vida + " ,tiene una defensa de " +this.defensa+ " ," +
-                "tiene un ataque de " + this.ataque+ ", y un movimiento de "+ this.movimiento;
+        return "Este personaje es un " +this.getTipo()+ " ,tiene una vida de " +this.getVida() + " ,tiene una defensa de " +this.getDefensa()+ " ," +
+                "tiene un ataque de " + this.getAtaque()+ ", y un movimiento de "+ this.getMovimiento() + " id: " + this.getIdPersonaje() ;
     }
 
 
     //metodos adcionales
-    public void infanteriaSumar3Ataque(Personaje personaje) {
+   /* public void infanteriaSumar3Ataque(Personaje personaje) {
         if(personaje.getClass().getSimpleName().equals("Infanteria")){
             personaje.setAtaque(getAtaque() + 3);
         }
-    }
+    }*/
 }
 

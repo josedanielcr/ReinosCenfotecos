@@ -5,12 +5,8 @@ import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
 import com.mygdx.game.bl.personajes.componente.Personaje;
 import com.mygdx.game.bl.personajes.decorador.ObjetoDecorado;
 
-import java.util.ArrayList;
-
-public class ArtilleriaDoblePoderDefensa extends ObjetoDecorado {
-
-
-    public ArtilleriaDoblePoderDefensa(Personaje pPersonaje) {//aqui recibe el personaje que quiere decorar, sin son varios lo que hace es que le aplica el decorador en un aiteracion en el controller
+public class TanqueUnaVidaPorDosMovimientos extends ObjetoDecorado {
+    public TanqueUnaVidaPorDosMovimientos(Personaje pPersonaje) {//aqui recibe el personaje que quiere decorar, sin son varios lo que hace es que le aplica el decorador en un aiteracion en el controller
         this.cPersonaje = pPersonaje;
 
     }
@@ -26,7 +22,7 @@ public class ArtilleriaDoblePoderDefensa extends ObjetoDecorado {
     }
     @Override
     public int getVida() {
-        return this.cPersonaje.getVida() ;
+        return this.cPersonaje.getVida()-1 ;
     }
 
     @Override
@@ -46,7 +42,7 @@ public class ArtilleriaDoblePoderDefensa extends ObjetoDecorado {
 
     @Override
     public int getDefensa() {
-        return this.cPersonaje.getDefensa()*2;
+        return this.cPersonaje.getDefensa();
     }
 
     @Override
@@ -56,8 +52,8 @@ public class ArtilleriaDoblePoderDefensa extends ObjetoDecorado {
 
     @Override
     public int getMovimiento() {
-        return this.cPersonaje.getMovimiento();
-    }
+        return this.cPersonaje.getMovimiento()*2;
+    }//el max seria 4 porque el tanque solo puede sacar 2 de movimiento
 
     @Override
     public void setMovimiento(int movimiento) {
@@ -97,5 +93,4 @@ public class ArtilleriaDoblePoderDefensa extends ObjetoDecorado {
     @Override
     public void setRango(int pRango) { this.cPersonaje.setRango(pRango);
     }
-
 }

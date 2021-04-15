@@ -1,16 +1,12 @@
 package com.mygdx.game.bl.personajes.decoradorConcreto;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
 import com.mygdx.game.bl.personajes.componente.Personaje;
 import com.mygdx.game.bl.personajes.decorador.ObjetoDecorado;
 
-import java.util.ArrayList;
+public class AtaqueBomba extends ObjetoDecorado {
 
-public class ArtilleriaDoblePoderDefensa extends ObjetoDecorado {
-
-
-    public ArtilleriaDoblePoderDefensa(Personaje pPersonaje) {//aqui recibe el personaje que quiere decorar, sin son varios lo que hace es que le aplica el decorador en un aiteracion en el controller
+    public AtaqueBomba(Personaje pPersonaje) {//aqui recibe el personaje que quiere decorar, sin son varios lo que hace es que le aplica el decorador en un aiteracion en el controller
         this.cPersonaje = pPersonaje;
 
     }
@@ -97,5 +93,4 @@ public class ArtilleriaDoblePoderDefensa extends ObjetoDecorado {
     @Override
     public void setRango(int pRango) { this.cPersonaje.setRango(pRango);
     }
-
 }

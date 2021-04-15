@@ -2,11 +2,15 @@ package com.mygdx.game.bl.personajes.componente;
 
 
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
 
 import java.util.ArrayList;
 
-public abstract class Personaje {
+public abstract class Personaje implements PersonajeAbstracto {
     //--------getters and setters---------
+    public abstract   String obtenerInformacionPersonaje();
+
+    public abstract   int getIdPersonaje();
     public abstract int getVida();
     public abstract void setVida(int vida);
     public abstract int getAtaque();
@@ -20,5 +24,8 @@ public abstract class Personaje {
     public abstract String getTipo();
     public abstract void setTipo(String tipo);
     public abstract String getAtaqueEspecial();
-    public abstract String aplicarAtaqueEspecial();
+    public abstract int getRango();
+    public abstract void setRango(int pRango);
+
+   // public abstract String aplicarAtaqueEspecial();
 }

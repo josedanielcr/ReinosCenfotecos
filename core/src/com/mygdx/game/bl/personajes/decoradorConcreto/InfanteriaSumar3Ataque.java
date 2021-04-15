@@ -1,6 +1,7 @@
 package com.mygdx.game.bl.personajes.decoradorConcreto;
 
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
 import com.mygdx.game.bl.personajes.PproductoConcreto.Infanteria;
 import com.mygdx.game.bl.personajes.componente.Personaje;
 import com.mygdx.game.bl.personajes.decorador.ObjetoDecorado;
@@ -9,17 +10,26 @@ import java.util.ArrayList;
 
 public class InfanteriaSumar3Ataque extends ObjetoDecorado{
 
-    private ArrayList<Personaje> personajes;
 
 
-    public InfanteriaSumar3Ataque(Personaje pPersonaje,ArrayList<Personaje> p) {
+
+    public InfanteriaSumar3Ataque(Personaje pPersonaje) {//aqui recibe el personaje que quiere decorar, sin son varios lo que hace es que le aplica el decorador en un aiteracion en el controller
         this.cPersonaje = pPersonaje;
-        this.personajes = p;
+
+    }
+    @Override
+    public String obtenerInformacionPersonaje() {
+        return "Este personaje es un " +this.getTipo()+ " ,tiene una vida de " +this.getVida() + " ,tiene una defensa de " +this.getDefensa()+ " ," +
+                "tiene un ataque de " + this.getAtaque()+ ", y un movimiento de "+ this.getMovimiento() + " id: " + this.getIdPersonaje();
     }
 
     @Override
+    public int getIdPersonaje() {
+        return this.cPersonaje.getIdPersonaje();
+    }
+    @Override
     public int getVida() {
-        return this.cPersonaje.getVida() + 1000;
+        return this.cPersonaje.getVida() ;
     }
 
     @Override
@@ -29,7 +39,7 @@ public class InfanteriaSumar3Ataque extends ObjetoDecorado{
 
     @Override
     public int getAtaque() {
-        return this.cPersonaje.getAtaque();
+        return this.cPersonaje.getAtaque()+3;
     }
 
     @Override
@@ -83,11 +93,11 @@ public class InfanteriaSumar3Ataque extends ObjetoDecorado{
     }
 
     @Override
-    public String aplicarAtaqueEspecial() {
-        Infanteria i = (Infanteria) this.getcPersonaje();
-        i.infanteriaSumar3Ataque(personajes.get(0));
-        personajes.get(0).setTipo("skdjfhsdklfhsdjkl");
-        System.out.println(personajes.get(0).getTipo());
-        return "aplicado";
+    public int getRango() {
+        return this.cPersonaje.getRango();
+    }
+
+    @Override
+    public void setRango(int pRango) { this.cPersonaje.setRango(pRango);
     }
 }

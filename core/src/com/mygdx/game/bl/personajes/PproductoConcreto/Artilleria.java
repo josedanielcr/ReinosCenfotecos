@@ -7,8 +7,8 @@ import com.mygdx.game.bl.personajes.componente.Personaje;
 
 import java.util.ArrayList;
 
-public class Artilleria extends Personaje implements PersonajeAbstracto {
-
+public class Artilleria  extends Personaje {
+    protected int idPersonaje;
     protected int vida;
     protected int ataque;
     protected int defensa;
@@ -16,9 +16,11 @@ public class Artilleria extends Personaje implements PersonajeAbstracto {
     protected Rectangle rectangle;
     protected  String tipo;
     protected String ataqueEspecial;
+    protected int rango;
 
 
-    public Artilleria(int movimiento) {
+    public Artilleria(int movimiento, int idPersonaje) {
+        this.idPersonaje=idPersonaje;
         this.vida = 4;
         this.ataque = 6;
         this.defensa = 10;
@@ -26,6 +28,15 @@ public class Artilleria extends Personaje implements PersonajeAbstracto {
         this.rectangle = null;
         this.tipo = "Artilleria";
         this.ataqueEspecial = null;
+        this.rango=1;
+    }
+
+    public int getIdPersonaje() {
+        return idPersonaje;
+    }
+
+    public void setIdPersonaje(int idPersonaje) {
+        this.idPersonaje = idPersonaje;
     }
 
     public int getVida() {
@@ -80,10 +91,17 @@ public class Artilleria extends Personaje implements PersonajeAbstracto {
         return ataqueEspecial;
     }
 
-    @Override
+    public int getRango() {
+        return rango;
+    }
+
+    public void setRango(int rango) {
+        this.rango = rango;
+    }
+/* @Override
     public String aplicarAtaqueEspecial() {
         return null;
-    }
+    }*/
 
     public void setAtaqueEspecial(String ataqueEspecial) {
         this.ataqueEspecial = ataqueEspecial;
@@ -91,19 +109,14 @@ public class Artilleria extends Personaje implements PersonajeAbstracto {
 
 
     //TODO: hacer estas funciones ahorita
-    @Override
+
     public String obtenerInformacionPersonaje() {
-        return "Este personaje es un " +this.tipo+ " ,tiene una vida de " +this.vida + " ,tiene una defensa de " +this.defensa+ " ," +
-                "tiene un ataque de " + this.ataque+ ", y un movimiento de "+ this.movimiento;
+        return "Este personaje es un " +this.getTipo()+ " ,tiene una vida de " +this.getVida() + " ,tiene una defensa de " +this.getDefensa()+ " ," +
+                "tiene un ataque de " + this.getAtaque()+ ", y un movimiento de "+ this.getMovimiento() + " id: " + this.getIdPersonaje();
     }
 
 
 
-    //metodos adicionales
-    public void artilleriaHealer2(ArrayList<Personaje> personajes) {
-        for(Personaje p: personajes){
-            p.setVida(getVida() + 1);
-        }
-    }
+
 
 }

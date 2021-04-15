@@ -41,7 +41,7 @@ public class Main {
         }
 
         if(opcion == 7){
-            controllerPersonaje.decorarPrueba();
+            controllerPersonaje.decorarPrueba(1);
         }
         return false;
     }

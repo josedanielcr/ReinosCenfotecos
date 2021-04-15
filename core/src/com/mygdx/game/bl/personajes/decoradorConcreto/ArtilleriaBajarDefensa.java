@@ -5,17 +5,15 @@ import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
 import com.mygdx.game.bl.personajes.componente.Personaje;
 import com.mygdx.game.bl.personajes.decorador.ObjetoDecorado;
 
-import java.util.ArrayList;
-
-public class ArtilleriaDoblePoderDefensa extends ObjetoDecorado {
-
-
-    public ArtilleriaDoblePoderDefensa(Personaje pPersonaje) {//aqui recibe el personaje que quiere decorar, sin son varios lo que hace es que le aplica el decorador en un aiteracion en el controller
+public class ArtilleriaBajarDefensa extends ObjetoDecorado {//le baja 2 de defensa a quien se encuentre a 5 casillas de distancia a la redonda
+    public ArtilleriaBajarDefensa(Personaje pPersonaje) {//aqui recibe el personaje que quiere decorar, sin son varios lo que hace es que le aplica el decorador en un aiteracion en el controller
         this.cPersonaje = pPersonaje;
 
     }
+
     @Override
     public String obtenerInformacionPersonaje() {
+
         return "Este personaje es un " +this.getTipo()+ " ,tiene una vida de " +this.getVida() + " ,tiene una defensa de " +this.getDefensa()+ " ," +
                 "tiene un ataque de " + this.getAtaque()+ ", y un movimiento de "+ this.getMovimiento() + " id: " + this.getIdPersonaje();
     }
@@ -24,6 +22,7 @@ public class ArtilleriaDoblePoderDefensa extends ObjetoDecorado {
     public int getIdPersonaje() {
         return this.cPersonaje.getIdPersonaje();
     }
+
     @Override
     public int getVida() {
         return this.cPersonaje.getVida() ;
@@ -46,7 +45,7 @@ public class ArtilleriaDoblePoderDefensa extends ObjetoDecorado {
 
     @Override
     public int getDefensa() {
-        return this.cPersonaje.getDefensa()*2;
+        return this.cPersonaje.getDefensa()-2;
     }
 
     @Override
@@ -97,5 +96,6 @@ public class ArtilleriaDoblePoderDefensa extends ObjetoDecorado {
     @Override
     public void setRango(int pRango) { this.cPersonaje.setRango(pRango);
     }
+
 
 }

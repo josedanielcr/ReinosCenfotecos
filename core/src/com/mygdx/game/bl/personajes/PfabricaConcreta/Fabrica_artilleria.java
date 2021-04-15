@@ -6,8 +6,8 @@ import com.mygdx.game.bl.personajes.PproductoConcreto.Artilleria;
 
 public class Fabrica_artilleria implements PersonajeFA {
     @Override
-    public PersonajeAbstracto crearPersonaje(int movimiento) {
-        Artilleria artilleria = new Artilleria(movimiento);
+    public PersonajeAbstracto crearPersonaje(int movimiento, int id) {
+        Artilleria artilleria = new Artilleria(movimiento,id);
         return artilleria;
     }
 }
