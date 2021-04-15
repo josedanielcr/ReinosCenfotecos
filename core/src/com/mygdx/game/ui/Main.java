@@ -1,6 +1,6 @@
 package com.mygdx.game.ui;
 
-import com.mygdx.game.tl.ControllerJugadores;
+//import com.mygdx.game.tl.ControllerJugadores;
 import com.mygdx.game.tl.ControllerPersonaje;
 
 import java.io.BufferedReader;
@@ -12,7 +12,7 @@ public class Main {
 
     static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     static PrintStream out = System.out;
-    static ControllerJugadores controllerJugadores;
+//    static ControllerJugadores controllerJugadores;
 
 
     public static void main(String[] args) throws IOException {
@@ -32,11 +32,11 @@ public class Main {
            out.println(controllerPersonaje.procesarOpcion(opcion));
         }
         if(opcion == 5){
-            controllerJugadores = new ControllerJugadores();
-            controllerJugadores.inicializarJugadores();
+//            controllerJugadores = new ControllerJugadores();
+//            controllerJugadores.inicializarJugadores();
         }
         if(opcion == 6){
-            System.out.println(controllerJugadores.obtenerTiempoRestanteTurno());
+//            System.out.println(controllerJugadores.obtenerTiempoRestanteTurno());
         }
         return false;
     }

@@ -1,7 +1,5 @@
 package com.mygdx.game.bl.Screens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -10,8 +8,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.bl.celdas.iPrototipo.Celda;
-import com.mygdx.game.bl.cofre.Cofre;
 import com.mygdx.game.tl.ControllerCelda;
+import com.mygdx.game.tl.ControllerDado;
+import com.mygdx.game.tl.ControllerObserver;
 import com.mygdx.game.ui.MyGdxGame;
 
 import java.util.ArrayList;
@@ -27,6 +26,8 @@ public class GameScreen implements Screen {
 
     //Gestores
     private static ControllerCelda gestorCelda;
+    private static ControllerObserver gestorObserver;
+    private static ControllerDado gestorDado;
 
     //graphics
     private SpriteBatch batch;
@@ -36,13 +37,12 @@ public class GameScreen implements Screen {
     private final int WORLD_HEIGHT = 900;
 
     //game objects
-
     private ArrayList<Celda> tablero;
-    private Cofre cofre = new Cofre();
 
-    //TextureAtlas
-
+    //variables
     public static final TextureAtlas cellAtlas = new TextureAtlas("cells.atlas");
+    private String turn;
+    private int gameTime;
 
 
     public GameScreen(MyGdxGame myGame) {
@@ -56,9 +56,13 @@ public class GameScreen implements Screen {
         final int numInicialCeldasNormales = 1;
         final int numInicialCeldasCastillo = 1000;
         final int lifepointsCastillo = 3;
+        turn = "jugador"; //TODO que aqui empiece en neutro o algo, y una vez que le de start game empiece a contar
+        gameTime=0;
 
-        //Inicializamos el gestor.
+        //Inicializamos los gestores.
         gestorCelda = new ControllerCelda(numInicialCeldasNormales, numInicialCeldasCastillo, lifepointsCastillo);
+        gestorObserver = new ControllerObserver(this);
+        gestorDado = new ControllerDado();
 
         //Inicializar TextureRegions
 
@@ -74,6 +78,19 @@ public class GameScreen implements Screen {
 
     }
 
+    public void changeTurn(){
+        if(turn.equals("jugador")){
+            turn="cpu";
+        }else{
+            turn="jugador";
+        }
+        gestorObserver.resetTimer();
+    }
+
+    public void updateClock(int value){
+        gameTime=value; //actualiza variable local para dibujar el tiempo restante del turno
+    }
+
 
     @Override
     public void render(float deltaTime) {
@@ -85,7 +102,7 @@ public class GameScreen implements Screen {
         }
 
 
-        cofre.draw(batch);
+        gestorDado.getCofreJugador().draw(batch);
 
         gestorCelda.variarCelda(50);
 

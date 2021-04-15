@@ -11,6 +11,8 @@ public class Personaje {
     protected int movimiento;
     protected Rectangle rectangle;
 
+
+
     public Personaje() {
     }
 
