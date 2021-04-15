@@ -27,21 +27,34 @@ public class Main {
 
     private static boolean ejecutar(int opcion) throws Exception {
         ControllerPersonaje controllerPersonaje = new ControllerPersonaje();
+        if(opcion == 1){
+            controllerPersonaje.crearPersonaje(1,3);
+            System.out.println(controllerPersonaje.retornarPersonajes());
+        }
+        if(opcion == 2){
+           controllerPersonaje.crearPersonaje(2,5);
+           System.out.println(controllerPersonaje.retornarPersonajes());
+        }
+        if(opcion == 3){
+            controllerPersonaje.crearPersonaje(3,2);
+            System.out.println(controllerPersonaje.retornarPersonajes());
+        }
         if(opcion == 4){
-           out.println( controllerPersonaje.retornarPersonajes());
-        } else {
-           out.println(controllerPersonaje.procesarOpcion(opcion));
+            controllerPersonaje.crearPersonajeEnemigo();
+            System.out.println(controllerPersonaje.retornarPersonajesEnemigos());
         }
         if(opcion == 5){
-            controllerJugadores = new ControllerJugadores();
-            controllerJugadores.inicializarJugadores();
+           int [] ids = {2};
+           int id = 1;
+           controllerPersonaje.aplicarAtaqueEspecial(id,ids);
+            System.out.println(controllerPersonaje.retornarPersonajes());
         }
         if(opcion == 6){
             System.out.println(controllerJugadores.obtenerTiempoRestanteTurno());
         }
 
         if(opcion == 7){
-            controllerPersonaje.decorarPrueba(1);
+            //controllerPersonaje.decorarPrueba(1);
         }
         return false;
     }

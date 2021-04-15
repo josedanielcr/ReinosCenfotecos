@@ -7,8 +7,8 @@ import com.mygdx.game.bl.personajes.PproductoConcreto.Tanque;
 public class Fabrica_tanque implements PersonajeFA {
 
     @Override
-    public PersonajeAbstracto crearPersonaje(int movimiento, int id) {
-        Tanque tanque = new Tanque(movimiento,id);
+    public PersonajeAbstracto crearPersonaje(int movimiento, int id, String ataqueEspecial) {
+        Tanque tanque = new Tanque(movimiento,id, ataqueEspecial);
         return tanque;
     }
 }

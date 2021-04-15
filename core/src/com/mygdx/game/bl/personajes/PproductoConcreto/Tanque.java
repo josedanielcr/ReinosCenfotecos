@@ -18,7 +18,7 @@ public class Tanque  extends Personaje {
     protected String ataqueEspecial;
     protected int rango;
 
-    public Tanque(int movimiento, int idPersonaje) {
+    public Tanque(int movimiento, int idPersonaje, String ataqueEspecial) {
         this.idPersonaje= idPersonaje;
         this.vida = 2;
         this.ataque = 10;
@@ -26,7 +26,7 @@ public class Tanque  extends Personaje {
         this.movimiento = movimiento;
         this.rectangle = null;
         this.tipo = "Tanque";
-        this.ataqueEspecial = null;
+        this.ataqueEspecial = ataqueEspecial;
         this.rango=1;
     }
 
@@ -107,7 +107,8 @@ public class Tanque  extends Personaje {
 
     public String obtenerInformacionPersonaje() {
         return "Este personaje es un " +this.getTipo()+ " ,tiene una vida de " +this.getVida() + " ,tiene una defensa de " +this.getDefensa()+ " ," +
-                "tiene un ataque de " + this.getAtaque()+ ", y un movimiento de "+ this.getMovimiento() + " id: " + this.getIdPersonaje();
+                "tiene un ataque de " + this.getAtaque()+ ", y un movimiento de "+ this.getMovimiento() + " id: " + this.getIdPersonaje() +
+                " ,un ataque especial " + this.getAtaqueEspecial() + ", finalmente un rango de " + this.getRango();
     }
 
 }

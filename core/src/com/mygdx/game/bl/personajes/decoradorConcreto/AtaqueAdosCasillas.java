@@ -12,7 +12,8 @@ public class AtaqueAdosCasillas extends ObjetoDecorado {
     @Override
     public String obtenerInformacionPersonaje() {
         return "Este personaje es un " +this.getTipo()+ " ,tiene una vida de " +this.getVida() + " ,tiene una defensa de " +this.getDefensa()+ " ," +
-                "tiene un ataque de " + this.getAtaque()+ ", y un movimiento de "+ this.getMovimiento() + " id: " + this.getIdPersonaje();
+                "tiene un ataque de " + this.getAtaque()+ ", y un movimiento de "+ this.getMovimiento() + " id: " + this.getIdPersonaje() +
+                " ,un ataque especial " + this.getAtaqueEspecial() + ", finalmente un rango de " + this.getRango();
     }
 
     @Override
@@ -41,7 +42,7 @@ public class AtaqueAdosCasillas extends ObjetoDecorado {
 
     @Override
     public int getDefensa() {
-        return this.cPersonaje.getDefensa()*2;
+        return this.cPersonaje.getDefensa();
     }
 
     @Override
@@ -86,11 +87,12 @@ public class AtaqueAdosCasillas extends ObjetoDecorado {
 
     @Override
     public int getRango() {
-        return this.cPersonaje.getRango();
+        return this.cPersonaje.getRango()+1;
     }
 
     @Override
-    public void setRango(int pRango) { this.cPersonaje.setRango(pRango);
+    public void setRango(int pRango) {
+        this.cPersonaje.setRango(pRango);
     }
 
 }

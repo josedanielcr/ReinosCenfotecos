@@ -2,7 +2,6 @@ package com.mygdx.game.bl.personajes.PproductoConcreto;
 
 
 import com.badlogic.gdx.math.Rectangle;
-import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
 import com.mygdx.game.bl.personajes.componente.Personaje;
 
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ public class Artilleria  extends Personaje {
     protected int rango;
 
 
-    public Artilleria(int movimiento, int idPersonaje) {
+    public Artilleria(int movimiento, int idPersonaje, String ataqueEspecial) {
         this.idPersonaje=idPersonaje;
         this.vida = 4;
         this.ataque = 6;
@@ -27,7 +26,7 @@ public class Artilleria  extends Personaje {
         this.movimiento = movimiento;
         this.rectangle = null;
         this.tipo = "Artilleria";
-        this.ataqueEspecial = null;
+        this.ataqueEspecial = ataqueEspecial;
         this.rango=1;
     }
 
@@ -112,7 +111,8 @@ public class Artilleria  extends Personaje {
 
     public String obtenerInformacionPersonaje() {
         return "Este personaje es un " +this.getTipo()+ " ,tiene una vida de " +this.getVida() + " ,tiene una defensa de " +this.getDefensa()+ " ," +
-                "tiene un ataque de " + this.getAtaque()+ ", y un movimiento de "+ this.getMovimiento() + " id: " + this.getIdPersonaje();
+                "tiene un ataque de " + this.getAtaque()+ ", y un movimiento de "+ this.getMovimiento() + " id: " + this.getIdPersonaje() +
+                " ,un ataque especial " + this.getAtaqueEspecial() + ", finalmente un rango de " + this.getRango();
     }
 
 

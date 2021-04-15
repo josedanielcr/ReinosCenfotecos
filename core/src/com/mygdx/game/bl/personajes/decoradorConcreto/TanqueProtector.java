@@ -4,9 +4,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.bl.personajes.componente.Personaje;
 import com.mygdx.game.bl.personajes.decorador.ObjetoDecorado;
 
-public class ArtilleriaBajarDefensa extends ObjetoDecorado {//le baja 2 de defensa a quien se encuentre a 5 casillas de distancia a la redonda
+public class TanqueProtector extends ObjetoDecorado {
 
-    public ArtilleriaBajarDefensa(Personaje pPersonaje) {//aqui recibe el personaje que quiere decorar, sin son varios lo que hace es que le aplica el decorador en un aiteracion en el controller
+    public TanqueProtector(Personaje pPersonaje) {//aqui recibe el personaje que quiere decorar, sin son varios lo que hace es que le aplica el decorador en un aiteracion en el controller
         this.cPersonaje = pPersonaje;
     }
 
@@ -24,7 +24,7 @@ public class ArtilleriaBajarDefensa extends ObjetoDecorado {//le baja 2 de defen
 
     @Override
     public int getVida() {
-        return this.cPersonaje.getVida() ;
+        return this.cPersonaje.getVida() - 1;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class ArtilleriaBajarDefensa extends ObjetoDecorado {//le baja 2 de defen
 
     @Override
     public int getDefensa() {
-        return this.cPersonaje.getDefensa()-2;
+        return this.cPersonaje.getDefensa();
     }
 
     @Override
@@ -95,6 +95,4 @@ public class ArtilleriaBajarDefensa extends ObjetoDecorado {//le baja 2 de defen
     @Override
     public void setRango(int pRango) { this.cPersonaje.setRango(pRango);
     }
-
-
 }

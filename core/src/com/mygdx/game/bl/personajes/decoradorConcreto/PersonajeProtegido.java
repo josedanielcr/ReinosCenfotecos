@@ -4,25 +4,27 @@ import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.bl.personajes.componente.Personaje;
 import com.mygdx.game.bl.personajes.decorador.ObjetoDecorado;
 
-public class AtaqueBomba extends ObjetoDecorado {
+public class PersonajeProtegido extends ObjetoDecorado {
 
-    public AtaqueBomba(Personaje pPersonaje) {//aqui recibe el personaje que quiere decorar, sin son varios lo que hace es que le aplica el decorador en un aiteracion en el controller
+    public PersonajeProtegido(Personaje pPersonaje) {//aqui recibe el personaje que quiere decorar, sin son varios lo que hace es que le aplica el decorador en un aiteracion en el controller
         this.cPersonaje = pPersonaje;
-
     }
+
     @Override
     public String obtenerInformacionPersonaje() {
         return "Este personaje es un " +this.getTipo()+ " ,tiene una vida de " +this.getVida() + " ,tiene una defensa de " +this.getDefensa()+ " ," +
-                "tiene un ataque de " + this.getAtaque()+ ", y un movimiento de "+ this.getMovimiento() + " id: " + this.getIdPersonaje();
+                "tiene un ataque de " + this.getAtaque()+ ", y un movimiento de "+ this.getMovimiento() + " id: " + this.getIdPersonaje() +
+                " ,un ataque especial " + this.getAtaqueEspecial() + ", finalmente un rango de " + this.getRango();
     }
 
     @Override
     public int getIdPersonaje() {
         return this.cPersonaje.getIdPersonaje();
     }
+
     @Override
     public int getVida() {
-        return this.cPersonaje.getVida() ;
+        return this.cPersonaje.getVida() + 1 ;
     }
 
     @Override
@@ -42,7 +44,7 @@ public class AtaqueBomba extends ObjetoDecorado {
 
     @Override
     public int getDefensa() {
-        return this.cPersonaje.getDefensa()*2;
+        return this.cPersonaje.getDefensa();
     }
 
     @Override
@@ -93,4 +95,5 @@ public class AtaqueBomba extends ObjetoDecorado {
     @Override
     public void setRango(int pRango) { this.cPersonaje.setRango(pRango);
     }
+
 }
