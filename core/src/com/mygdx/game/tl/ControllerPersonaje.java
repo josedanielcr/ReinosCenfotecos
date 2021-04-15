@@ -16,7 +16,7 @@ public class ControllerPersonaje {
     private static ArrayList<PersonajeAbstracto> personajesArr = new ArrayList();
     private static ArrayList<PersonajeAbstracto> personajesArrEnemigo = new ArrayList();
     private static int idPersonaje;
-
+    private static int contGeneral=0;
 
     //controller real
     public PersonajeAbstracto crearPersonaje(int tipoPersonaje, int dadoCantMoviendo, int tipo){
@@ -27,20 +27,26 @@ public class ControllerPersonaje {
             switch (tipoPersonaje){
                 case 1:
                     personaje = new Fabrica_infanteria();
-                    if(tipo==1) personajeDeRetorno = crearFabricaPersonaje(personaje, dadoCantMoviendo, 1,1);
-                    else personajeDeRetorno = crearFabricaPersonaje(personaje, dadoCantMoviendo, 1,2);
+                    if(tipo==1){
+
+                        personajeDeRetorno = crearFabricaPersonaje(personaje,  1,1);
+                    } else{
+
+                        personajeDeRetorno = crearFabricaPersonaje(personaje, 1,2);
+
+                    }
 
 
                     break;
                 case 2:
                     personaje = new Fabrica_artilleria();
-                    if(tipo==1)personajeDeRetorno = crearFabricaPersonaje(personaje, dadoCantMoviendo, 2,1);
-                    else personajeDeRetorno = crearFabricaPersonaje(personaje, dadoCantMoviendo, 2,2);
+                    if(tipo==1)personajeDeRetorno = crearFabricaPersonaje(personaje, 2,1);
+                    else personajeDeRetorno = crearFabricaPersonaje(personaje,  2,2);
                     break;
                 case 3:
                     personaje = new Fabrica_tanque();
-                    if(tipo==1)personajeDeRetorno = crearFabricaPersonaje(personaje, dadoCantMoviendo, 3,1);
-                    else personajeDeRetorno = crearFabricaPersonaje(personaje, dadoCantMoviendo, 3,2);
+                    if(tipo==1)personajeDeRetorno = crearFabricaPersonaje(personaje,  3,1);
+                    else personajeDeRetorno = crearFabricaPersonaje(personaje,  3,2);
                     break;
             }
         } catch (Exception e){
@@ -50,8 +56,9 @@ public class ControllerPersonaje {
     }
 
 
-    private PersonajeAbstracto crearFabricaPersonaje(PersonajeFA personaje, int cantMovimiento, int tipoPersonaje, int tipo) throws Exception{//tipo es para ver si es enemigue o no
-        PersonajeAbstracto objPersonaje = personaje.crearPersonaje(cantMovimiento, obtenerId(), retornarAtaqueEspecial(tipoPersonaje));
+    private PersonajeAbstracto crearFabricaPersonaje(PersonajeFA personaje, int tipoPersonaje, int tipo) throws Exception{//tipo es para ver si es enemigue o no
+
+        PersonajeAbstracto objPersonaje = personaje.crearPersonaje( obtenerId(), retornarAtaqueEspecial(tipoPersonaje));
         if(tipo==1) {
             personajesArr.add(objPersonaje);
         }
@@ -59,6 +66,7 @@ public class ControllerPersonaje {
             personajesArrEnemigo.add(objPersonaje);
         }
         return objPersonaje;
+
     }
 
 
@@ -92,6 +100,7 @@ public class ControllerPersonaje {
 
     //decorador principal
     public ArrayList<PersonajeAbstracto> aplicarAtaqueEspecial(int idPropietarie, int[] idExternos){
+
         String ataque = retornarAtaqueEpropietarie(idPropietarie);
         ArrayList<PersonajeAbstracto> personajeDecorados = new ArrayList<>();
         switch (ataque){
@@ -126,13 +135,14 @@ public class ControllerPersonaje {
                 decorarAtaqueBomba(idPropietarie,idExternos);
                 break;
             case "proteccionAliade":
-              decorarProteccionAliade(idPropietarie,idExternos);
+                decorarProteccionAliade(idPropietarie,idExternos);
                 break;
             case "bajar2Defensa":
                 personajeDecorados.add(decorarBajar2Defensa(idExternos[0]));
                 break;
         }
         return personajeDecorados;
+
     }
 
     //decoradores especificos
