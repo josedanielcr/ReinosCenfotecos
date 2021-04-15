@@ -93,7 +93,7 @@ public class InfanteriaBajarDefensa extends ObjetoDecorado{//le baja en 1 la def
 
     @Override
     public int getRango() {
-        return this.cPersonaje.getRango();
+        return this.cPersonaje.getRango()+4;
     }
 
     @Override

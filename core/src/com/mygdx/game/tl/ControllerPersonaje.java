@@ -19,22 +19,28 @@ public class ControllerPersonaje {
 
 
     //controller real
-    public PersonajeAbstracto crearPersonaje(int tipoPersonaje, int dadoCantMoviendo){
+    public PersonajeAbstracto crearPersonaje(int tipoPersonaje, int dadoCantMoviendo, int tipo){
+
         PersonajeAbstracto personajeDeRetorno = null;
         PersonajeFA personaje;
         try {
             switch (tipoPersonaje){
                 case 1:
                     personaje = new Fabrica_infanteria();
-                    personajeDeRetorno= crearFabricaPersonaje(personaje,dadoCantMoviendo, 1);
+                    if(tipo==1) personajeDeRetorno = crearFabricaPersonaje(personaje, dadoCantMoviendo, 1,1);
+                    else personajeDeRetorno = crearFabricaPersonaje(personaje, dadoCantMoviendo, 1,2);
+
+
                     break;
                 case 2:
                     personaje = new Fabrica_artilleria();
-                    personajeDeRetorno = crearFabricaPersonaje(personaje, dadoCantMoviendo, 2);
+                    if(tipo==1)personajeDeRetorno = crearFabricaPersonaje(personaje, dadoCantMoviendo, 2,1);
+                    else personajeDeRetorno = crearFabricaPersonaje(personaje, dadoCantMoviendo, 2,2);
                     break;
                 case 3:
                     personaje = new Fabrica_tanque();
-                    personajeDeRetorno = crearFabricaPersonaje(personaje, dadoCantMoviendo, 3);
+                    if(tipo==1)personajeDeRetorno = crearFabricaPersonaje(personaje, dadoCantMoviendo, 3,1);
+                    else personajeDeRetorno = crearFabricaPersonaje(personaje, dadoCantMoviendo, 3,2);
                     break;
             }
         } catch (Exception e){
@@ -44,17 +50,25 @@ public class ControllerPersonaje {
     }
 
 
-    private PersonajeAbstracto crearFabricaPersonaje(PersonajeFA personaje, int cantMovimiento, int tipoPersonaje) throws Exception{
+    private PersonajeAbstracto crearFabricaPersonaje(PersonajeFA personaje, int cantMovimiento, int tipoPersonaje, int tipo) throws Exception{//tipo es para ver si es enemigue o no
         PersonajeAbstracto objPersonaje = personaje.crearPersonaje(cantMovimiento, obtenerId(), retornarAtaqueEspecial(tipoPersonaje));
-        personajesArr.add( objPersonaje);
+        if(tipo==1) {
+            personajesArr.add(objPersonaje);
+        }
+        if(tipo==2){
+            personajesArrEnemigo.add(objPersonaje);
+        }
         return objPersonaje;
     }
+
+
+
 
     public void crearPersonajeEnemigo() throws Exception {
         int tipoPersonaje = valorPersonajeRandom();
         int cantMovimiento = retornarMovimientoPersonaje(tipoPersonaje);
-        PersonajeAbstracto personajeAbstracto= crearPersonaje(cantMovimiento,tipoPersonaje);
-        personajesArrEnemigo.add(personajeAbstracto);
+        PersonajeAbstracto personajeAbstracto= crearPersonaje(cantMovimiento,tipoPersonaje,2);
+        //personajesArrEnemigo.add(personajeAbstracto);
     }
 
     //metodos de impresion
@@ -62,7 +76,7 @@ public class ControllerPersonaje {
         StringBuilder infoPersonajes = new StringBuilder();
         for (PersonajeAbstracto personajeAbstracto : personajesArr) {
             infoPersonajes.append(personajeAbstracto.obtenerInformacionPersonaje()).append("\n");
-            ;
+
         }
         return infoPersonajes.toString();
     }
@@ -84,7 +98,7 @@ public class ControllerPersonaje {
             case "healer1":
                 personajeDecorados.add(decorarHealer1(idExternos[0]));
                 break;
-            case "sumar3ataque":
+            case "sumar3Ataque":
                 personajeDecorados.add(decorarSumar3Ataque(idExternos[0]));
                 break;
             case "sumar3Defensa":
@@ -217,6 +231,8 @@ public class ControllerPersonaje {
     private void decorarProteccionAliade(int idPropietarie, int[] idExternos) {
         PersonajeAbstracto personaje = retornarPersonajeDecorador(idPropietarie);
         personaje = new TanqueProtector((Personaje) personaje);
+        int indexPersonaje1 = obtenerIndexPersonaje(personaje);
+        personajesArr.set(indexPersonaje1,personaje);
         ArrayList<PersonajeAbstracto> personajes = retornarPersonajesDecorador(idExternos, 1);
         for(PersonajeAbstracto p: personajes){
             int indexPersonaje = obtenerIndexPersonaje(p);
@@ -225,7 +241,7 @@ public class ControllerPersonaje {
         }
     }
 
-
+/**/
 
     //metodos miscelanios
     private void eliminarPersonaje(int idPropietarie){
@@ -278,7 +294,7 @@ public class ControllerPersonaje {
                 int r2 = (int) (Math.random() * ataques.length);
                 return ataques[r2];
             case 3:
-                ataques = new String[] {"unaVidaDobleM", "ataqueBomba", "proteccionAliade", "proteccionAliade"};
+                ataques = new String[] {"unaVidaDobleM", "ataqueBomba", "proteccionAliade"};
                 int r3 = (int) (Math.random() * ataques.length);
                 return ataques[r3];
         }
