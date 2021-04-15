@@ -84,7 +84,7 @@ public class GameScreen implements Screen {
         }else{
             turn="jugador";
         }
-        gestorObserver.resetTimer();
+        System.out.println(turn);
     }
 
     public void updateClock(int value){

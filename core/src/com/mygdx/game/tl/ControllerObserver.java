@@ -23,8 +23,4 @@ public class ControllerObserver {
         timer.removerObservador(obsTimer);
     }
 
-    public void resetTimer(){
-        this.timer.resetTimer();
-    }
-
 }

@@ -10,7 +10,8 @@ import java.util.TimerTask;
 public class SujetoTimer implements Sujeto {
 
     private ArrayList<Observer> observers = new ArrayList<>();
-    public static int tiempoRestante = 60;
+    public int tiempoRestante = 60;
+    boolean newTurn=false;
 
     public SujetoTimer() {
         cronometro();
@@ -25,20 +26,21 @@ public class SujetoTimer implements Sujeto {
                 i++;
                 if (i % seconds == 0) {
                     tiempoRestante = 0;
+                    newTurn=true;
                 }
                 else {
                     tiempoRestante = (seconds - i);
                 }
                 notificarObservadores();
-                System.out.println(tiempoRestante);
+                if(newTurn){
+                    newTurn=false;
+                    i=0;
+                    tiempoRestante=60;
+                }
             }
         };
         Timer timer = new Timer();
         timer.schedule(task, 0, 1000);
-    }
-
-    public void resetTimer(){
-        tiempoRestante=60;
     }
 
     @Override
