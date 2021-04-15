@@ -18,12 +18,12 @@ public class Artilleria  extends Personaje {
     protected int rango;
 
 
-    public Artilleria(int movimiento, int idPersonaje, String ataqueEspecial) {
+    public Artilleria( int idPersonaje, String ataqueEspecial) {
         this.idPersonaje=idPersonaje;
         this.vida = 4;
         this.ataque = 6;
         this.defensa = 10;
-        this.movimiento = movimiento;
+        this.movimiento = 4;
         this.rectangle = null;
         this.tipo = "Artilleria";
         this.ataqueEspecial = ataqueEspecial;

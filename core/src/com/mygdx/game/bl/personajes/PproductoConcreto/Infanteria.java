@@ -21,12 +21,12 @@ public class Infanteria extends Personaje{
 
 
 
-    public Infanteria(int movimiento, int idPersonaje, String ataqueEspecial) {
+    public Infanteria( int idPersonaje, String ataqueEspecial) {
         this.idPersonaje=idPersonaje;
         this.vida = 5;
         this.ataque = 3;
         this.defensa = 5;
-        this.movimiento = movimiento;
+        this.movimiento = 6;
         this.rectangle = null;
         this.tipo = "Infanteria";
         this.ataqueEspecial = ataqueEspecial;

@@ -55,12 +55,12 @@ public class Main {
 
     static void mostrarMenu() {//inicio menu
         out.println();
-        out.println("1.Crear Artillero");
-        out.println("2.Crear Infanteria");
+        out.println("1.Crear Infantaria");
+        out.println("2.Crear Artilleria");
         out.println("3.Crear Tanque");
-        out.println("4. Imprimir personajes");
-        out.println("5. verificar turnos");
-        out.println("6. obtener tiempo restante del turno");
+        out.println("4.Crear personajes enemigues");
+        out.println("5.Aplicar Decorador");
+       // out.println("6. obtener tiempo restante del turno");
         out.println();
     }//fin menu
 

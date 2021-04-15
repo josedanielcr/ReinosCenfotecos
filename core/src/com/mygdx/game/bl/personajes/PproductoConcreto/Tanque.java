@@ -18,12 +18,12 @@ public class Tanque  extends Personaje {
     protected String ataqueEspecial;
     protected int rango;
 
-    public Tanque(int movimiento, int idPersonaje, String ataqueEspecial) {
+    public Tanque( int idPersonaje, String ataqueEspecial) {
         this.idPersonaje= idPersonaje;
         this.vida = 2;
         this.ataque = 10;
         this.defensa = 10;
-        this.movimiento = movimiento;
+        this.movimiento = 2;
         this.rectangle = null;
         this.tipo = "Tanque";
         this.ataqueEspecial = ataqueEspecial;
