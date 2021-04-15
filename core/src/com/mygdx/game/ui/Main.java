@@ -1,6 +1,4 @@
 package com.mygdx.game.ui;
-
-import com.mygdx.game.tl.ControllerJugadores;
 import com.mygdx.game.tl.ControllerPersonaje;
 
 import java.io.BufferedReader;
@@ -13,7 +11,6 @@ public class Main {
 
     static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     static PrintStream out = System.out;
-    static ControllerJugadores controllerJugadores;
 
 
     public static void main(String[] args) throws Exception {
@@ -32,8 +29,8 @@ public class Main {
             System.out.println(controllerPersonaje.retornarPersonajes());
         }
         if(opcion == 2){
-           controllerPersonaje.crearPersonaje(2,5,1);
-           System.out.println(controllerPersonaje.retornarPersonajes());
+            controllerPersonaje.crearPersonaje(2,5,1);
+            System.out.println(controllerPersonaje.retornarPersonajes());
         }
         if(opcion == 3){
             controllerPersonaje.crearPersonaje(3,2,1);
@@ -44,13 +41,10 @@ public class Main {
             System.out.println(controllerPersonaje.retornarPersonajesEnemigos());
         }
         if(opcion == 5){
-           int [] ids = {2,3};
-           int id = 1;
-           controllerPersonaje.aplicarAtaqueEspecial(id,ids);
+            int [] ids = {2,3};
+            int id = 1;
+            controllerPersonaje.aplicarAtaqueEspecial(id,ids);
             System.out.println(controllerPersonaje.retornarPersonajes());
-        }
-        if(opcion == 6){
-            System.out.println(controllerJugadores.obtenerTiempoRestanteTurno());
         }
 
         if(opcion == 7){
