@@ -1,6 +1,9 @@
 package com.mygdx.game.tl;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.mygdx.game.bl.celdas.Abstracta.IColor;
+import com.mygdx.game.bl.celdas.Color.Blue;
+import com.mygdx.game.bl.celdas.Color.Red;
 import com.mygdx.game.bl.celdas.HelperCelda;
 import com.mygdx.game.bl.celdas.Prototipos.Celda_Castillo;
 import com.mygdx.game.bl.celdas.Prototipos.Celda_Tablero;
@@ -16,7 +19,7 @@ public class ControllerCelda {
     private final int idInicialCastillo;
     private final Celda prototipoCeldaCastillo;
     private final Celda prototipoCeldaTablero;
-    public static final TextureAtlas cellAtlas = new TextureAtlas("cells.atlas");
+    public static final TextureAtlas cellAtlas = new TextureAtlas("cells/cells.atlas");
 
 
     //***********************************************************************************************
@@ -86,7 +89,7 @@ public class ControllerCelda {
             int num = HelperCelda.randomCastilloBlue(pIdCeldaInicial);
             for (Celda c : arrCeldas) {
                 if (c.getId()==num) {
-                    c.setObjectCell("blue");
+                    c.setCellColor(new Blue(true));
                     break;
                 }
             }
@@ -103,7 +106,8 @@ public class ControllerCelda {
             int num = HelperCelda.randomCastilloRed(pIdCeldaInicial);
             for (Celda c : arrCeldas) {
                 if (c.getId()==num) {
-                    c.setObjectCell("red");
+                    c.setCellColor(new Red(true));
+                    c.setCastillo(true);
                 }
             }
         }
@@ -126,8 +130,20 @@ public class ControllerCelda {
         return this.arrCeldas;
     }
 
-    public void variarCelda(int id) {
-        arrCeldas.get(id).setCellTextureRegion(cellAtlas.findRegion("redCastleCell"));
+    /**
+     * Método que permite obtener cambiar el color de las celdas implementado con el patrón Bridge.
+     */
+    public void changeColor(int id, String color) {
+        IColor colorCell = null;
+
+        if (color.equals("red")) {
+            colorCell = new Red(false);
+        }
+        if (color.equals("blue")) {
+            colorCell = new Blue(false);
+        }
+
+        arrCeldas.get(id).setCellColor(colorCell);
     }
 
 }

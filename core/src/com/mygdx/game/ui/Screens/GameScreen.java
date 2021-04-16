@@ -1,13 +1,16 @@
-package com.mygdx.game.bl.Screens;
+package com.mygdx.game.ui.Screens;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.bl.celdas.iPrototipo.Celda;
+import com.mygdx.game.bl.cofre.Cofre;
 import com.mygdx.game.tl.ControllerCelda;
 import com.mygdx.game.tl.ControllerDado;
 import com.mygdx.game.tl.ControllerObserver;
@@ -17,6 +20,7 @@ import java.util.ArrayList;
 
 
 public class GameScreen implements Screen {
+
     //Conexión con el orquestador
     private MyGdxGame parent;
 
@@ -36,13 +40,39 @@ public class GameScreen implements Screen {
     private final int WORLD_WIDTH = 1600;
     private final int WORLD_HEIGHT = 900;
 
+    //background
+    Texture background;
+
     //game objects
     private ArrayList<Celda> tablero;
+    private Cofre cofre = new Cofre();
+
+    //players
+
+    String turnPlayer = "blue";
+    String colorPlayer1 = "blue";
+    String colorPlayer2 = "red";
+
+    //dice
+
+    int actionDieResult = 1;
+    int summonDieResult = 1;
+    int movementDieResult = 1;
+
+    public TextureRegion actionDie;
+    public TextureRegion summonDie;
+    public TextureRegion movementDie;
+
+
+    //Texture atlas
+    public final TextureAtlas diceAtlas = new TextureAtlas("dice/dice.atlas");
+    public static final TextureAtlas cellAtlas = new TextureAtlas("cells/cells.atlas");
 
     //variables
-    public static final TextureAtlas cellAtlas = new TextureAtlas("cells.atlas");
+
     private String turn;
     private int gameTime;
+    private static int time = 0;
 
 
     public GameScreen(MyGdxGame myGame) {
@@ -64,13 +94,22 @@ public class GameScreen implements Screen {
         gestorObserver = new ControllerObserver(this);
         gestorDado = new ControllerDado();
 
-        //Inicializar TextureRegions
+        //Inicializar background
 
+        background = new Texture("backgrounds/bg.png");
+
+        //Inicializar dados
+
+        actionDie = diceAtlas.findRegion("movement");
+        summonDie = diceAtlas.findRegion("artilleria");
+        movementDie = diceAtlas.findRegion("1");
+
+
+        //Inicializar botones
 
 
         //Establecer objetos de juego
         tablero = gestorCelda.getCellArray();
-
 
 
 
@@ -95,15 +134,22 @@ public class GameScreen implements Screen {
     public void render(float deltaTime) {
         batch.begin();
 
+        //Dibujar background
+        batch.draw(background, 0,0);
+
         //Dibujar Tablero
         for (Celda c:tablero) {
             c.draw(batch);
         }
 
-
         gestorDado.getCofreJugador().draw(batch);
 
-        gestorCelda.variarCelda(50);
+        //DibujarDados
+        batch.draw(summonDie, 52,152);
+        batch.draw(actionDie, 136,152);
+        batch.draw(movementDie, 92,87);
+
+        gestorCelda.changeColor(50, turnPlayer);
 
         batch.end();
 
@@ -142,4 +188,5 @@ public class GameScreen implements Screen {
 
     }
 }
+
 

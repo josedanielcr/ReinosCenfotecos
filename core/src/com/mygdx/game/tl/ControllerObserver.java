@@ -1,6 +1,6 @@
 package com.mygdx.game.tl;
 
-import com.mygdx.game.bl.Screens.GameScreen;
+import com.mygdx.game.ui.Screens.GameScreen;
 import com.mygdx.game.bl.jugadores.concreto.ObserverTimer;
 import com.mygdx.game.bl.jugadores.concreto.SujetoTimer;
 import com.mygdx.game.bl.jugadores.interfaces.Observer;

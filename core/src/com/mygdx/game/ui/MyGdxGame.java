@@ -2,7 +2,7 @@ package com.mygdx.game.ui;
 
 import com.badlogic.gdx.Game;
 import com.mygdx.game.bl.AppPreferences;
-import com.mygdx.game.bl.Screens.*;
+import com.mygdx.game.ui.Screens.*;
 
 public class MyGdxGame extends Game {
 	private GameScreen gameScreen;

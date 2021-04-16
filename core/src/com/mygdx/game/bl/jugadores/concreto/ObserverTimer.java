@@ -1,6 +1,6 @@
 package com.mygdx.game.bl.jugadores.concreto;
 
-import com.mygdx.game.bl.Screens.GameScreen;
+import com.mygdx.game.ui.Screens.GameScreen;
 import com.mygdx.game.bl.jugadores.interfaces.Observer;
 
 public class ObserverTimer implements Observer {
