@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.bl.celdas.Abstracta.IColor;
 
 public abstract class Celda {
-    public static final int posXCeldaInicial = 548, posYCeldaInicial = 405, width = 30, height = 30;
+    public static final int posXCeldaInicial = 248, posYCeldaInicial = 195, width = 30, height = 30;
     private int id;
     private Rectangle boundingBox;
     private IColor cellColor;

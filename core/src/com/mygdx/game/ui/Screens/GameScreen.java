@@ -3,9 +3,10 @@ package com.mygdx.game.ui.Screens;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.bl.celdas.iPrototipo.Celda;
@@ -35,6 +36,9 @@ public class GameScreen implements Screen {
     private final int WORLD_WIDTH = 1600;
     private final int WORLD_HEIGHT = 900;
 
+    //background
+    Texture background;
+
     //game objects
 
     private ArrayList<Celda> tablero;
@@ -46,14 +50,29 @@ public class GameScreen implements Screen {
     String colorPlayer1 = "blue";
     String colorPlayer2 = "red";
 
+    //dice
+
+    int actionDieResult = 1;
+    int summonDieResult = 1;
+    int movementDieResult = 1;
+
+    public TextureRegion actionDie;
+    public TextureRegion summonDie;
+    public TextureRegion movementDie;
+
 
     //TextureAtlas
 
-    public static final TextureAtlas cellAtlas = new TextureAtlas("cells.atlas");
+    public static final TextureAtlas cellAtlas = new TextureAtlas("cells/cells.atlas");
+    public final TextureAtlas diceAtlas = new TextureAtlas("dice/dice.atlas");
+
+    //Controllers & Game Variables
 
     private static int time = 0;
 
     private static ControllerJugadores cJug = new ControllerJugadores();
+
+
 
     public GameScreen(MyGdxGame myGame) {
         parent = myGame;
@@ -73,18 +92,25 @@ public class GameScreen implements Screen {
         //Inicializamos el gestor.
         gestorCelda = new ControllerCelda(numInicialCeldasNormales, numInicialCeldasCastillo, lifepointsCastillo);
 
-        //Inicializar TextureRegions
+        //Inicializar background
 
+        background = new Texture("backgrounds/bg.png");
+
+        //Inicializar dados
+
+        actionDie = diceAtlas.findRegion("movement");
+        summonDie = diceAtlas.findRegion("artilleria");
+        movementDie = diceAtlas.findRegion("1");
+
+
+        //Inicializar botones
 
 
         //Establecer objetos de juego
         tablero = gestorCelda.getCellArray();
 
 
-
-
         batch = new SpriteBatch();
-
     }
 
 
@@ -92,23 +118,25 @@ public class GameScreen implements Screen {
     public void render(float deltaTime) {
         batch.begin();
 
+        //Dibujar background
+        batch.draw(background, 0,0);
+
+
         //Dibujar Tablero
         for (Celda c:tablero) {
             c.draw(batch);
         }
 
-
-
-
-
+        //DibujarDados
+        batch.draw(summonDie, 52,152);
+        batch.draw(actionDie, 136,152);
+        batch.draw(movementDie, 92,87);
 
         cofre.draw(batch);
 
         gestorCelda.changeColor(50, turnPlayer);
 
         batch.end();
-
-
 
     }
 

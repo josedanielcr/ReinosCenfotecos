@@ -19,7 +19,7 @@ public class ControllerCelda {
     private final int idInicialCastillo;
     private final Celda prototipoCeldaCastillo;
     private final Celda prototipoCeldaTablero;
-    public static final TextureAtlas cellAtlas = new TextureAtlas("cells.atlas");
+    public static final TextureAtlas cellAtlas = new TextureAtlas("cells/cells.atlas");
 
 
     //***********************************************************************************************
