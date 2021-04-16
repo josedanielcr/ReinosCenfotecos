@@ -1,7 +1,7 @@
 package com.mygdx.game.bl.personajes.PproductoAbstracto;
 
-
-public interface PersonajeAbstracto {
-    String obtenerInformacionPersonaje();
-    String obtenerTipoPersonaje();
+public interface PersonajeAbstracto  {
+     String obtenerInformacionPersonaje();
+     int getIdPersonaje();
+     String getAtaqueEspecial();
 }

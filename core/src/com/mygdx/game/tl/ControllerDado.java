@@ -11,10 +11,17 @@ public class ControllerDado {
     private static final String[] rollsInvocacion = new String[2];
     private static String rollsAccion="";
     private static int rollMovimiento=0;
-    private static TextureAtlas textureAtlas = new TextureAtlas("dados.atlas");
+//    private static TextureAtlas textureAtlas = new TextureAtlas("dados.atlas");
     private static TextureRegion[] dadoTexture;
     //para probar
-    private static Cofre cofre = new Cofre();
+    private static Cofre cofreJugador;
+    private static Cofre cofreCompu;
+
+    public ControllerDado() {
+        cofreJugador = new Cofre();
+        cofreCompu = new Cofre();
+        //inicializar texturas?
+    }
 
     public static void rodarDado() {
         crearDado(1);
@@ -26,9 +33,9 @@ public class ControllerDado {
     private static void crearDado(int pOpcion){
         Dado dado;
         FabricaDados fabrica = new FabricaDados();
-        dadoTexture[0] = textureAtlas.findRegion("dadoInvocacion");
-        dadoTexture[1] = textureAtlas.findRegion("dadoAccion");
-        dadoTexture[2] = textureAtlas.findRegion("dadoMovimiento");
+//        dadoTexture[0] = textureAtlas.findRegion("dadoInvocacion");
+//        dadoTexture[1] = textureAtlas.findRegion("dadoAccion");
+//        dadoTexture[2] = textureAtlas.findRegion("dadoMovimiento");
 
         switch (pOpcion) {
             case 1:
@@ -70,6 +77,14 @@ public class ControllerDado {
     }
 
     private static void guardarRoll(String prol) {
-        cofre.guardarRoll(prol); //TODO este metodo devuelve un boolean para saber si se guard o no y traducir eso a un msj de error.
+        cofreJugador.guardarRoll(prol); //TODO talvez este metodo devuelve un boolean para saber si se guard o no y traducir eso a un msj de error.
+    }
+
+    private static void guardarRollCompu(String prol){
+        cofreCompu.guardarRoll(prol);
+    }
+
+    public Cofre getCofreJugador(){
+        return cofreJugador;
     }
 }
