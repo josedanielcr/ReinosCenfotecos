@@ -1,0 +1,90 @@
+
+buttons.png
+size: 256, 256
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+addDown
+  rotate: false
+  xy: 2, 2
+  size: 32, 31
+  orig: 32, 31
+  offset: 0, 0
+  index: -1
+addUp
+  rotate: false
+  xy: 121, 74
+  size: 32, 31
+  orig: 32, 31
+  offset: 0, 0
+  index: -1
+atkDown
+  rotate: false
+  xy: 2, 139
+  size: 117, 34
+  orig: 117, 34
+  offset: 0, 0
+  index: -1
+atkUp
+  rotate: false
+  xy: 2, 175
+  size: 117, 34
+  orig: 117, 34
+  offset: 0, 0
+  index: -1
+endTurnDown
+  rotate: false
+  xy: 2, 211
+  size: 117, 34
+  orig: 117, 34
+  offset: 0, 0
+  index: -1
+endTurnUp
+  rotate: false
+  xy: 2, 103
+  size: 117, 34
+  orig: 117, 34
+  offset: 0, 0
+  index: -1
+rollButtonDown
+  rotate: false
+  xy: 2, 35
+  size: 90, 30
+  orig: 90, 30
+  offset: 0, 0
+  index: -1
+rollButtonUp
+  rotate: false
+  xy: 121, 107
+  size: 90, 30
+  orig: 90, 30
+  offset: 0, 0
+  index: -1
+spAtkDown
+  rotate: false
+  xy: 2, 67
+  size: 117, 34
+  orig: 117, 34
+  offset: 0, 0
+  index: -1
+spAtkUp
+  rotate: false
+  xy: 121, 211
+  size: 117, 34
+  orig: 117, 34
+  offset: 0, 0
+  index: -1
+summonDown
+  rotate: false
+  xy: 121, 175
+  size: 117, 34
+  orig: 117, 34
+  offset: 0, 0
+  index: -1
+summonUp
+  rotate: false
+  xy: 121, 139
+  size: 117, 34
+  orig: 117, 34
+  offset: 0, 0
+  index: -1

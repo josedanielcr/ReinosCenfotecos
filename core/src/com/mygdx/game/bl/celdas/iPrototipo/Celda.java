@@ -93,4 +93,5 @@ public abstract class Celda {
         batch.draw(cellColor.getColoredCell(), boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height);
     }
 
+
 }
