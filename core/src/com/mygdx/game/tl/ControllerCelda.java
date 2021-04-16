@@ -12,7 +12,7 @@ import com.mygdx.game.bl.celdas.iPrototipo.Celda;
 import java.util.ArrayList;
 
 public class ControllerCelda {
-    private final ArrayList<Celda> arrCeldas = new ArrayList<>();
+    private ArrayList<Celda> arrCeldas = new ArrayList<>();
     private int idCeldaTablero;
     private int idCeldaCastillo;
     private final int idInicialTablero;

@@ -1,6 +1,8 @@
 package com.mygdx.game.bl.personajes.PproductoConcreto;
 
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.bl.personajes.componente.Personaje;
 
