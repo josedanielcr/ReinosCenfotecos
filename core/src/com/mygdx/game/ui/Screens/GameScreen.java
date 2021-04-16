@@ -1,17 +1,17 @@
-package com.mygdx.game.bl.Screens;
+package com.mygdx.game.ui.Screens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.bl.celdas.iPrototipo.Celda;
 import com.mygdx.game.bl.cofre.Cofre;
 import com.mygdx.game.tl.ControllerCelda;
+import com.mygdx.game.tl.ControllerJugadores;
 import com.mygdx.game.ui.MyGdxGame;
 
 import java.util.ArrayList;
@@ -40,10 +40,20 @@ public class GameScreen implements Screen {
     private ArrayList<Celda> tablero;
     private Cofre cofre = new Cofre();
 
+    //players
+
+    String turnPlayer = "blue";
+    String colorPlayer1 = "blue";
+    String colorPlayer2 = "red";
+
+
     //TextureAtlas
 
     public static final TextureAtlas cellAtlas = new TextureAtlas("cells.atlas");
 
+    private static int time = 0;
+
+    private static ControllerJugadores cJug = new ControllerJugadores();
 
     public GameScreen(MyGdxGame myGame) {
         parent = myGame;
@@ -51,6 +61,9 @@ public class GameScreen implements Screen {
         viewport = new StretchViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
 
         // Especificar atlas de texturas
+
+        // Contenedor de tiempo
+
 
         //Atributos de Gestores
         final int numInicialCeldasNormales = 1;
@@ -85,11 +98,17 @@ public class GameScreen implements Screen {
         }
 
 
+
+
+
+
         cofre.draw(batch);
 
-        gestorCelda.variarCelda(50);
+        gestorCelda.changeColor(50, turnPlayer);
 
         batch.end();
+
+
 
     }
 

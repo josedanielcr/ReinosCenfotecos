@@ -1,17 +1,16 @@
 package com.mygdx.game.bl.celdas.iPrototipo;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.bl.celdas.Abstracta.IColor;
 
 public abstract class Celda {
-    public static final TextureAtlas cellAtlas = new TextureAtlas("cells.atlas");
-    public static final int posXCeldaInicial = 50, posYCeldaInicial = 50, width = 30, height = 30;
+    public static final int posXCeldaInicial = 548, posYCeldaInicial = 405, width = 30, height = 30;
     private int id;
     private Rectangle boundingBox;
-    private TextureRegion cellTextureRegion;
-    private String estado; //free, red, blue
+    private IColor cellColor;
+    private int lifePoints;
+    private boolean castillo;
 
 
     //***********************************************************************************************
@@ -34,20 +33,12 @@ public abstract class Celda {
         this.boundingBox = boundingBox;
     }
 
-    public TextureRegion getCellTextureRegion() {
-        return cellTextureRegion;
+    public IColor getCellColor() {
+        return cellColor;
     }
 
-    public void setCellTextureRegion(TextureRegion cellTextureRegion) {
-        this.cellTextureRegion = cellTextureRegion;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setCellColor(IColor cellColor) {
+        this.cellColor = cellColor;
     }
 
     public void setBoundingBoxX (int x) {
@@ -58,6 +49,21 @@ public abstract class Celda {
         this.boundingBox.y = y;
     }
 
+    public int getLifePoints() {
+        return lifePoints;
+    }
+
+    public void setLifePoints(int lifePoints) {
+        this.lifePoints = lifePoints;
+    }
+
+    public boolean isCastillo() {
+        return castillo;
+    }
+
+    public void setCastillo(boolean castillo) {
+        this.castillo = castillo;
+    }
 
     //***********************************************************************************************
     // MÉTODOS ABSTRACTOS
@@ -84,7 +90,7 @@ public abstract class Celda {
      * @param batch El batch del objeto a dibujar.
      */
     public void draw(Batch batch) {
-        batch.draw(cellTextureRegion, boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height);
+        batch.draw(cellColor.getColoredCell(), boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height);
     }
 
 }

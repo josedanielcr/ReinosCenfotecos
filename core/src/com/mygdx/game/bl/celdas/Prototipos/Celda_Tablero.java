@@ -1,6 +1,7 @@
 package com.mygdx.game.bl.celdas.Prototipos;
 
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.bl.celdas.Color.Gray;
 import com.mygdx.game.bl.celdas.iPrototipo.Celda;
 
 public class Celda_Tablero extends Celda {
@@ -13,8 +14,7 @@ public class Celda_Tablero extends Celda {
     public Celda_Tablero(int id) {
         this.setId(id);
         this.setBoundingBox(new Rectangle(posXCeldaInicial,posYCeldaInicial, width, height));
-        this.setEstado("free");
-        this.setCellTextureRegion(cellAtlas.findRegion("emptyCell1"));
+        this.setCellColor(new Gray(false));
 
     }
 

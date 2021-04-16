@@ -2,12 +2,11 @@ package com.mygdx.game.bl.celdas.Prototipos;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.bl.celdas.Color.Gray;
 import com.mygdx.game.bl.celdas.iPrototipo.Celda;
 
 public class Celda_Castillo extends Celda {
-    final static TextureAtlas cellAtlas = new TextureAtlas("cells.atlas");
-    private int lifePoints;
-    private boolean castillo;
+    final static TextureAtlas cellAtlas = new TextureAtlas("cells/cells.atlas");
 
     //***********************************************************************************************
     // CONSTRUCTORES
@@ -16,31 +15,14 @@ public class Celda_Castillo extends Celda {
     public Celda_Castillo(int id, int lifePoints) {
         this.setId(id);
         this.setBoundingBox(new Rectangle(posXCeldaInicial,posYCeldaInicial, width, height));
-        this.setEstado("free");
-        this.castillo = false;
-        this.setCellTextureRegion(cellAtlas.findRegion("emptyCastleCell"));
-        this.lifePoints = lifePoints;
+        this.setCellColor(new Gray(true));
+        this.setLifePoints(lifePoints);
+        this.setCastillo(false);
     }
 
     //***********************************************************************************************
     // GETS & SETTERS
     //***********************************************************************************************
-
-    public boolean isCastillo() {
-        return castillo;
-    }
-
-    public void setCastillo(boolean castillo) {
-        this.castillo = castillo;
-    }
-
-    public int getLifePoints() {
-        return lifePoints;
-    }
-
-    public void setLifePoints(int lifePoints) {
-        this.lifePoints = lifePoints;
-    }
 
 
     //***********************************************************************************************
@@ -54,24 +36,16 @@ public class Celda_Castillo extends Celda {
 
     @Override
     public void setObjectCell(String codigo) {
-        if (lifePoints>1) {
+         if (this.getLifePoints()==1) {
             if (codigo.equals("blue")) {
-                setCellTextureRegion(cellAtlas.findRegion("blueCastleCell"));
+                this.getCellColor().setColoredCell(cellAtlas.findRegion("blueCastleCell1"));
             }
-            else {
-                setCellTextureRegion(cellAtlas.findRegion("redCastleCell"));
-            }
-            this.castillo = true;
-        }
-        else if (lifePoints==1) {
-            if (codigo.equals("blue")) {
-                setCellTextureRegion(cellAtlas.findRegion("blueCastleCell1"));
-            } else {
-                setCellTextureRegion(cellAtlas.findRegion("redCastleCell1"));
+            if (codigo.equals("red")) {
+                this.getCellColor().setColoredCell(cellAtlas.findRegion("redCastleCell1"));
             }
         }
-        else {
-            setCellTextureRegion(cellAtlas.findRegion("deadCastleCell"));
+        if (this.getLifePoints()==0) {
+            this.getCellColor().setColoredCell(cellAtlas.findRegion("deadCastleCell"));
         }
     }
 
