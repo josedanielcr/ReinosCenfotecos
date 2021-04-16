@@ -232,9 +232,9 @@ public class ControllerPersonaje {
     }
 
     private void decorarAtaqueBomba(int idPropietarie, int[] idExternos) {
-       eliminarPersonaje(idPropietarie);
-       ArrayList<PersonajeAbstracto> personajes = retornarPersonajesDecorador(idExternos, 2);
-       eliminarEnemigues(personajes);
+        eliminarPersonaje(idPropietarie);
+        ArrayList<PersonajeAbstracto> personajes = retornarPersonajesDecorador(idExternos, 2);
+        eliminarEnemigues(personajes);
     }
 
 
@@ -251,7 +251,7 @@ public class ControllerPersonaje {
         }
     }
 
-/**/
+    /**/
 
     //metodos miscelanios
     private void eliminarPersonaje(int idPropietarie){
@@ -296,11 +296,11 @@ public class ControllerPersonaje {
         String [] ataques= null;
         switch (tipoPersonaje){
             case 1:
-               ataques = new String[]{"healer1", "sumar3Ataque", "sumar3Defensa", "bajarDefensa"};
+                ataques = new String[]{"healer1", "sumar3Ataque", "sumar3Defensa", "bajarDefensa"};
                 int r1 = (int) (Math.random() * ataques.length);
                 return ataques[r1];
             case 2:
-               ataques = new String[]{"ataqueDosCasillas", "healer2", "doblePoderAtaque", "doblePoderDefensa", "bajar2Defensa"};
+                ataques = new String[]{"ataqueDosCasillas", "healer2", "doblePoderAtaque", "doblePoderDefensa", "bajar2Defensa"};
                 int r2 = (int) (Math.random() * ataques.length);
                 return ataques[r2];
             case 3:
@@ -327,7 +327,7 @@ public class ControllerPersonaje {
         String ataque = "";
         for(PersonajeAbstracto p: personajesArr){
             if(p.getIdPersonaje() == id){
-               ataque = p.getAtaqueEspecial();
+                ataque = p.getAtaqueEspecial();
             }
         }
         return ataque;
@@ -367,7 +367,7 @@ public class ControllerPersonaje {
 }
 
 
-//    /**MÉTODOS DEL DECORADOR**/
+//    /*MÉTODOS DEL DECORADOR*/
 //    public void decorarPrueba(int id) throws Exception {
 //        PersonajeAbstracto personajeAbstracto;
 //        for (int i=0; i<personajesArr.size();i++) {
