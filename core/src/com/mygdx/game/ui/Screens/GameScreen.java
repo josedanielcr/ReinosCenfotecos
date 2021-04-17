@@ -23,7 +23,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.bl.celdas.iPrototipo.Celda;
-import com.mygdx.game.bl.cofre.Cofre;
 import com.mygdx.game.tl.ControllerCelda;
 import com.mygdx.game.tl.ControllerDado;
 import com.mygdx.game.tl.ControllerObserver;
@@ -61,21 +60,13 @@ public class GameScreen implements Screen, InputProcessor {
 
     //game objects
     private final ArrayList<Celda> tablero;
-    private Cofre cofre = new Cofre();
 
     //players
-
     String currentPlayer = "blue";
 
-     //dice
-
-    int actionDieResult = 1;
-    int summonDieResult = 1;
-    int movementDieResult = 1;
-
-    public TextureRegion actionDie;
+    public TextureRegion summonDie2;
     public TextureRegion summonDie;
-    public TextureRegion movementDie;
+    public TextureRegion actionDie;
 
     //buttons
 
@@ -106,10 +97,10 @@ public class GameScreen implements Screen, InputProcessor {
 
     //Variables
 
-    private String turn;
     public int gameTime = 60;
     private static int time = 0;
     public int currentCell = 1;
+    private boolean rolled;
 
     int cantDadosArtilleria = 0;
     int cantDadosInfanteria = 0;
@@ -130,23 +121,21 @@ public class GameScreen implements Screen, InputProcessor {
         final int numInicialCeldasNormales = 1;
         final int numInicialCeldasCastillo = 1000;
         final int lifepointsCastillo = 3;
-        turn = "jugador"; //TODO que aqui empiece en neutro o algo, y una vez que le de start game empiece a contar
 
 
         //Inicializamos los gestores.
         gestorCelda = new ControllerCelda(numInicialCeldasNormales, numInicialCeldasCastillo, lifepointsCastillo);
         gestorObserver = new ControllerObserver(this);
-        gestorDado = new ControllerDado();
+        gestorDado = new ControllerDado(this);
 
         //Inicializar background
 
         background = new Texture("backgrounds/bg.png");
 
         //Inicializar dados
-
+        summonDie2 = diceAtlas.findRegion("summon");
+        summonDie = diceAtlas.findRegion("summon");
         actionDie = diceAtlas.findRegion("movement");
-        summonDie = diceAtlas.findRegion("artilleria");
-        movementDie = diceAtlas.findRegion("1");
 
 
         //Inicializar labels
@@ -184,31 +173,35 @@ public class GameScreen implements Screen, InputProcessor {
         chestInfanteria.setSize(31, 30);
         chestInfanteria.setPosition(1077, 136);
         chestInfanteria.setAlignment(Align.center);
-        chestInfanteria.setText(cantDadosInfanteria);
 
         chestArtilleria = new Label("-1", labelStyle);
         chestArtilleria.setSize(31, 30);
         chestArtilleria.setPosition(1077, 86);
         chestArtilleria.setAlignment(Align.center);
-        chestArtilleria.setText(cantDadosArtilleria);
 
         chestTanque = new Label("-1", labelStyle);
         chestTanque.setSize(31, 30);
         chestTanque.setPosition(1077, 40);
         chestTanque.setAlignment(Align.center);
-        chestTanque.setText(cantDadosTanque);
 
         chestAtk = new Label("-1", labelStyle);
         chestAtk.setSize(31, 30);
         chestAtk.setPosition(1171, 125);
         chestAtk.setAlignment(Align.center);
-        chestAtk.setText(cantDadosAtk);
 
         chestSpAtk = new Label("-1", labelStyle);
         chestSpAtk.setSize(31, 30);
         chestSpAtk.setPosition(1171, 58);
         chestSpAtk.setAlignment(Align.center);
-        chestSpAtk.setText(cantDadosSpAtk);
+
+        /* __________________________________________________________________________________________*/
+        /* --------------                      Label Comm                                    --------*/
+        /* ------------------------------------------------------------------------------------------*/
+
+        comm = new Label("", labelStyle);
+        comm.setSize(164, 30);
+        comm.setPosition(500, 40);
+        comm.setAlignment(Align.center);
 
 
         //Inicializar botones
@@ -225,7 +218,13 @@ public class GameScreen implements Screen, InputProcessor {
         btnRoll.setPosition(75,40);
         btnRoll.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
-                System.out.println("Accion ejecutada: Tirar Dados");
+                if(!rolled) {
+                    comm.setText("");
+                    gestorDado.rodarDado();
+                    rolled=true;
+                }else{
+                    comm.setText("Solo puede tirar los dados 1 vez por turno.");
+                }
             }
         });
 
@@ -241,6 +240,7 @@ public class GameScreen implements Screen, InputProcessor {
         btnEndTurn.setPosition(1083,690);
         btnEndTurn.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                comm.setText("");
                 endTurn();
             }
         });
@@ -264,7 +264,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 
         /* __________________________________________________________________________________________*/
-        /* -----------                        Botón de Add Chest                             --------*/
+        /* -----------                        Botón de Add To Chest                             --------*/
         /* ------------------------------------------------------------------------------------------*/
         TextureRegionDrawable addUp =  new TextureRegionDrawable(buttonAtlas.findRegion("addUp"));
         TextureRegionDrawable addDown =  new TextureRegionDrawable(buttonAtlas.findRegion("addDown"));
@@ -275,7 +275,12 @@ public class GameScreen implements Screen, InputProcessor {
         btnAddChest.setPosition(929,122);
         btnAddChest.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
-                System.out.println("Accion ejecutada: Se agregaron dados de turno a cofre."); // editar con el método correcto
+                if(currentPlayer.equals("blue")) {
+                    gestorDado.addToChest(1);
+                    summonDie = diceAtlas.findRegion("summon");
+                    summonDie2 = diceAtlas.findRegion("summon");
+                    comm.setText("Dados almacenados en el cofre.");
+                }
             }
         });
 
@@ -312,13 +317,14 @@ public class GameScreen implements Screen, InputProcessor {
         stage.addActor(chestTanque);
         stage.addActor(chestAtk);
         stage.addActor(chestSpAtk);
+        stage.addActor(comm);
     }
 
 
     @Override
     public void render(float deltaTime) {
         batch.begin();
-        lTimer.setText(gameTime);
+
         //Dibujar background
         batch.draw(background, 0,0);
 
@@ -327,15 +333,19 @@ public class GameScreen implements Screen, InputProcessor {
             c.draw(batch);
         }
 
+        //dibuja labels dinamicas
+        lTimer.setText(gameTime);
+        chestInfanteria.setText(cantDadosInfanteria);
+        chestArtilleria.setText(cantDadosArtilleria);
+        chestTanque.setText(cantDadosTanque);
+        chestAtk.setText(cantDadosAtk);
+        chestSpAtk.setText(cantDadosSpAtk);
 
-        //Dibujar Dados
         batch.draw(summonDie, 52,152);
-        batch.draw(actionDie, 136,152);
-        batch.draw(movementDie, 92,87);
+        batch.draw(summonDie2, 136,152);
+        batch.draw(actionDie, 92,87);
 
-        //Dibujar
-
-
+        //Dibujar celdas
         gestorCelda.changeColor(50, currentPlayer);
 
         batch.end();
@@ -432,6 +442,7 @@ public class GameScreen implements Screen, InputProcessor {
         }
         else if(currentPlayer.equals("red")){
             currentPlayer="blue";
+            rolled=false;
         }
 
         if (currentPlayer.equals("blue") ) {
@@ -444,10 +455,62 @@ public class GameScreen implements Screen, InputProcessor {
     public void endTurn(){
         changeTurn();
         gestorObserver.resetTimer();
+        rolled=false;
     }
 
     public void updateClock(int value){
         gameTime=value; //actualiza variable local para dibujar el tiempo restante del turno
+    }
+
+    public void renderDice(String rollInvo, String rollInvo2, String rollAccion){
+        switch (rollInvo) {
+            case "Infanteria":
+                summonDie = diceAtlas.findRegion("infanteria");
+                break;
+            case "Artilleria":
+                summonDie = diceAtlas.findRegion("artilleria");
+                break;
+            case "Tanque":
+                summonDie = diceAtlas.findRegion("tanque");
+                break;
+        }
+
+        switch(rollInvo2){
+            case "Infanteria":
+                summonDie2 = diceAtlas.findRegion("infanteria");
+                break;
+            case "Artilleria":
+                summonDie2 = diceAtlas.findRegion("artilleria");
+                break;
+            case "Tanque":
+                summonDie2 = diceAtlas.findRegion("tanque");
+                break;
+            default:
+                summonDie2 = diceAtlas.findRegion("summon");
+                break;
+        }
+
+        if (rollAccion.equals("Ataque")){
+            actionDie = diceAtlas.findRegion("atk");
+        }else if (rollAccion.equals("AtaqueEspecial")){
+            actionDie = diceAtlas.findRegion("spatk");
+        }else{
+            int movimiento = Integer.parseInt(rollAccion);
+            for (int i=0;i<6;i++){
+                if(i==movimiento){
+                    actionDie = diceAtlas.findRegion(String.valueOf(i));
+                }
+            }
+        }
+    }
+
+    public void updateChest() {
+        int[] dice = gestorDado.savedDice();
+        cantDadosInfanteria=dice[0];
+        cantDadosArtilleria=dice[1];
+        cantDadosTanque=dice[2];
+        cantDadosAtk=dice[3];
+        cantDadosSpAtk=dice[4];
     }
 }
 

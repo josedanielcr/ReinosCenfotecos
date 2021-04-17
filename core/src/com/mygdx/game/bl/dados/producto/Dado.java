@@ -11,13 +11,11 @@ public abstract class Dado {
     private String lado5;
     private String lado6;
     private String tipo;
-    TextureRegion dadoTextureRegion;
 
     //CONSTRUCTOR
 
-    public Dado(String tipo, TextureRegion pdadoTextureRegion) {
+    public Dado(String tipo) {
         this.tipo = tipo;
-        this.dadoTextureRegion = pdadoTextureRegion;
     }
 
     public Dado(String lado1, String lado2, String lado3, String lado4, String lado5, String lado6, String tipo) {
@@ -92,7 +90,7 @@ public abstract class Dado {
 
     //METODOS ABSTRACTOS
 
-    public abstract String rollDice();
+    public abstract String rollDie();
     public abstract void asignarLados();
 
 }
