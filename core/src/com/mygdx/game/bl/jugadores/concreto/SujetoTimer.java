@@ -12,6 +12,9 @@ public class SujetoTimer implements Sujeto {
     private ArrayList<Observer> observers = new ArrayList<>();
     public int tiempoRestante = 60;
     boolean newTurn=false;
+    Timer timer;
+    int seconds = 60;
+    int i = 0;
 
     public SujetoTimer() {
         cronometro();
@@ -19,27 +22,12 @@ public class SujetoTimer implements Sujeto {
 
     private void cronometro() {
         TimerTask task =new TimerTask() {
-            int seconds = 60;
-            int i = 0;
             @Override
             public void run() {
-                i++;
-                if (i % seconds == 0) {
-                    tiempoRestante = 0;
-                    newTurn=true;
-                }
-                else {
-                    tiempoRestante = (seconds - i);
-                }
-                notificarObservadores();
-                if(newTurn){
-                    newTurn=false;
-                    i=0;
-                    tiempoRestante=60;
-                }
+                timerRun();
             }
         };
-        Timer timer = new Timer();
+        timer = new Timer();
         timer.schedule(task, 0, 1000);
     }
 
@@ -61,6 +49,38 @@ public class SujetoTimer implements Sujeto {
     public void notificarObservadores() {
         for(Observer o:observers){
             o.actualizar(tiempoRestante);
+        }
+    }
+
+    public void reset() {
+        tiempoRestante=60;
+        i=0;
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                timerRun();
+            }
+        };
+        timer.cancel();
+        timer = new Timer();
+        timer.schedule(task,0,1000);
+    }
+
+    public void timerRun() {
+        i++;
+        if (i % seconds == 0) {
+            tiempoRestante = 0;
+            newTurn=true;
+        }
+        else {
+            tiempoRestante = (seconds - i);
+        }
+        notificarObservadores();
+        if(newTurn){
+            newTurn=false;
+            tiempoRestante=10;
+            i=0;
+            reset();
         }
     }
 }

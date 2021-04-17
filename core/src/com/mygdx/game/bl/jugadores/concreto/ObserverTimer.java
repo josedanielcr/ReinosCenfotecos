@@ -30,7 +30,7 @@ public class ObserverTimer implements Observer {
 
     private void updateTurn(int value){
         if(value==0){
-            gs.changeTurn(); // TODO
+            gs.changeTurn();
         }else{
             gs.updateClock(value); //dibuja
         }
