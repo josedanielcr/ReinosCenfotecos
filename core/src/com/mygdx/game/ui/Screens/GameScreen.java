@@ -13,14 +13,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.bl.celdas.iPrototipo.Celda;
@@ -66,11 +65,9 @@ public class GameScreen implements Screen, InputProcessor {
 
     //players
 
-    String turnPlayer = "blue";
-    String colorPlayer1 = "blue";
-    String colorPlayer2 = "red";
+    String currentPlayer = "blue";
 
-    //dice
+     //dice
 
     int actionDieResult = 1;
     int summonDieResult = 1;
@@ -92,19 +89,33 @@ public class GameScreen implements Screen, InputProcessor {
     //Labels
 
     Label lTimer;
+    Label lTurnPlayer;
+    Label chestInfanteria;
+    Label chestArtilleria;
+    Label chestTanque;
+    Label chestAtk;
+    Label chestSpAtk;
+    Label comm;
+    Label idCell;
+    Label idPattern;
 
     //Texture atlas
     public final TextureAtlas diceAtlas = new TextureAtlas("dice/dice.atlas");
     public final TextureAtlas cellAtlas = new TextureAtlas("cells/cells.atlas");
     public final TextureAtlas buttonAtlas = new TextureAtlas("buttons/buttons.atlas");
 
-    //variables
+    //Variables
 
     private String turn;
-    private int gameTime = 60;
+    public int gameTime = 60;
     private static int time = 0;
     public int currentCell = 1;
-    public String currentPlayer = "blue";
+
+    int cantDadosArtilleria = 0;
+    int cantDadosInfanteria = 0;
+    int cantDadosTanque = 0;
+    int cantDadosAtk = 0;
+    int cantDadosSpAtk = 0;
 
 
     public GameScreen(MyGdxGame myGame) {
@@ -120,7 +131,7 @@ public class GameScreen implements Screen, InputProcessor {
         final int numInicialCeldasCastillo = 1000;
         final int lifepointsCastillo = 3;
         turn = "jugador"; //TODO que aqui empiece en neutro o algo, y una vez que le de start game empiece a contar
-        gameTime=0;
+
 
         //Inicializamos los gestores.
         gestorCelda = new ControllerCelda(numInicialCeldasNormales, numInicialCeldasCastillo, lifepointsCastillo);
@@ -140,18 +151,71 @@ public class GameScreen implements Screen, InputProcessor {
 
         //Inicializar labels
 
-        /*Label.LabelStyle labelStyle = new Label.LabelStyle();
-        BitmapFont myFont = new BitmapFont("R");
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        BitmapFont myFont = new BitmapFont(Gdx.files.internal("fonts/font-export.fnt"));
         labelStyle.fontColor = Color.WHITE;
-        labelStyle.font = myFont;*/
+        labelStyle.font = myFont;
 
 
         /* __________________________________________________________________________________________*/
-        /* --------------                         Cronómetro                                 --------*/
+        /* --------------                       Label Cronómetro                             --------*/
         /* ------------------------------------------------------------------------------------------*/
-        /*lTimer = new Label("60",);
-        lTimer.setSize(100, 30);
-        lTimer.setPosition(1104, 852);*/
+
+        lTimer = new Label("time", labelStyle);
+        lTimer.setSize(130, 30);
+        lTimer.setPosition(1100, 852);
+        lTimer.setAlignment(Align.center);
+        lTimer.setText(gameTime);
+
+        /* __________________________________________________________________________________________*/
+        /* --------------                      Label Turn Player                             --------*/
+        /* ------------------------------------------------------------------------------------------*/
+
+        lTurnPlayer = new Label("Player", labelStyle);
+        lTurnPlayer.setSize(164, 30);
+        lTurnPlayer.setPosition(907, 852);
+        lTurnPlayer.setAlignment(Align.center);
+
+        if (currentPlayer.equals("blue") ) {
+            lTurnPlayer.setText("Player 1");
+        }
+        if (currentPlayer.equals("red") ) {
+            lTurnPlayer.setText("Player 2");
+        }
+
+        /* __________________________________________________________________________________________*/
+        /* --------------                      Labels Chest Stats                            --------*/
+        /* ------------------------------------------------------------------------------------------*/
+
+        chestInfanteria = new Label("-1", labelStyle);
+        chestInfanteria.setSize(31, 30);
+        chestInfanteria.setPosition(1077, 136);
+        chestInfanteria.setAlignment(Align.center);
+        chestInfanteria.setText(cantDadosInfanteria);
+
+        chestArtilleria = new Label("-1", labelStyle);
+        chestArtilleria.setSize(31, 30);
+        chestArtilleria.setPosition(1077, 86);
+        chestArtilleria.setAlignment(Align.center);
+        chestArtilleria.setText(cantDadosArtilleria);
+
+        chestTanque = new Label("-1", labelStyle);
+        chestTanque.setSize(31, 30);
+        chestTanque.setPosition(1077, 40);
+        chestTanque.setAlignment(Align.center);
+        chestTanque.setText(cantDadosTanque);
+
+        chestAtk = new Label("-1", labelStyle);
+        chestAtk.setSize(31, 30);
+        chestAtk.setPosition(1171, 125);
+        chestAtk.setAlignment(Align.center);
+        chestAtk.setText(cantDadosAtk);
+
+        chestSpAtk = new Label("-1", labelStyle);
+        chestSpAtk.setSize(31, 30);
+        chestSpAtk.setPosition(1171, 58);
+        chestSpAtk.setAlignment(Align.center);
+        chestSpAtk.setText(cantDadosSpAtk);
 
 
         //Inicializar botones
@@ -242,15 +306,19 @@ public class GameScreen implements Screen, InputProcessor {
 
         Gdx.input.setInputProcessor(multiplexer);
 
-        //add elements to stage
+        //add actors to stage
 
         stage.addActor(btnRoll);
         stage.addActor(btnEndTurn);
         stage.addActor(btnAddChest);
         stage.addActor(btnSummon);
-        /*stage.addActor(lTimer);*/
-
-
+        stage.addActor(lTimer);
+        stage.addActor(lTurnPlayer);
+        stage.addActor(chestInfanteria);
+        stage.addActor(chestArtilleria);
+        stage.addActor(chestTanque);
+        stage.addActor(chestAtk);
+        stage.addActor(chestSpAtk);
     }
 
 
@@ -275,7 +343,7 @@ public class GameScreen implements Screen, InputProcessor {
         //Dibujar
 
 
-        gestorCelda.changeColor(50, turnPlayer);
+        gestorCelda.changeColor(50, currentPlayer);
 
         batch.end();
         stage.act();
@@ -308,6 +376,7 @@ public class GameScreen implements Screen, InputProcessor {
     @Override
     public void dispose() {
         batch.dispose();
+        stage.dispose();
     }
 
     @Override
@@ -341,12 +410,6 @@ public class GameScreen implements Screen, InputProcessor {
                 System.out.println("Celda seleccionada : "+currentCell);
             }
         }
-
-
-        /*if (btnRoll.isPressed()) {
-            System.out.println("Botón de Roll presionado");
-        }*/
-
         return false;
     }
 
