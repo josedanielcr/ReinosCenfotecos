@@ -171,17 +171,10 @@ public class GameScreen implements Screen, InputProcessor {
         /* --------------                      Label Turn Player                             --------*/
         /* ------------------------------------------------------------------------------------------*/
 
-        lTurnPlayer = new Label("Player", labelStyle);
+        lTurnPlayer = new Label("Player 1", labelStyle);
         lTurnPlayer.setSize(164, 30);
         lTurnPlayer.setPosition(907, 852);
         lTurnPlayer.setAlignment(Align.center);
-
-        if (currentPlayer.equals("blue") ) {
-            lTurnPlayer.setText("Player 1");
-        }
-        if (currentPlayer.equals("red") ) {
-            lTurnPlayer.setText("Player 2");
-        }
 
         /* __________________________________________________________________________________________*/
         /* --------------                      Labels Chest Stats                            --------*/
@@ -248,7 +241,7 @@ public class GameScreen implements Screen, InputProcessor {
         btnEndTurn.setPosition(1083,690);
         btnEndTurn.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
-                System.out.println("Accion ejecutada: Final del turno."); // editar con el método correcto
+                endTurn();
             }
         });
 
@@ -325,7 +318,7 @@ public class GameScreen implements Screen, InputProcessor {
     @Override
     public void render(float deltaTime) {
         batch.begin();
-
+        lTimer.setText(gameTime);
         //Dibujar background
         batch.draw(background, 0,0);
 
@@ -437,9 +430,20 @@ public class GameScreen implements Screen, InputProcessor {
         if(currentPlayer.equals("blue")){
             currentPlayer="red";
         }
-        if(currentPlayer.equals("red")){
+        else if(currentPlayer.equals("red")){
             currentPlayer="blue";
         }
+
+        if (currentPlayer.equals("blue") ) {
+            lTurnPlayer.setText("Player 1");
+        }else if (currentPlayer.equals("red") ) {
+            lTurnPlayer.setText("Player 2");
+        }
+    }
+
+    public void endTurn(){
+        changeTurn();
+        gestorObserver.resetTimer();
     }
 
     public void updateClock(int value){
