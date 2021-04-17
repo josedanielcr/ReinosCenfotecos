@@ -44,29 +44,40 @@ public class Cofre {
 
     //METODOS
 
-    public void guardarRoll(String proll1, String proll2, String proll3) {
+    public boolean guardarRoll(String proll1, String proll2, String proll3) {
+        boolean added=true;
 
         if (proll1.equals("Infanteria") || proll1.equals("Artilleria") || proll1.equals("Tanque")) {
             if (campoCofre(1)) {
                 dadosInvocacion.add(proll1);
+            }else{
+                added=false;
             }
         }
 
         if (proll2.equals("Infanteria") || proll2.equals("Artilleria") || proll2.equals("Tanque")) {
             if (campoCofre(1)) {
                 dadosInvocacion.add(proll2);
+            }else{
+                added=false;
             }
         }
 
         if (proll3.equals("Ataque")) {
             if (campoCofre(2)) {
                 dadosAtaque.add(proll1);
+            }else{
+                added=false;
             }
         } else if (proll3.equals("AtaqueEspecial")) {
             if (campoCofre(3)) {
                 dadosAtaqueEspecial.add(proll1);
+            }else{
+                added=false;
             }
         }
+
+        return added;
     }
 
     public boolean campoCofre(int pcofre) {

@@ -61,17 +61,26 @@ public class ControllerDado {
         return rollMovimiento;
     }
 
-    public void addToChest(int pplayer){
-        if(pplayer==1){
-            guardarRoll(rollsInvocacion[0],rollsInvocacion[1],rollAccion);
+    public boolean addToChest(int pplayer){
+        if(rollsInvocacion!=null && rollAccion!=null) {
+            if (pplayer == 1) {
+                guardarRoll(rollsInvocacion[0], rollsInvocacion[1], rollAccion);
+            } else {
+                guardarRollCompu(rollsInvocacion[0], rollsInvocacion[1], rollAccion);
+            }
+            gameScreen.updateChest();
+            return true;
         }else{
-            guardarRollCompu(rollsInvocacion[0],rollsInvocacion[1],rollAccion);
+            return false;
         }
-        gameScreen.updateChest();
     }
 
     private void guardarRoll(String prol, String prol2, String prol3) {
-        cofreJugador.guardarRoll(prol,prol2,prol3);
+        if(!cofreJugador.guardarRoll(prol,prol2,prol3)) {
+            gameScreen.full();
+        }
+        rollsInvocacion = null;
+        rollAccion = null;
     }
 
     private void guardarRollCompu(String prol, String prol2, String prol3){

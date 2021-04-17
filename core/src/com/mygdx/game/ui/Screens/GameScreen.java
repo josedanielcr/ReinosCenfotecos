@@ -101,6 +101,9 @@ public class GameScreen implements Screen, InputProcessor {
     private static int time = 0;
     public int currentCell = 1;
     private boolean rolled;
+    private boolean notMovement;
+    private boolean addedToChest=false;
+    private boolean fullChest=false;
 
     int cantDadosArtilleria = 0;
     int cantDadosInfanteria = 0;
@@ -200,7 +203,7 @@ public class GameScreen implements Screen, InputProcessor {
 
         comm = new Label("", labelStyle);
         comm.setSize(164, 30);
-        comm.setPosition(500, 40);
+        comm.setPosition(475, 40);
         comm.setAlignment(Align.center);
 
 
@@ -241,6 +244,7 @@ public class GameScreen implements Screen, InputProcessor {
         btnEndTurn.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 comm.setText("");
+                addedToChest=false;
                 endTurn();
             }
         });
@@ -267,7 +271,7 @@ public class GameScreen implements Screen, InputProcessor {
         /* -----------                        Botón de Add To Chest                             --------*/
         /* ------------------------------------------------------------------------------------------*/
         TextureRegionDrawable addUp =  new TextureRegionDrawable(buttonAtlas.findRegion("addUp"));
-        TextureRegionDrawable addDown =  new TextureRegionDrawable(buttonAtlas.findRegion("addDown"));
+        final TextureRegionDrawable addDown =  new TextureRegionDrawable(buttonAtlas.findRegion("addDown"));
         ImageButton.ImageButtonStyle styleAdd = new ImageButton.ImageButtonStyle();
         styleAdd.up = addUp;
         styleAdd.down = addDown;
@@ -275,11 +279,27 @@ public class GameScreen implements Screen, InputProcessor {
         btnAddChest.setPosition(929,122);
         btnAddChest.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
-                if(currentPlayer.equals("blue")) {
-                    gestorDado.addToChest(1);
-                    summonDie = diceAtlas.findRegion("summon");
-                    summonDie2 = diceAtlas.findRegion("summon");
-                    comm.setText("Dados almacenados en el cofre.");
+                if(currentPlayer.equals("blue") && !addedToChest) {
+                    if(gestorDado.addToChest(1)) {
+                        summonDie = diceAtlas.findRegion("summon");
+                        summonDie2 = diceAtlas.findRegion("summon");
+                        if (notMovement) {
+                            actionDie = diceAtlas.findRegion("movement");
+                        }
+                        if(!fullChest) {
+                            comm.setText("Dados almacenados en el cofre.");
+                        }else{
+                            comm.setText("Error: Cofre lleno. Al menos 1 dado no se pudo guardar.");
+                        }
+                        addedToChest=true;
+                    }else{
+                        comm.setText("No hay dados que almacenar.");
+                        addedToChest=false;
+                    }
+                }else{
+                    if(!fullChest) {
+                        comm.setText("Solo se pueden guardar dados 1 vez por turno.");
+                    }
                 }
             }
         });
@@ -492,9 +512,12 @@ public class GameScreen implements Screen, InputProcessor {
 
         if (rollAccion.equals("Ataque")){
             actionDie = diceAtlas.findRegion("atk");
+            notMovement=true;
         }else if (rollAccion.equals("AtaqueEspecial")){
             actionDie = diceAtlas.findRegion("spatk");
+            notMovement=true;
         }else{
+            notMovement=false;
             int movimiento = Integer.parseInt(rollAccion);
             for (int i=0;i<6;i++){
                 if(i==movimiento){
@@ -502,6 +525,7 @@ public class GameScreen implements Screen, InputProcessor {
                 }
             }
         }
+        System.out.println("Roll de accion: "+rollAccion);
     }
 
     public void updateChest() {
@@ -511,6 +535,10 @@ public class GameScreen implements Screen, InputProcessor {
         cantDadosTanque=dice[2];
         cantDadosAtk=dice[3];
         cantDadosSpAtk=dice[4];
+    }
+
+    public void full() {
+        fullChest=true;
     }
 }
 
