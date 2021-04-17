@@ -1,5 +1,6 @@
 package com.mygdx.game.bl.personajes.decoradorConcreto;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.bl.personajes.componente.Personaje;
 import com.mygdx.game.bl.personajes.decorador.ObjetoDecorado;
@@ -14,7 +15,7 @@ public class TanqueProtector extends ObjetoDecorado {
     public String obtenerInformacionPersonaje() {
         return "Este personaje es un " +this.getTipo()+ " ,tiene una vida de " +this.getVida() + " ,tiene una defensa de " +this.getDefensa()+ " ," +
                 "tiene un ataque de " + this.getAtaque()+ ", y un movimiento de "+ this.getMovimiento() + " id: " + this.getIdPersonaje() +
-                " ,un ataque especial " + this.getAtaqueEspecial() + ", finalmente un rango de " + this.getRango();
+                " ,un ataque especial " + this.getAtaqueEspecial() + ", un rango de " + this.getRango() + " ,Y un textureRegion de " + this.gettRegion();
     }
 
     @Override
@@ -94,5 +95,15 @@ public class TanqueProtector extends ObjetoDecorado {
 
     @Override
     public void setRango(int pRango) { this.cPersonaje.setRango(pRango);
+    }
+
+    @Override
+    public void settRegion(TextureRegion tRegion) {
+        this.cPersonaje.settRegion(tRegion);
+    }
+
+    @Override
+    public TextureRegion gettRegion() {
+        return this.cPersonaje.gettRegion();
     }
 }

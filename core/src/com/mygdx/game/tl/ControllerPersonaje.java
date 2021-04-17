@@ -19,7 +19,7 @@ public class ControllerPersonaje {
     private static int contGeneral=0;
 
     //controller real
-    public PersonajeAbstracto crearPersonaje(int tipoPersonaje, int dadoCantMoviendo, int tipo){
+    public PersonajeAbstracto crearPersonaje(int tipoPersonaje, int dadoCantMoviendo, int tipo, String personajeActivo){
 
         PersonajeAbstracto personajeDeRetorno = null;
         PersonajeFA personaje;
@@ -29,10 +29,10 @@ public class ControllerPersonaje {
                     personaje = new Fabrica_infanteria();
                     if(tipo==1){
 
-                        personajeDeRetorno = crearFabricaPersonaje(personaje,  1,1);
+                        personajeDeRetorno = crearFabricaPersonaje(personaje,  1,1, personajeActivo);
                     } else{
 
-                        personajeDeRetorno = crearFabricaPersonaje(personaje, 1,2);
+                        personajeDeRetorno = crearFabricaPersonaje(personaje, 1,2, personajeActivo);
 
                     }
 
@@ -40,13 +40,13 @@ public class ControllerPersonaje {
                     break;
                 case 2:
                     personaje = new Fabrica_artilleria();
-                    if(tipo==1)personajeDeRetorno = crearFabricaPersonaje(personaje, 2,1);
-                    else personajeDeRetorno = crearFabricaPersonaje(personaje,  2,2);
+                    if(tipo==1)personajeDeRetorno = crearFabricaPersonaje(personaje, 2,1, personajeActivo);
+                    else personajeDeRetorno = crearFabricaPersonaje(personaje,  2,2, personajeActivo);
                     break;
                 case 3:
                     personaje = new Fabrica_tanque();
-                    if(tipo==1)personajeDeRetorno = crearFabricaPersonaje(personaje,  3,1);
-                    else personajeDeRetorno = crearFabricaPersonaje(personaje,  3,2);
+                    if(tipo==1)personajeDeRetorno = crearFabricaPersonaje(personaje,  3,1, personajeActivo);
+                    else personajeDeRetorno = crearFabricaPersonaje(personaje,  3,2, personajeActivo);
                     break;
             }
         } catch (Exception e){
@@ -56,9 +56,9 @@ public class ControllerPersonaje {
     }
 
 
-    private PersonajeAbstracto crearFabricaPersonaje(PersonajeFA personaje, int tipoPersonaje, int tipo) throws Exception{//tipo es para ver si es enemigue o no
+    private PersonajeAbstracto crearFabricaPersonaje(PersonajeFA personaje, int tipoPersonaje, int tipo, String personajeActivo) throws Exception{//tipo es para ver si es enemigue o no
 
-        PersonajeAbstracto objPersonaje = personaje.crearPersonaje( obtenerId(), retornarAtaqueEspecial(tipoPersonaje));
+        PersonajeAbstracto objPersonaje = personaje.crearPersonaje(obtenerId(), retornarAtaqueEspecial(tipoPersonaje),personajeActivo );
         if(tipo==1) {
             personajesArr.add(objPersonaje);
         }
@@ -75,7 +75,7 @@ public class ControllerPersonaje {
     public void crearPersonajeEnemigo() throws Exception {
         int tipoPersonaje = valorPersonajeRandom();
         int cantMovimiento = retornarMovimientoPersonaje(tipoPersonaje);
-        PersonajeAbstracto personajeAbstracto= crearPersonaje(cantMovimiento,tipoPersonaje,2);
+        PersonajeAbstracto personajeAbstracto= crearPersonaje(cantMovimiento,tipoPersonaje,2, "red");
         //personajesArrEnemigo.add(personajeAbstracto);
     }
 

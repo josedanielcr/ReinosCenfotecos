@@ -6,21 +6,23 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.bl.personajes.componente.Personaje;
 
-import java.util.ArrayList;
 
 public class Artilleria  extends Personaje {
+
+    //final static TextureAtlas personajeAtlas = new TextureAtlas("");
     protected int idPersonaje;
     protected int vida;
     protected int ataque;
     protected int defensa;
     protected int movimiento;
     protected Rectangle rectangle;
+    protected TextureRegion tRegion;
     protected  String tipo;
     protected String ataqueEspecial;
     protected int rango;
 
 
-    public Artilleria( int idPersonaje, String ataqueEspecial) {
+    public Artilleria( int idPersonaje, String ataqueEspecial, String personajeActivo) {
         this.idPersonaje=idPersonaje;
         this.vida = 4;
         this.ataque = 6;
@@ -30,6 +32,14 @@ public class Artilleria  extends Personaje {
         this.tipo = "Artilleria";
         this.ataqueEspecial = ataqueEspecial;
         this.rango=1;
+        if(personajeActivo.equals("blue")){
+            //this.tRegion = personajeAtlas.findRegion("");
+        }
+        if(personajeActivo.equals("red")){
+            //this.tRegion = personajeAtlas.findRegion("");
+        }
+        //mientras milton pone el atlas :)
+        this.tRegion = null;
     }
 
     public int getIdPersonaje() {
@@ -99,7 +109,16 @@ public class Artilleria  extends Personaje {
     public void setRango(int rango) {
         this.rango = rango;
     }
-/* @Override
+
+    public TextureRegion gettRegion() {
+        return tRegion;
+    }
+
+    public void settRegion(TextureRegion tRegion) {
+        this.tRegion = tRegion;
+    }
+
+    /* @Override
     public String aplicarAtaqueEspecial() {
         return null;
     }*/
@@ -114,7 +133,7 @@ public class Artilleria  extends Personaje {
     public String obtenerInformacionPersonaje() {
         return "Este personaje es un " +this.getTipo()+ " ,tiene una vida de " +this.getVida() + " ,tiene una defensa de " +this.getDefensa()+ " ," +
                 "tiene un ataque de " + this.getAtaque()+ ", y un movimiento de "+ this.getMovimiento() + " id: " + this.getIdPersonaje() +
-                " ,un ataque especial " + this.getAtaqueEspecial() + ", finalmente un rango de " + this.getRango();
+                " ,un ataque especial " + this.getAtaqueEspecial() + ", un rango de " + this.getRango() + " ,Y un textureRegion de " + this.gettRegion();
     }
 
 
