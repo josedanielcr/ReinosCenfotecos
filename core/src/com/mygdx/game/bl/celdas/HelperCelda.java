@@ -57,7 +57,7 @@ public class HelperCelda {
      * @param idInicialCastillo El ID de la primera celda de zona de castillo.
      * @return El ID de zona de castillo seleccionada al azar para el Jugador 1.
      */
-    public static int randomCastilloRed(int idInicialCastillo) {
+    public static int randomCastilloBlue(int idInicialCastillo) {
         int seleccion;
         Random rand = new Random();
         seleccion = rand.nextInt(20);
@@ -69,7 +69,7 @@ public class HelperCelda {
      * @param idInicialCastillo El ID de la primera celda de zona de castillo.
      * @return El ID de zona de castillo seleccionada al azar para el Jugador 2.
      */
-    public static int randomCastilloBlue (int idInicialCastillo) {
+    public static int randomCastilloRed (int idInicialCastillo) {
         int seleccion;
         Random rand = new Random();
         seleccion = rand.nextInt(20);

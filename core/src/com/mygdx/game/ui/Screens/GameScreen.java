@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -63,8 +64,6 @@ public class GameScreen implements Screen, InputProcessor {
     private final ArrayList<Celda> tablero;
     private ArrayList<PersonajeAbstracto> personajes1;
     private ArrayList<PersonajeAbstracto> personajes2;
-    private Cofre cofre = new Cofre();
-
 
     //players
     String currentPlayer = "blue";
@@ -81,6 +80,16 @@ public class GameScreen implements Screen, InputProcessor {
     ImageButton btnAtk;
     ImageButton btnSpAtk;
     ImageButton btnAddChest;
+
+    //Patterns
+
+    ImageButton btnI;
+    ImageButton btnT;
+    ImageButton btnL1;
+    ImageButton btnL2;
+    ImageButton btnZ1;
+    ImageButton btnZ2;
+    ImageButton btnU;
 
     //Labels
 
@@ -99,17 +108,23 @@ public class GameScreen implements Screen, InputProcessor {
     public final TextureAtlas diceAtlas = new TextureAtlas("dice/dice.atlas");
     public final TextureAtlas cellAtlas = new TextureAtlas("cells/cells.atlas");
     public final TextureAtlas buttonAtlas = new TextureAtlas("buttons/buttons.atlas");
+    public final TextureAtlas patternAtlas = new TextureAtlas("patterns/patterns.atlas");
 
     //Variables
 
     public int gameTime = 60;
     private static int time = 0;
-    public int currentCell = 1;
-    public int personajeSeleccionado = 1;
+    public int currentCell = 0;
+    public int currentEnemyCell = 0;
+    public int startingCell1;
+    public int startingCell2;
+    public int idPersonajeSeleccionado = 0;
     private boolean rolled;
     private boolean notMovement;
     private boolean addedToChest=false;
     private boolean fullChest=false;
+    private String currentPattern="I";
+    private int currentSummonType=1;
 
     int cantDadosArtilleria = 0;
     int cantDadosInfanteria = 0;
@@ -139,6 +154,10 @@ public class GameScreen implements Screen, InputProcessor {
         gestorProxy = new ControllerProxy(gestorCelda, gestorPersonaje);
         gestorDado = new ControllerDado(this);
 
+        //Inicializar variables
+        startingCell1 = gestorCelda.getCellCastleId1();
+        startingCell2 = gestorCelda.getCellCastleId2();
+
         //Inicializar background
 
         background = new Texture("backgrounds/bg.png");
@@ -155,6 +174,12 @@ public class GameScreen implements Screen, InputProcessor {
         BitmapFont myFont = new BitmapFont(Gdx.files.internal("fonts/font-export.fnt"));
         labelStyle.fontColor = Color.WHITE;
         labelStyle.font = myFont;
+
+        Label.LabelStyle commStyle = new Label.LabelStyle();
+        BitmapFont myFontComm = new BitmapFont(Gdx.files.internal("fonts/font-export.fnt"));
+        myFontComm.getData().setScale(0.90f);
+        commStyle.fontColor = Color.WHITE;
+        commStyle.font = myFontComm;
 
 
         /* __________________________________________________________________________________________*/
@@ -209,7 +234,7 @@ public class GameScreen implements Screen, InputProcessor {
         /* --------------                      Label Comm                                    --------*/
         /* ------------------------------------------------------------------------------------------*/
 
-        comm = new Label("", labelStyle);
+        comm = new Label("", commStyle);
         comm.setSize(164, 30);
         comm.setPosition(475, 40);
         comm.setAlignment(Align.center);
@@ -238,6 +263,40 @@ public class GameScreen implements Screen, InputProcessor {
                 }
             }
         });
+
+
+        /* __________________________________________________________________________________________*/
+        /* -----------                            Botón de Ataque                            --------*/
+        /* ------------------------------------------------------------------------------------------*/
+        TextureRegionDrawable atkUp =  new TextureRegionDrawable(buttonAtlas.findRegion("atkUp"));
+        TextureRegionDrawable atkDown =  new TextureRegionDrawable(buttonAtlas.findRegion("atkDown"));
+        ImageButton.ImageButtonStyle styleAtk = new ImageButton.ImageButtonStyle();
+        styleAtk.up = atkUp;
+        styleAtk.down = atkDown;
+        btnAtk = new ImageButton(styleAtk);
+        btnAtk.setPosition(939,750);
+        btnAtk.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                comm.setText("Action activated: ATTACK.");
+            }
+        });
+
+        /* __________________________________________________________________________________________*/
+        /* -----------                          Botón de Ataque Especial                     --------*/
+        /* ------------------------------------------------------------------------------------------*/
+        TextureRegionDrawable spAtkUp =  new TextureRegionDrawable(buttonAtlas.findRegion("spAtkUp"));
+        TextureRegionDrawable spAtkDown =  new TextureRegionDrawable(buttonAtlas.findRegion("spAtkDown"));
+        ImageButton.ImageButtonStyle styleSpAtk = new ImageButton.ImageButtonStyle();
+        styleSpAtk.up = spAtkUp;
+        styleSpAtk.down = spAtkDown;
+        btnSpAtk = new ImageButton(styleSpAtk);
+        btnSpAtk.setPosition(1083,750);
+        btnSpAtk.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                comm.setText("Action activated: SP ATTACK.");
+            }
+        });
+
 
         /* __________________________________________________________________________________________*/
         /* -----------                         Botón de End Turn                             --------*/
@@ -269,7 +328,14 @@ public class GameScreen implements Screen, InputProcessor {
         btnSummon.setPosition(939,690);
         btnSummon.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
-                System.out.println("Accion ejecutada: Realizar convocacion."); // editar con el método correcto
+
+                if (currentCell==0) {
+                    gestorProxy.startSummon(startingCell1, currentPattern, currentPlayer, currentSummonType);
+                }
+                else {
+                    gestorProxy.startSummon(currentCell, currentPattern, currentPlayer, currentSummonType);
+                }
+
             }
         });
 
@@ -312,15 +378,132 @@ public class GameScreen implements Screen, InputProcessor {
             }
         });
 
+        //Inicializar patrones
 
+        /* __________________________________________________________________________________________*/
+        /* --------                           Botón de Patrón I                              --------*/
+        /* ------------------------------------------------------------------------------------------*/
+        TextureRegionDrawable iUp =  new TextureRegionDrawable(patternAtlas.findRegion("iUp"));
+        TextureRegionDrawable iDown =  new TextureRegionDrawable(patternAtlas.findRegion("iDown"));
+        ImageButton.ImageButtonStyle iStyle = new ImageButton.ImageButtonStyle();
+        iStyle.up = iUp;
+        iStyle.down = iDown;
+        btnI = new ImageButton(iStyle);
+        btnI.setPosition(60,680);
+        btnI.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                currentPattern = "I";
+                System.out.println("Patrón seleccionado: " +currentPattern);
+            }
+        });
+
+        /* __________________________________________________________________________________________*/
+        /* --------                           Botón de Patrón T                              --------*/
+        /* ------------------------------------------------------------------------------------------*/
+        TextureRegionDrawable tUp =  new TextureRegionDrawable(patternAtlas.findRegion("tUp"));
+        TextureRegionDrawable tDown =  new TextureRegionDrawable(patternAtlas.findRegion("tDown"));
+        ImageButton.ImageButtonStyle tStyle = new ImageButton.ImageButtonStyle();
+        tStyle.up = tUp;
+        tStyle.down = tDown;
+        btnT = new ImageButton(tStyle);
+        btnT.setPosition(134,695);
+        btnT.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                currentPattern = "T";
+                System.out.println("Patrón seleccionado: " +currentPattern);
+            }
+        });
+
+        /* __________________________________________________________________________________________*/
+        /* --------                           Botón de Patrón L1                             --------*/
+        /* ------------------------------------------------------------------------------------------*/
+        TextureRegionDrawable l1Up =  new TextureRegionDrawable(patternAtlas.findRegion("l1Up"));
+        TextureRegionDrawable l1Down =  new TextureRegionDrawable(patternAtlas.findRegion("l1Down"));
+        ImageButton.ImageButtonStyle l1Style = new ImageButton.ImageButtonStyle();
+        l1Style.up = l1Up;
+        l1Style.down = l1Down;
+        btnL1 = new ImageButton(l1Style);
+        btnL1.setPosition(60,583);
+        btnL1.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                currentPattern = "L1";
+                System.out.println("Patrón seleccionado: " +currentPattern);
+            }
+        });
+
+        /* __________________________________________________________________________________________*/
+        /* --------                           Botón de Patrón L2                             --------*/
+        /* ------------------------------------------------------------------------------------------*/
+        TextureRegionDrawable l2Up =  new TextureRegionDrawable(patternAtlas.findRegion("l2Up"));
+        TextureRegionDrawable l2Down =  new TextureRegionDrawable(patternAtlas.findRegion("l2Down"));
+        ImageButton.ImageButtonStyle l2Style = new ImageButton.ImageButtonStyle();
+        l2Style.up = l2Up;
+        l2Style.down = l2Down;
+        btnL2 = new ImageButton(l2Style);
+        btnL2.setPosition(134,583);
+        btnL2.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                currentPattern = "L2";
+                System.out.println("Patrón seleccionado: " +currentPattern);
+            }
+        });
+
+        /* __________________________________________________________________________________________*/
+        /* --------                           Botón de Patrón Z1                             --------*/
+        /* ------------------------------------------------------------------------------------------*/
+        TextureRegionDrawable z1Up =  new TextureRegionDrawable(patternAtlas.findRegion("z1Up"));
+        TextureRegionDrawable z1Down =  new TextureRegionDrawable(patternAtlas.findRegion("z1Down"));
+        ImageButton.ImageButtonStyle z1Style = new ImageButton.ImageButtonStyle();
+        z1Style.up = z1Up;
+        z1Style.down = z1Down;
+        btnZ1 = new ImageButton(z1Style);
+        btnZ1.setPosition(60,480);
+        btnZ1.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                currentPattern = "Z1";
+                System.out.println("Patrón seleccionado: " +currentPattern);
+            }
+        });
+
+        /* __________________________________________________________________________________________*/
+        /* --------                           Botón de Patrón Z2                             --------*/
+        /* ------------------------------------------------------------------------------------------*/
+        TextureRegionDrawable z2Up =  new TextureRegionDrawable(patternAtlas.findRegion("z2Up"));
+        TextureRegionDrawable z2Down =  new TextureRegionDrawable(patternAtlas.findRegion("z2Down"));
+        ImageButton.ImageButtonStyle z2Style = new ImageButton.ImageButtonStyle();
+        z2Style.up = z2Up;
+        z2Style.down = z2Down;
+        btnZ2 = new ImageButton(z2Style);
+        btnZ2.setPosition(134,480);
+        btnZ2.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                currentPattern = "Z2";
+                System.out.println("Patrón seleccionado: " +currentPattern);
+            }
+        });
+
+        /* __________________________________________________________________________________________*/
+        /* --------                           Botón de Patrón U                              --------*/
+        /* ------------------------------------------------------------------------------------------*/
+        TextureRegionDrawable uUp =  new TextureRegionDrawable(patternAtlas.findRegion("uUp"));
+        TextureRegionDrawable uDown =  new TextureRegionDrawable(patternAtlas.findRegion("uDown"));
+        ImageButton.ImageButtonStyle uStyle = new ImageButton.ImageButtonStyle();
+        uStyle.up = uUp;
+        uStyle.down = uDown;
+        btnU = new ImageButton(uStyle);
+        btnU.setPosition(92,395);
+        btnU.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                currentPattern = "U";
+                System.out.println("Patrón seleccionado: " +currentPattern);
+            }
+        });
 
 
         //Establecer objetos de juego
         tablero = gestorCelda.getCellArray();
         personajes1 = gestorPersonaje.getArrayPersonajes();
         personajes2 = gestorPersonaje.getArrayEnemigos();
-
-
 
 
         //setear la pantalla al input processor para responder a clicks
@@ -340,6 +523,8 @@ public class GameScreen implements Screen, InputProcessor {
         stage.addActor(btnEndTurn);
         stage.addActor(btnAddChest);
         stage.addActor(btnSummon);
+        stage.addActor(btnAtk);
+        stage.addActor(btnSpAtk);
         stage.addActor(lTimer);
         stage.addActor(lTurnPlayer);
         stage.addActor(chestInfanteria);
@@ -348,6 +533,13 @@ public class GameScreen implements Screen, InputProcessor {
         stage.addActor(chestAtk);
         stage.addActor(chestSpAtk);
         stage.addActor(comm);
+        stage.addActor(btnI);
+        stage.addActor(btnT);
+        stage.addActor(btnL1);
+        stage.addActor(btnL2);
+        stage.addActor(btnZ1);
+        stage.addActor(btnZ2);
+        stage.addActor(btnU);
     }
 
 
@@ -459,15 +651,25 @@ public class GameScreen implements Screen, InputProcessor {
 
         for (PersonajeAbstracto p : personajes1) {
             if (p.getRectangle().contains(temp.x,temp.y)) {
-                personajeSeleccionado = p.getIdPersonaje();
-                System.out.println("Personaje seleccionado : "+personajeSeleccionado);
+                idPersonajeSeleccionado = p.getIdPersonaje();
+                if (gestorProxy.getInfoPersonaje(idPersonajeSeleccionado, currentPlayer)!=null) {
+                    System.out.println("Llenar info de perfil de personaje.");
+                }
+                else {
+                    comm.setText("Current turn player do not own that unit.");
+                }
             }
         }
 
         for (PersonajeAbstracto p : personajes2) {
             if (p.getRectangle().contains(temp.x,temp.y)) {
-                personajeSeleccionado = p.getIdPersonaje();
-                System.out.println("Personaje seleccionado : "+personajeSeleccionado);
+                idPersonajeSeleccionado = p.getIdPersonaje();
+                if (gestorProxy.getInfoPersonaje(idPersonajeSeleccionado, currentPlayer)!=null) {
+                    System.out.println("Llenar info de perfil de personaje.");
+                }
+                else {
+                    comm.setText("Current turn player do not own that unit.");
+                }
             }
         }
 

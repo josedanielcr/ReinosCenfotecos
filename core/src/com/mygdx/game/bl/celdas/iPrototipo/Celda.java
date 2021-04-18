@@ -11,6 +11,7 @@ public abstract class Celda {
     private IColor cellColor;
     private int lifePoints;
     private boolean castillo;
+    private int idPersonaje;
 
 
     //***********************************************************************************************
@@ -63,6 +64,14 @@ public abstract class Celda {
 
     public void setCastillo(boolean castillo) {
         this.castillo = castillo;
+    }
+
+    public int getIdPersonaje() {
+        return idPersonaje;
+    }
+
+    public void setIdPersonaje(int idPersonaje) {
+        this.idPersonaje = idPersonaje;
     }
 
     //***********************************************************************************************

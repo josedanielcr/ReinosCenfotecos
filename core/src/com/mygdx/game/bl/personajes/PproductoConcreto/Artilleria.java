@@ -10,7 +10,7 @@ import com.mygdx.game.bl.personajes.componente.Personaje;
 
 public class Artilleria extends Personaje {
 
-    //final static TextureAtlas personajeAtlas = new TextureAtlas("");
+    final static TextureAtlas personajeAtlas = new TextureAtlas("personajes/personajes.atlas");
     protected int idPersonaje;
     protected int vida;
     protected int ataque;
@@ -21,6 +21,7 @@ public class Artilleria extends Personaje {
     protected  String tipo;
     protected String ataqueEspecial;
     protected int rango;
+    protected String duenno;
 
 
     public Artilleria( int idPersonaje, String ataqueEspecial, String personajeActivo, Rectangle boundingBox) {
@@ -34,13 +35,12 @@ public class Artilleria extends Personaje {
         this.ataqueEspecial = ataqueEspecial;
         this.rango=1;
         if(personajeActivo.equals("blue")){
-            //this.tRegion = personajeAtlas.findRegion("");
+            this.tRegion = personajeAtlas.findRegion("artilleriaBlue");
         }
         if(personajeActivo.equals("red")){
-            //this.tRegion = personajeAtlas.findRegion("");
+            this.tRegion = personajeAtlas.findRegion("artilleriaRed");
         }
-        //mientras milton pone el atlas :)
-        this.tRegion = null;
+        this.duenno = personajeActivo;
     }
 
     public int getIdPersonaje() {
@@ -128,6 +128,13 @@ public class Artilleria extends Personaje {
         this.ataqueEspecial = ataqueEspecial;
     }
 
+    public String getDuenno() {
+        return duenno;
+    }
+
+    public void setDuenno(String duenno) {
+        this.duenno = duenno;
+    }
 
     //TODO: hacer estas funciones ahorita
 

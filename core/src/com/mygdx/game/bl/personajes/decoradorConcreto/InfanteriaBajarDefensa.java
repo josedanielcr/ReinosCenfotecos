@@ -113,6 +113,16 @@ public class InfanteriaBajarDefensa extends ObjetoDecorado{//le baja en 1 la def
     }
 
     @Override
+    public String getDuenno() {
+        return this.cPersonaje.getDuenno();
+    }
+
+    @Override
+    public void setDuenno(String duenno) {
+        this.cPersonaje.setDuenno(duenno);
+    }
+
+    @Override
     public void draw(Batch batch) {
         cPersonaje.draw(batch);
     }

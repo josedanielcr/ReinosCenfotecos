@@ -160,4 +160,35 @@ public class ControllerCelda {
         }
         return null;
     }
+
+    /**
+     * Método que devuelve el ID de la celda inicial de convocación.
+     * @return El ID de la celda en la que comienza el juego para el Jugador 1.
+     */
+    public int getCellCastleId1() {
+        for (Celda c : arrCeldas) {
+            if (c.getId()>=400 && c.getId()<420) {
+                if (c.isCastillo()) {
+                    return c.getId();
+                }
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * Método que devuelve el ID de la celda inicial de convocación.
+     * @return El ID de la celda en la que comienza el juego para el Jugador 2.
+     */
+
+    public int getCellCastleId2() {
+        for (Celda c : arrCeldas) {
+            if (c.getId()>419) {
+                if (c.isCastillo()) {
+                    return c.getId();
+                }
+            }
+        }
+        return 0;
+    }
 }
