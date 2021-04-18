@@ -1,5 +1,6 @@
 package com.mygdx.game.bl.personajes.decoradorConcreto;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.bl.personajes.componente.Personaje;
@@ -107,5 +108,8 @@ public class ArtilleriaBajarDefensa extends ObjetoDecorado {//le baja 2 de defen
         return this.cPersonaje.gettRegion();
     }
 
-
+    @Override
+    public void draw(Batch batch) {
+        cPersonaje.draw(batch);
+    }
 }

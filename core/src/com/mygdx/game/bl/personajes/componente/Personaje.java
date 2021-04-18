@@ -1,6 +1,7 @@
 package com.mygdx.game.bl.personajes.componente;
 
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
@@ -29,6 +30,9 @@ public abstract class Personaje implements PersonajeAbstracto {
     public abstract void setRango(int pRango);
     public abstract void settRegion(TextureRegion tRegion);
     public abstract TextureRegion gettRegion();
+
+
+
 
    // public abstract String aplicarAtaqueEspecial();
 }

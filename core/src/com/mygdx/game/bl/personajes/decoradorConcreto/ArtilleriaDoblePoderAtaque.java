@@ -1,5 +1,6 @@
 package com.mygdx.game.bl.personajes.decoradorConcreto;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
@@ -109,5 +110,10 @@ int ataque=2;
     @Override
     public TextureRegion gettRegion() {
         return this.cPersonaje.gettRegion();
+    }
+
+    @Override
+    public void draw(Batch batch) {
+        cPersonaje.draw(batch);
     }
 }
