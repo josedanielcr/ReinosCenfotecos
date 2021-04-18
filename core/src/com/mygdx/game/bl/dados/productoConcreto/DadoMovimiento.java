@@ -5,8 +5,8 @@ import com.mygdx.game.bl.dados.producto.Dado;
 
 public class DadoMovimiento extends Dado {
 
-    public DadoMovimiento(String tipo, TextureRegion dadoTextureRegion) {
-        super(tipo,dadoTextureRegion);
+    public DadoMovimiento(String tipo) {
+        super(tipo);
     }
 
     public DadoMovimiento(String lado1, String lado2, String lado3, String lado4, String lado5, String lado6, String tipo) {
@@ -14,7 +14,7 @@ public class DadoMovimiento extends Dado {
     }
 
     @Override
-    public String rollDice() { //TODO no es la solucion mas elegante pero se puede castear el string a Int cuando se recibe
+    public String rollDie() {
         int die = ((int) (Math.random()*6)+1);
         switch (die){
             case 1:

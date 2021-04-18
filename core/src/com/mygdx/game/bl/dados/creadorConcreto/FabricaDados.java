@@ -11,17 +11,17 @@ public class FabricaDados implements DadoFA {
     //discriminacion sobre que dado generar
 
     @Override
-    public Dado crearDado(int pTipo, TextureRegion dadoTextureRegion) {
+    public Dado crearDado(int pTipo) {
         if(pTipo==1){
-            DadoInvocacion newDado = new DadoInvocacion("Invocación",dadoTextureRegion);
+            DadoInvocacion newDado = new DadoInvocacion("Invocación");
             newDado.asignarLados();
             return newDado;
         }else if(pTipo==2){
-            DadoAccion newDado = new DadoAccion("Acción",dadoTextureRegion);
+            DadoAccion newDado = new DadoAccion("Acción");
             newDado.asignarLados();
             return newDado;
         }else{
-            DadoMovimiento newDado = new DadoMovimiento("Movimiento",dadoTextureRegion);
+            DadoMovimiento newDado = new DadoMovimiento("Movimiento");
             newDado.asignarLados();
             return newDado;
         }

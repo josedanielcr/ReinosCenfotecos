@@ -5,8 +5,8 @@ import com.mygdx.game.bl.dados.producto.Dado;
 
 public class DadoAccion extends Dado {
 
-    public DadoAccion(String tipo, TextureRegion pdadoTextureRegion) {
-        super(tipo,pdadoTextureRegion);
+    public DadoAccion(String tipo) {
+        super(tipo);
     }
 
     public DadoAccion(String lado1, String lado2, String lado3, String lado4, String lado5, String lado6, String tipo) {
@@ -14,7 +14,7 @@ public class DadoAccion extends Dado {
     }
 
     @Override
-    public String rollDice() {
+    public String rollDie() {
         int die = ((int) (Math.random()*6)+1);
         switch (die){
             case 1:
@@ -40,7 +40,7 @@ public class DadoAccion extends Dado {
         setLado2("Movimiento");
         setLado3("Ataque");
         setLado4("Ataque");
-        setLado5("Ataque especial");
-        setLado6("Ataque especial");
+        setLado5("AtaqueEspecial");
+        setLado6("AtaqueEspecial");
     }
 }

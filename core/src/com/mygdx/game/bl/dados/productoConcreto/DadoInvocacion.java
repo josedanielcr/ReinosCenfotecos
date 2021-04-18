@@ -5,8 +5,8 @@ import com.mygdx.game.bl.dados.producto.Dado;
 
 public class DadoInvocacion extends Dado {
 
-    public DadoInvocacion(String tipo, TextureRegion dadoTextureRegion) {
-        super(tipo,dadoTextureRegion);
+    public DadoInvocacion(String tipo) {
+        super(tipo);
     }
 
     public DadoInvocacion(String lado1, String lado2, String lado3, String lado4, String lado5, String lado6, String tipo) {
@@ -14,7 +14,7 @@ public class DadoInvocacion extends Dado {
     }
 
     @Override
-    public String rollDice() {
+    public String rollDie() {
         int die = ((int) (Math.random()*6)+1);
         switch (die){
             case 1:
