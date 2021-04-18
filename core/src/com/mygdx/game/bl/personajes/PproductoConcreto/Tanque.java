@@ -124,7 +124,6 @@ public class Tanque  extends Personaje {
         this.tRegion = tRegion;
     }
 
-    //TODO: hacer estas funciones ahorita
 
     public String obtenerInformacionPersonaje() {
         return "Este personaje es un " +this.getTipo()+ " ,tiene una vida de " +this.getVida() + " ,tiene una defensa de " +this.getDefensa()+ " ," +

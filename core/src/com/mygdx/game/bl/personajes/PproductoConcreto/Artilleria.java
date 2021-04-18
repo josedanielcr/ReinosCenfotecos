@@ -128,9 +128,6 @@ public class Artilleria extends Personaje {
         this.ataqueEspecial = ataqueEspecial;
     }
 
-
-    //TODO: hacer estas funciones ahorita
-
     public String obtenerInformacionPersonaje() {
         return "Este personaje es un " +this.getTipo()+ " ,tiene una vida de " +this.getVida() + " ,tiene una defensa de " +this.getDefensa()+ " ," +
                 "tiene un ataque de " + this.getAtaque()+ ", y un movimiento de "+ this.getMovimiento() + " id: " + this.getIdPersonaje() +

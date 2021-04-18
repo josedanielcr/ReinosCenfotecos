@@ -63,7 +63,6 @@ public class GameScreen implements Screen, InputProcessor {
     private final ArrayList<Celda> tablero;
     private ArrayList<PersonajeAbstracto> personajes1;
     private ArrayList<PersonajeAbstracto> personajes2;
-    private Cofre cofre = new Cofre();
 
 
     //players
@@ -269,7 +268,17 @@ public class GameScreen implements Screen, InputProcessor {
         btnSummon.setPosition(939,690);
         btnSummon.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
-                System.out.println("Accion ejecutada: Realizar convocacion."); // editar con el método correcto
+                if(canSummon("Infanteria")){ //si tiene suficientes dados en el cofre
+                    if(gestorProxy.startSummon(150,"T","blue").equals("Convocación exitosa.")){ //si no hay problemas de invocacion
+                        gestorDado.summon("Infanteria");
+                        updateChest();
+                        comm.setText("Convocacion exitosa!");
+                    }else{
+                        comm.setText("Error de convocacion. No se han usado sus dados.");
+                    };
+                }else{
+                    comm.setText("No tiene suficientes datos para invocar esa unidad.");
+                };
             }
         });
 
@@ -563,7 +572,6 @@ public class GameScreen implements Screen, InputProcessor {
                 }
             }
         }
-        System.out.println("Roll de accion: "+rollAccion);
     }
 
     public void updateChest() {
@@ -577,6 +585,25 @@ public class GameScreen implements Screen, InputProcessor {
 
     public void full() {
         fullChest=true;
+    }
+
+    public boolean canSummon(String ptipo){ //TODO que cuente los dados del cofre y del rol
+        boolean canSummon=false;
+        if(ptipo.equals("Infanteria")){
+            if(cantDadosInfanteria>=2){
+                canSummon=true;
+            }
+        }else if(ptipo.equals("Artilleria")){
+            if(cantDadosArtilleria>=3){
+                canSummon=true;
+            }
+        }else{
+            if(cantDadosTanque>=4){
+                canSummon=true;
+            }
+        }
+
+        return canSummon;
     }
 }
 

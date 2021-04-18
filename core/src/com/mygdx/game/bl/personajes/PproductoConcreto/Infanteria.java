@@ -2,6 +2,7 @@ package com.mygdx.game.bl.personajes.PproductoConcreto;
 
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.bl.personajes.componente.Personaje;
@@ -39,7 +40,9 @@ public class Infanteria extends Personaje{
             //this.tRegion = personajeAtlas.findRegion("");
         }
         //mientras milton pone el atlas :)
-        this.tRegion = null;
+        //TODO revertir eso
+        TextureAtlas atlas = new TextureAtlas("dice/dice.atlas");
+        this.tRegion=atlas.findRegion("atk");
     }
 
     public int getIdPersonaje() {
@@ -122,7 +125,6 @@ public class Infanteria extends Personaje{
         this.tRegion = tRegion;
     }
 
-    //TODO: hacer estas funciones ahorita
 
     public String obtenerInformacionPersonaje() {
         return "Este personaje es un " +this.getTipo()+ " ,tiene una vida de " +this.getVida() + " ,tiene una defensa de " +this.getDefensa()+ " ," +
