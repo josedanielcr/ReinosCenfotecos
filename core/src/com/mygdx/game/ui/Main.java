@@ -25,19 +25,19 @@ public class Main {
     private static boolean ejecutar(int opcion) {
         ControllerPersonaje controllerPersonaje = new ControllerPersonaje();
         if(opcion == 1){
-            controllerPersonaje.crearPersonaje(1, 1,"blue",null);
+            controllerPersonaje.crearPersonaje(controllerPersonaje.obtenerId(),1, 1,"blue",null);
             System.out.println(controllerPersonaje.retornarPersonajes());
         }
         if(opcion == 2){
-            controllerPersonaje.crearPersonaje(2, 1,"blue",null);
+            controllerPersonaje.crearPersonaje(controllerPersonaje.obtenerId(),2, 1,"blue",null);
             System.out.println(controllerPersonaje.retornarPersonajes());
         }
         if(opcion == 3){
-            controllerPersonaje.crearPersonaje(3, 1,"blue",null);
+            controllerPersonaje.crearPersonaje(controllerPersonaje.obtenerId(),3, 1,"blue",null);
             System.out.println(controllerPersonaje.retornarPersonajes());
         }
         if(opcion == 4){
-            controllerPersonaje.crearPersonajeEnemigo(null);
+            controllerPersonaje.crearPersonajeEnemigo(controllerPersonaje.obtenerId(),null);
             System.out.println(controllerPersonaje.retornarPersonajesEnemigos());
         }
         if(opcion == 5){

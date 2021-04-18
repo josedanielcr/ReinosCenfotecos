@@ -21,5 +21,7 @@ public interface PersonajeAbstracto  {
      void setTipo(String tipo);
      int getRango();
      void setRango(int pRango);
+     String getDuenno();
+     void setDuenno(String duenno);
      void draw(Batch batch);
 }

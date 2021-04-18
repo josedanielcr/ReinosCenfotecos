@@ -1,6 +1,7 @@
 package com.mygdx.game.bl.personajes.PproductoConcreto;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 
 public class Tanque  extends Personaje {
 
-    //final static TextureAtlas personajeAtlas = new TextureAtlas("");
+    final static TextureAtlas personajeAtlas = new TextureAtlas("personajes/personajes.atlas");
     protected int idPersonaje;
     protected int vida;
     protected int ataque;
@@ -21,6 +22,7 @@ public class Tanque  extends Personaje {
     protected  String tipo;
     protected String ataqueEspecial;
     protected int rango;
+    protected String duenno;
 
     public Tanque( int idPersonaje, String ataqueEspecial, String personajeActivo, Rectangle boundingBox) {
         this.idPersonaje= idPersonaje;
@@ -33,13 +35,12 @@ public class Tanque  extends Personaje {
         this.ataqueEspecial = ataqueEspecial;
         this.rango=1;
         if(personajeActivo.equals("blue")){
-            //this.tRegion = personajeAtlas.findRegion("");
+            this.tRegion = personajeAtlas.findRegion("tanqueBlue");
         }
         if(personajeActivo.equals("red")){
-            //this.tRegion = personajeAtlas.findRegion("");
+            this.tRegion = personajeAtlas.findRegion("tanqueRed");
         }
-        //mientras milton pone el atlas :)
-        this.tRegion = null;
+        this.duenno = personajeActivo;
     }
 
 
@@ -122,6 +123,16 @@ public class Tanque  extends Personaje {
 
     public void settRegion(TextureRegion tRegion) {
         this.tRegion = tRegion;
+    }
+
+    @Override
+    public String getDuenno() {
+        return duenno;
+    }
+
+    @Override
+    public void setDuenno(String duenno) {
+        this.duenno = duenno;
     }
 
     //TODO: hacer estas funciones ahorita

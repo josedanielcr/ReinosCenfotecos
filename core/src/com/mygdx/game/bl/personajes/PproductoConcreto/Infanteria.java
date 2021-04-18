@@ -2,6 +2,7 @@ package com.mygdx.game.bl.personajes.PproductoConcreto;
 
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.bl.personajes.componente.Personaje;
@@ -9,7 +10,7 @@ import com.mygdx.game.bl.personajes.componente.Personaje;
 
 public class Infanteria extends Personaje{
 
-    //final static TextureAtlas personajeAtlas = new TextureAtlas("");
+    final static TextureAtlas personajeAtlas = new TextureAtlas("personajes/personajes.atlas");
     protected int idPersonaje;
     protected int vida;
     protected int ataque;
@@ -20,6 +21,7 @@ public class Infanteria extends Personaje{
     protected  String tipo;
     protected String ataqueEspecial;
     protected int rango;
+    protected String duenno;
 
 
     public Infanteria( int idPersonaje, String ataqueEspecial, String personajeActivo, Rectangle boundingBox) {
@@ -33,13 +35,12 @@ public class Infanteria extends Personaje{
         this.ataqueEspecial = ataqueEspecial;
         this.rango=1;
         if(personajeActivo.equals("blue")){
-            //this.tRegion = personajeAtlas.findRegion("");
+            this.tRegion = personajeAtlas.findRegion("infanteriaBlue");
         }
         if(personajeActivo.equals("red")){
-            //this.tRegion = personajeAtlas.findRegion("");
+            this.tRegion = personajeAtlas.findRegion("infanteriaRed");
         }
-        //mientras milton pone el atlas :)
-        this.tRegion = null;
+        this.duenno = personajeActivo;
     }
 
     public int getIdPersonaje() {
@@ -120,6 +121,16 @@ public class Infanteria extends Personaje{
 
     public void settRegion(TextureRegion tRegion) {
         this.tRegion = tRegion;
+    }
+
+    @Override
+    public String getDuenno() {
+        return duenno;
+    }
+
+    @Override
+    public void setDuenno(String duenno) {
+        this.duenno = duenno;
     }
 
     //TODO: hacer estas funciones ahorita

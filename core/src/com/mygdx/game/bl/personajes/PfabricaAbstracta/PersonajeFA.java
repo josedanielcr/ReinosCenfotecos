@@ -5,5 +5,5 @@ import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
 
 
 public interface PersonajeFA {
-    PersonajeAbstracto crearPersonaje( int idP, String ataqueEspecial, String personajeActivo, Rectangle pBoundingBox);
+    PersonajeAbstracto crearPersonaje(int idP, String ataqueEspecial, String personajeActivo, Rectangle pBoundingBox);
 }

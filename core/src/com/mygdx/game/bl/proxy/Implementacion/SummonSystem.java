@@ -8,6 +8,7 @@ import com.mygdx.game.bl.cadenaResponsabilidad.concreto.CeldaPersonajeSummon;
 import com.mygdx.game.bl.cadenaResponsabilidad.objetos.Pattern;
 import com.mygdx.game.bl.cadenaResponsabilidad.objetos.Task;
 import com.mygdx.game.bl.celdas.iPrototipo.Celda;
+import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
 import com.mygdx.game.bl.personajes.componente.Personaje;
 import com.mygdx.game.bl.proxy.Interface.ISummonSystem;
 import com.mygdx.game.tl.ControllerCelda;
@@ -53,7 +54,7 @@ public class SummonSystem implements ISummonSystem {
 
     }
 
-    public String summon(int pIdCelda, String pIdPattern, String pJugador) {
+    public String summon(int pIdCelda, String pIdPattern, String pJugador, int pType) {
         boolean validate;
         String report="";
 
@@ -68,45 +69,46 @@ public class SummonSystem implements ISummonSystem {
         validate = createArrayCellsPattern();
 
         if (validate) {
-            createTasks(pJugador);
+            createTasks(pJugador, pType);
 
             for (Task t : tasks) {
                 continuar = manejador.executeTask(t);
                 if(!continuar) {
-                    report = "Celdas inválidas. Seleccione otra celda de inicio u otro patrón de convocación.";
+                    report = "Invalid Cells. Select another starting cell or summoning pattern.";
                     break;
                 }
             }
             if (continuar) {
-                report = "Convocación exitosa.";
+                report = "Successful summon.";
             }
 
         }
         else {
-            report = "Error: El patrón de convocación excede el límite superior/inferior del tablero.";
+            report = "Error: The summoning pattern exceeds the up/down limit of the gameboard.";
         }
         return report;
 
     }
 
     @Override
-    public Personaje displayStats(int pIdPersonaje, String pJugador) {
-        return null;
+    public PersonajeAbstracto displayStats(int pIdPersonaje, String pJugador) {
+        PersonajeAbstracto pTemp = gPer.retornarPersonajeDecorador(pIdPersonaje);
+        return pTemp;
     }
 
     public void addTask(Task pTask) {
         tasks.add(pTask);
     }
 
-    public void createTasks(String pJugador) {
+    public void createTasks(String pJugador, int typeSummon) {
         if (tasks==null) {
             tasks = new ArrayList<>();
         }
         if (startCell != null) {
-            addTask(new Task("free", startCell, fiveCellPattern, pJugador));
-            addTask(new Task("border", startCell, fiveCellPattern, pJugador));
-            addTask(new Task("color", startCell, fiveCellPattern, pJugador));
-            addTask(new Task("summon", startCell, fiveCellPattern, pJugador));
+            addTask(new Task("free", startCell, fiveCellPattern, pJugador, typeSummon));
+            addTask(new Task("border", startCell, fiveCellPattern, pJugador, typeSummon));
+            addTask(new Task("color", startCell, fiveCellPattern, pJugador, typeSummon));
+            addTask(new Task("summon", startCell, fiveCellPattern, pJugador, typeSummon));
         }
     }
 

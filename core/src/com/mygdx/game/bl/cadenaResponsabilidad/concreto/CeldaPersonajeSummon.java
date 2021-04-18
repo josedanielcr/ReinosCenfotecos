@@ -16,14 +16,18 @@ public class CeldaPersonajeSummon extends HandlerSummon {
     @Override
     public boolean executeTask(Task pTask) {
         boolean resultado;
+        int id = gPer.obtenerId();
 
         if (pTask.getType().equals("summon")) {
-            Rectangle summonArea = pTask.getCellsPattern().get(getRandomCell()).getBoundingBox();
+            int random = getRandomCell();
+            Rectangle summonArea = pTask.getCellsPattern().get(random).getBoundingBox();
             if (pTask.getColorJugador().equals("blue")) {
-                gPer.crearPersonaje(1, 1, pTask.getColorJugador(), summonArea);
+                gPer.crearPersonaje(id, pTask.getTypeSummon(), 1, pTask.getColorJugador(), summonArea);
+                gCell.getCell(pTask.getCellsPattern().get(random).getId()).setIdPersonaje(id);
             }
             if (pTask.getColorJugador().equals("red")) {
-                gPer.crearPersonajeEnemigo(summonArea);
+                gPer.crearPersonajeEnemigo(id, summonArea);
+                gCell.getCell(pTask.getCellsPattern().get(random).getId()).setIdPersonaje(id);
             }
 
             resultado = true;
