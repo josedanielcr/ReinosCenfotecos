@@ -23,9 +23,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.bl.celdas.iPrototipo.Celda;
-import com.mygdx.game.tl.ControllerCelda;
-import com.mygdx.game.tl.ControllerDado;
-import com.mygdx.game.tl.ControllerObserver;
+import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
+import com.mygdx.game.tl.*;
 import com.mygdx.game.ui.MyGdxGame;
 
 import java.util.ArrayList;
@@ -45,6 +44,8 @@ public class GameScreen implements Screen, InputProcessor {
     private static ControllerCelda gestorCelda;
     private static ControllerObserver gestorObserver;
     private static ControllerDado gestorDado;
+    private static ControllerPersonaje gestorPersonaje;
+    private static ControllerProxy gestorProxy;
 
     //graphics
     private final SpriteBatch batch;
@@ -60,6 +61,10 @@ public class GameScreen implements Screen, InputProcessor {
 
     //game objects
     private final ArrayList<Celda> tablero;
+    private ArrayList<PersonajeAbstracto> personajes1;
+    private ArrayList<PersonajeAbstracto> personajes2;
+    private Cofre cofre = new Cofre();
+
 
     //players
     String currentPlayer = "blue";
@@ -100,6 +105,7 @@ public class GameScreen implements Screen, InputProcessor {
     public int gameTime = 60;
     private static int time = 0;
     public int currentCell = 1;
+    public int personajeSeleccionado = 1;
     private boolean rolled;
     private boolean notMovement;
     private boolean addedToChest=false;
@@ -129,6 +135,8 @@ public class GameScreen implements Screen, InputProcessor {
         //Inicializamos los gestores.
         gestorCelda = new ControllerCelda(numInicialCeldasNormales, numInicialCeldasCastillo, lifepointsCastillo);
         gestorObserver = new ControllerObserver(this);
+        gestorPersonaje = new ControllerPersonaje();
+        gestorProxy = new ControllerProxy(gestorCelda, gestorPersonaje);
         gestorDado = new ControllerDado(this);
 
         //Inicializar background
@@ -309,6 +317,8 @@ public class GameScreen implements Screen, InputProcessor {
 
         //Establecer objetos de juego
         tablero = gestorCelda.getCellArray();
+        personajes1 = gestorPersonaje.getArrayPersonajes();
+        personajes2 = gestorPersonaje.getArrayEnemigos();
 
 
 
@@ -353,6 +363,19 @@ public class GameScreen implements Screen, InputProcessor {
             c.draw(batch);
         }
 
+        if (personajes1!=null) {
+            for (PersonajeAbstracto p : personajes1) {
+                p.draw(batch);
+            }
+        }
+
+
+        if (personajes2!=null) {
+            for (PersonajeAbstracto p2 : personajes2) {
+                p2.draw(batch);
+            }
+        }
+      
         //dibuja labels dinamicas
         lTimer.setText(gameTime);
         chestInfanteria.setText(cantDadosInfanteria);
@@ -433,6 +456,21 @@ public class GameScreen implements Screen, InputProcessor {
                 System.out.println("Celda seleccionada : "+currentCell);
             }
         }
+
+        for (PersonajeAbstracto p : personajes1) {
+            if (p.getRectangle().contains(temp.x,temp.y)) {
+                personajeSeleccionado = p.getIdPersonaje();
+                System.out.println("Personaje seleccionado : "+personajeSeleccionado);
+            }
+        }
+
+        for (PersonajeAbstracto p : personajes2) {
+            if (p.getRectangle().contains(temp.x,temp.y)) {
+                personajeSeleccionado = p.getIdPersonaje();
+                System.out.println("Personaje seleccionado : "+personajeSeleccionado);
+            }
+        }
+
         return false;
     }
 

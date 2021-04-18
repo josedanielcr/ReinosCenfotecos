@@ -146,4 +146,18 @@ public class ControllerCelda {
         arrCeldas.get(id).setCellColor(colorCell);
     }
 
+    /**
+     * Método que consulta el arreglo y devuelve la celda especificada por el ID.
+     * @param pId El ID de la celda a consultar
+     * @return El objeto Celda consultado.
+     * */
+
+    public Celda getCell(int pId) {
+        for (Celda c : arrCeldas) {
+            if (c.getId()==pId) {
+                return c;
+            }
+        }
+        return null;
+    }
 }

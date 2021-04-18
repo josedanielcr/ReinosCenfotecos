@@ -1,5 +1,6 @@
 package com.mygdx.game.bl.personajes.decoradorConcreto;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
@@ -99,6 +100,8 @@ public class ArtilleriaDoblePoderDefensa extends ObjetoDecorado {
     @Override
     public void setRango(int pRango) { this.cPersonaje.setRango(pRango);
     }
+
+
     @Override
     public void settRegion(TextureRegion tRegion) {
         this.cPersonaje.settRegion(tRegion);
@@ -109,4 +112,8 @@ public class ArtilleriaDoblePoderDefensa extends ObjetoDecorado {
         return this.cPersonaje.gettRegion();
     }
 
+    @Override
+    public void draw(Batch batch) {
+        cPersonaje.draw(batch);
+    }
 }

@@ -1,6 +1,7 @@
 package com.mygdx.game.bl.personajes.PproductoConcreto;
 
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.bl.personajes.componente.Personaje;
@@ -21,13 +22,13 @@ public class Infanteria extends Personaje{
     protected int rango;
 
 
-    public Infanteria( int idPersonaje, String ataqueEspecial, String personajeActivo) {
+    public Infanteria( int idPersonaje, String ataqueEspecial, String personajeActivo, Rectangle boundingBox) {
         this.idPersonaje=idPersonaje;
         this.vida = 5;
         this.ataque = 3;
         this.defensa = 5;
         this.movimiento = 6;
-        this.rectangle = null;
+        this.rectangle = boundingBox;
         this.tipo = "Infanteria";
         this.ataqueEspecial = ataqueEspecial;
         this.rango=1;
@@ -129,6 +130,10 @@ public class Infanteria extends Personaje{
                 " ,un ataque especial " + this.getAtaqueEspecial() + ", un rango de " + this.getRango() + " ,Y un textureRegion de " + this.gettRegion();
     }
 
+    @Override
+    public void draw(Batch batch) {
+        batch.draw(gettRegion(), rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+    }
 
     //metodos adcionales
    /* public void infanteriaSumar3Ataque(Personaje personaje) {

@@ -1,13 +1,14 @@
 package com.mygdx.game.bl.personajes.PproductoConcreto;
 
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.bl.personajes.componente.Personaje;
 
 
-public class Artilleria  extends Personaje {
+public class Artilleria extends Personaje {
 
     //final static TextureAtlas personajeAtlas = new TextureAtlas("");
     protected int idPersonaje;
@@ -22,13 +23,13 @@ public class Artilleria  extends Personaje {
     protected int rango;
 
 
-    public Artilleria( int idPersonaje, String ataqueEspecial, String personajeActivo) {
+    public Artilleria( int idPersonaje, String ataqueEspecial, String personajeActivo, Rectangle boundingBox) {
         this.idPersonaje=idPersonaje;
         this.vida = 4;
         this.ataque = 6;
         this.defensa = 10;
         this.movimiento = 4;
-        this.rectangle = null;
+        this.rectangle = boundingBox;
         this.tipo = "Artilleria";
         this.ataqueEspecial = ataqueEspecial;
         this.rango=1;
@@ -136,7 +137,10 @@ public class Artilleria  extends Personaje {
                 " ,un ataque especial " + this.getAtaqueEspecial() + ", un rango de " + this.getRango() + " ,Y un textureRegion de " + this.gettRegion();
     }
 
-
+    @Override
+    public void draw(Batch batch) {
+        batch.draw(tRegion, rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+    }
 
 
 

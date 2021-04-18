@@ -1,5 +1,6 @@
 package com.mygdx.game.tl;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.bl.personajes.PfabricaAbstracta.PersonajeFA;
 import com.mygdx.game.bl.personajes.PfabricaConcreta.Fabrica_artilleria;
 import com.mygdx.game.bl.personajes.PfabricaConcreta.Fabrica_infanteria;
@@ -19,46 +20,41 @@ public class ControllerPersonaje {
     private static int contGeneral=0;
 
     //controller real
-    public PersonajeAbstracto crearPersonaje(int tipoPersonaje, int dadoCantMoviendo, int tipo, String personajeActivo){
+    public PersonajeAbstracto crearPersonaje(int tipoPersonaje, int tipo, String jugadorActivo, Rectangle boundingBox){
 
         PersonajeAbstracto personajeDeRetorno = null;
         PersonajeFA personaje;
-        try {
-            switch (tipoPersonaje){
-                case 1:
-                    personaje = new Fabrica_infanteria();
-                    if(tipo==1){
+        switch (tipoPersonaje){
+            case 1:
+                personaje = new Fabrica_infanteria();
+                if(tipo==1){
 
-                        personajeDeRetorno = crearFabricaPersonaje(personaje,  1,1, personajeActivo);
-                    } else{
+                    personajeDeRetorno = crearFabricaPersonaje(personaje,  1,1, jugadorActivo, boundingBox);
+                } else{
 
-                        personajeDeRetorno = crearFabricaPersonaje(personaje, 1,2, personajeActivo);
+                    personajeDeRetorno = crearFabricaPersonaje(personaje, 1,2, jugadorActivo, boundingBox);
 
-                    }
+                }
 
 
-                    break;
-                case 2:
-                    personaje = new Fabrica_artilleria();
-                    if(tipo==1)personajeDeRetorno = crearFabricaPersonaje(personaje, 2,1, personajeActivo);
-                    else personajeDeRetorno = crearFabricaPersonaje(personaje,  2,2, personajeActivo);
-                    break;
-                case 3:
-                    personaje = new Fabrica_tanque();
-                    if(tipo==1)personajeDeRetorno = crearFabricaPersonaje(personaje,  3,1, personajeActivo);
-                    else personajeDeRetorno = crearFabricaPersonaje(personaje,  3,2, personajeActivo);
-                    break;
-            }
-        } catch (Exception e){
-            e.toString();
+                break;
+            case 2:
+                personaje = new Fabrica_artilleria();
+                if(tipo==1)personajeDeRetorno = crearFabricaPersonaje(personaje, 2,1, jugadorActivo, boundingBox);
+                else personajeDeRetorno = crearFabricaPersonaje(personaje,  2,2, jugadorActivo, boundingBox);
+                break;
+            case 3:
+                personaje = new Fabrica_tanque();
+                if(tipo==1)personajeDeRetorno = crearFabricaPersonaje(personaje,  3,1, jugadorActivo, boundingBox);
+                else personajeDeRetorno = crearFabricaPersonaje(personaje,  3,2, jugadorActivo, boundingBox);
+                break;
         }
         return personajeDeRetorno;
     }
 
 
-    private PersonajeAbstracto crearFabricaPersonaje(PersonajeFA personaje, int tipoPersonaje, int tipo, String personajeActivo) throws Exception{//tipo es para ver si es enemigue o no
-
-        PersonajeAbstracto objPersonaje = personaje.crearPersonaje(obtenerId(), retornarAtaqueEspecial(tipoPersonaje),personajeActivo );
+    private PersonajeAbstracto crearFabricaPersonaje(PersonajeFA personaje, int tipoPersonaje, int tipo, String jugadorActivo, Rectangle boundingBox) {//tipo es para ver si es enemigue o no
+        PersonajeAbstracto objPersonaje = personaje.crearPersonaje(obtenerId(), retornarAtaqueEspecial(tipoPersonaje),jugadorActivo, boundingBox);
         if(tipo==1) {
             personajesArr.add(objPersonaje);
         }
@@ -70,13 +66,19 @@ public class ControllerPersonaje {
     }
 
 
-
-
-    public void crearPersonajeEnemigo() throws Exception {
-        int tipoPersonaje = valorPersonajeRandom();
-        int cantMovimiento = retornarMovimientoPersonaje(tipoPersonaje);
-        PersonajeAbstracto personajeAbstracto= crearPersonaje(cantMovimiento,tipoPersonaje,2, "red");
-        //personajesArrEnemigo.add(personajeAbstracto);
+    public void crearPersonajeEnemigo(Rectangle summonArea) {
+        int random = valorPersonajeRandom();
+        int tipoPersonaje;
+        if (random<=13) {
+            tipoPersonaje = 1;
+        }
+        else if (random<=19) {
+            tipoPersonaje = 2;
+        }
+        else {
+            tipoPersonaje = 3;
+        }
+        crearPersonaje(tipoPersonaje,2,"red",summonArea);
     }
 
     //metodos de impresion
@@ -285,7 +287,7 @@ public class ControllerPersonaje {
     }
 
     public int valorPersonajeRandom(){
-        return  ThreadLocalRandom.current().nextInt(1,4);
+        return  ThreadLocalRandom.current().nextInt(1,21);
     }
 
     private String retornarAtaqueEspecial(int tipoPersonaje){
@@ -362,26 +364,11 @@ public class ControllerPersonaje {
         return personajeAbstractos;
     }
 
+    public ArrayList<PersonajeAbstracto> getArrayPersonajes() {
+        return personajesArr;
+    }
 
-
+    public ArrayList<PersonajeAbstracto> getArrayEnemigos() {
+        return personajesArrEnemigo;
+    }
 }
-
-
-//    /*MÉTODOS DEL DECORADOR*/
-//    public void decorarPrueba(int id) throws Exception {
-//        PersonajeAbstracto personajeAbstracto;
-//        for (int i=0; i<personajesArr.size();i++) {
-//            if(personajesArr.get(i).getIdPersonaje()==id){
-//               personajeAbstracto= personajesArr.get(i);
-//               personajeAbstracto=  new ArtilleriaDoblePoderAtaque((Personaje) personajeAbstracto);
-//               personajesArr.set(i,personajeAbstracto);
-//            }
-//        }
-//        System.out.println(personajesArr.get(0).obtenerInformacionPersonaje());
-//    }
-
-
-//  case 8:
-//                    crearPersonajeEnemigo();
-//                    System.out.println(retornarPersonajesEnemigos());
-//                    break;
