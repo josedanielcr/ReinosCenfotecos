@@ -4,20 +4,32 @@ import java.util.ArrayList;
 
 public class Cofre {
 
-    private ArrayList<String> dadosInvocacion;
+    private ArrayList<String> dadosInfanteria;
+    private ArrayList<String> dadosArtilleria;
+    private ArrayList<String> dadosTanque;
     private ArrayList<String> dadosAtaque;
     private ArrayList<String> dadosAtaqueEspecial;
 
     public Cofre() {
-        dadosInvocacion=new ArrayList<>();
+        dadosInfanteria=new ArrayList<>();
+        dadosArtilleria=new ArrayList<>();
+        dadosTanque=new ArrayList<>();
         dadosAtaque=new ArrayList<>();
         dadosAtaqueEspecial=new ArrayList<>();
     }
 
     //GETS
 
-    public ArrayList<String> getDadosInvocacion() {
-        return dadosInvocacion;
+    public ArrayList<String> getDadosInfanteria() {
+        return dadosInfanteria;
+    }
+
+    public ArrayList<String> getDadosArtilleria() {
+        return dadosArtilleria;
+    }
+
+    public ArrayList<String> getDadosTanque() {
+        return dadosTanque;
     }
 
     public ArrayList<String> getDadosAtaque() {
@@ -30,8 +42,16 @@ public class Cofre {
 
     //SETS
 
-    public void setDadosInvocacion(ArrayList<String> dadosInvocacion) {
-        this.dadosInvocacion = dadosInvocacion;
+    public void setDadosInfanteria(ArrayList<String> dadosInfanteria) {
+        this.dadosInfanteria = dadosInfanteria;
+    }
+
+    public void setDadosArtilleria(ArrayList<String> dadosArtilleria) {
+        this.dadosArtilleria = dadosArtilleria;
+    }
+
+    public void setDadosTanque(ArrayList<String> dadosTanque) {
+        this.dadosTanque = dadosTanque;
     }
 
     public void setDadosAtaque(ArrayList<String> dadosAtaque) {
@@ -46,10 +66,18 @@ public class Cofre {
 
     public boolean guardarRoll(String proll1, String proll2, String proll3) {
         boolean added=true;
+        ArrayList<String> dados;
 
         if (proll1.equals("Infanteria") || proll1.equals("Artilleria") || proll1.equals("Tanque")) {
             if (campoCofre(1)) {
-                dadosInvocacion.add(proll1);
+                if(proll1.equals("Infanteria")){
+                    dados=dadosInfanteria;
+                }else if(proll1.equals("Artilleria")){
+                    dados=dadosArtilleria;
+                }else{
+                    dados=dadosTanque;
+                }
+                dados.add(proll1);
             }else{
                 added=false;
             }
@@ -57,7 +85,14 @@ public class Cofre {
 
         if (proll2.equals("Infanteria") || proll2.equals("Artilleria") || proll2.equals("Tanque")) {
             if (campoCofre(1)) {
-                dadosInvocacion.add(proll2);
+                if(proll2.equals("Infanteria")){
+                    dados=dadosInfanteria;
+                }else if(proll2.equals("Artilleria")){
+                    dados=dadosArtilleria;
+                }else{
+                    dados=dadosTanque;
+                }
+                dados.add(proll2);
             }else{
                 added=false;
             }
@@ -83,7 +118,7 @@ public class Cofre {
     public boolean campoCofre(int pcofre) {
         switch (pcofre) {
             case 1:
-                if (dadosInvocacion.size() < 6) {
+                if (dadosArtilleria.size()+dadosTanque.size()+dadosInfanteria.size() < 6) {
                     return true;
                 }
                 break;
@@ -102,39 +137,39 @@ public class Cofre {
     }
 
 
-    //para que la parte grafica sepa cuanto hay en cada "cofre"
-
     public int getDice(int pcofre) {
         int dice = 0;
         switch (pcofre) {
             case 0:
-                for (String dado : dadosInvocacion) {
-                    if (dado.equals("Infanteria")) {
-                        dice++;
-                    }
-                }
+                dice=dadosInfanteria.size();
                 break;
             case 1:
-                for (String dado : dadosInvocacion) {
-                    if (dado.equals("Artilleria")) {
-                        dice++;
-                    }
-                }
+                dice=dadosArtilleria.size();
                 break;
             case 2:
-                for (String dado : dadosInvocacion) {
-                    if (dado.equals("Tanque")) {
-                        dice++;
-                    }
-                }
+                dice=dadosTanque.size();
                 break;
             case 3:
                 dice=dadosAtaque.size();
-            break;
+                break;
             case 4:
                 dice=dadosAtaqueEspecial.size();
-            break;
+                break;
         }
         return dice;
+    }
+
+    public void removeSummonDice(int tipo){
+        switch(tipo){
+            case 1:
+                dadosInfanteria.remove(0);
+                break;
+            case 2:
+                dadosArtilleria.remove(0);
+                break;
+            case 3:
+                dadosTanque.remove(0);
+                break;
+        }
     }
 }

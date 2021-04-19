@@ -66,6 +66,7 @@ public class GameScreen implements Screen, InputProcessor {
     private ArrayList<PersonajeAbstracto> personajes1;
     private ArrayList<PersonajeAbstracto> personajes2;
 
+
     //players
     String currentPlayer = "blue";
 
@@ -558,25 +559,31 @@ public class GameScreen implements Screen, InputProcessor {
         btnSummon.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 String report;
-                if (currentPlayer.equals("blue")) {
-                    if (currentCell==0) {
-                        report = gestorProxy.startSummon(startingCell1, currentPattern, currentPlayer, currentSummonType);
+                    if (currentPlayer.equals("blue")) {
+                        if(canSummon(currentSummonType)) {
+                            if (currentCell == 0) {
+                                report = gestorProxy.startSummon(startingCell1, currentPattern, currentPlayer, currentSummonType);
+                            } else {
+                                report = gestorProxy.startSummon(currentCell, currentPattern, currentPlayer, currentSummonType);
+                            }
+                            if (report.equals("Summoning successful.")) {
+                                gestorDado.summon(currentSummonType);
+                                updateChest();
+                            }
+                        }else{
+                            report = "Not enough dice to summon that unit.";
+                        }
+                    }else{
+                        if (currentCell==0) {
+                            report = gestorProxy.startSummon(startingCell2, currentPattern, currentPlayer, currentSummonType);
+                        }
+                        else {
+                            //TODO esto es automatico? o va a necesitar de algun input aleatorio
+                            report = gestorProxy.startSummon(currentCell, currentPattern, currentPlayer, currentSummonType);
+                        }
                     }
-                    else {
-                        report = gestorProxy.startSummon(currentCell, currentPattern, currentPlayer, currentSummonType);
-                    }
-                }
-                else {
-                    if (currentCell==0) {
-                        report = gestorProxy.startSummon(startingCell2, currentPattern, currentPlayer, currentSummonType);
-                    }
-                    else {
-                        report = gestorProxy.startSummon(currentCell, currentPattern, currentPlayer, currentSummonType);
-                    }
-                }
                 comm.setText(report);
-            }
-        });
+            }});
 
 
 
@@ -991,6 +998,7 @@ public class GameScreen implements Screen, InputProcessor {
             lTurnPlayer.setText("Player 1");
         }else if (currentPlayer.equals("red") ) {
             lTurnPlayer.setText("Player 2");
+            //TODO ejecute el summoning del enemigo
         }
     }
 
@@ -1047,7 +1055,6 @@ public class GameScreen implements Screen, InputProcessor {
                 }
             }
         }
-        System.out.println("Roll de accion: "+rollAccion);
     }
 
     public void updateChest() {
@@ -1090,6 +1097,26 @@ public class GameScreen implements Screen, InputProcessor {
 
     public void full() {
         fullChest=true;
+    }
+
+    public boolean canSummon(int ptipo){ //TODO que cuente los dados del cofre y del rol
+        //TODO aqui en algun lado no puedo meter mas de 1 dado de ataque
+        boolean canSummon=false;
+        if(ptipo==1){
+            if(cantDadosInfanteria>=2){
+                canSummon=true;
+            }
+        }else if(ptipo==2){
+            if(cantDadosArtilleria>=3){
+                canSummon=true;
+            }
+        }else{
+            if(cantDadosTanque>=4){
+                canSummon=true;
+            }
+        }
+
+        return canSummon;
     }
 }
 

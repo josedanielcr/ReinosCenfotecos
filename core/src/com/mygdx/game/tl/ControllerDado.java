@@ -5,6 +5,8 @@ import com.mygdx.game.bl.dados.creadorConcreto.FabricaDados;
 import com.mygdx.game.bl.dados.producto.Dado;
 import com.mygdx.game.ui.Screens.GameScreen;
 
+import java.util.ArrayList;
+
 public class ControllerDado {
 
     private String[] rollsInvocacion;
@@ -95,6 +97,27 @@ public class ControllerDado {
         dice[3]=cofreJugador.getDice(3);
         dice[4]=cofreJugador.getDice(4);
         return dice;
+    }
+
+    public void summon(int ptipo) {
+        switch (ptipo) {
+            case 1:
+                for(int i=0;i<2;i++){
+                    cofreJugador.removeSummonDice(1);
+                }
+                break;
+            case 2:
+                for(int i=0;i<3;i++){
+                    cofreJugador.removeSummonDice(2);
+                }
+                break;
+            case 3:
+                for(int i=0;i<4;i++){
+                    cofreJugador.removeSummonDice(3);
+                }
+                break;
+        }
+
     }
 
     public Cofre getCofreJugador(){
