@@ -20,11 +20,13 @@ public class CeldaBordeAnalisis extends HandlerSummon {
                     if (pTask.getCellsPattern().get(i).getId()%20==1) {
                         if (pTask.getCellsPattern().get(i + 1).getId() % 20 == 0) {
                             resultado = false;
+                            break;
                         }
                     }
                     if (pTask.getCellsPattern().get(i).getId()%20==0) {
                         if (pTask.getCellsPattern().get(i + 1).getId() % 20 == 1) {
                             resultado = false;
+                            break;
                         }
                     }
 

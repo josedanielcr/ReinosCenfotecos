@@ -59,6 +59,7 @@ public class GameScreen implements Screen, InputProcessor {
 
     //background
     Texture background;
+    TextureRegion unitFrame;
 
     //game objects
     private final ArrayList<Celda> tablero;
@@ -80,6 +81,13 @@ public class GameScreen implements Screen, InputProcessor {
     ImageButton btnAtk;
     ImageButton btnSpAtk;
     ImageButton btnAddChest;
+    ImageButton btnSummonType1;
+    ImageButton btnSummonType2;
+    ImageButton btnSummonType3;
+    ImageButton btnUp;
+    ImageButton btnDown;
+    ImageButton btnLeft;
+    ImageButton btnRight;
 
     //Patterns
 
@@ -101,14 +109,23 @@ public class GameScreen implements Screen, InputProcessor {
     Label chestAtk;
     Label chestSpAtk;
     Label comm;
-    Label idCell;
-    Label idPattern;
+    Label lIdCell;
+    Label lIdPattern;
+    Label lLifeEnemy;
+    Label lIdTypeSummon;
+    Label lAttack;
+    Label lDefense;
+    Label lRange;
+    Label lSpAttack;
+    Label lUnitMove;
+    Label lUnitLife;
 
     //Texture atlas
     public final TextureAtlas diceAtlas = new TextureAtlas("dice/dice.atlas");
     public final TextureAtlas cellAtlas = new TextureAtlas("cells/cells.atlas");
     public final TextureAtlas buttonAtlas = new TextureAtlas("buttons/buttons.atlas");
     public final TextureAtlas patternAtlas = new TextureAtlas("patterns/patterns.atlas");
+    public final TextureAtlas personajeAtlas = new TextureAtlas("personajes/personajes.atlas");
 
     //Variables
 
@@ -119,6 +136,7 @@ public class GameScreen implements Screen, InputProcessor {
     public int startingCell1;
     public int startingCell2;
     public int idPersonajeSeleccionado = 0;
+    private int opponentLife;
     private boolean rolled;
     private boolean notMovement;
     private boolean addedToChest=false;
@@ -131,6 +149,14 @@ public class GameScreen implements Screen, InputProcessor {
     int cantDadosTanque = 0;
     int cantDadosAtk = 0;
     int cantDadosSpAtk = 0;
+
+    int currentAtk = 0;
+    int currentDef = 0;
+    int currentRange = 0;
+    String currentSpAtk ="";
+    int currentUnitLife = 0;
+    int currentUnitMove = 0;
+
 
 
     public GameScreen(MyGdxGame myGame) {
@@ -157,10 +183,12 @@ public class GameScreen implements Screen, InputProcessor {
         //Inicializar variables
         startingCell1 = gestorCelda.getCellCastleId1();
         startingCell2 = gestorCelda.getCellCastleId2();
+        opponentLife = gestorCelda.getCell(startingCell2).getLifePoints();
 
         //Inicializar background
 
         background = new Texture("backgrounds/bg.png");
+        unitFrame = new TextureRegion(personajeAtlas.findRegion("unitFrame"));
 
         //Inicializar dados
         summonDie2 = diceAtlas.findRegion("summon");
@@ -181,6 +209,54 @@ public class GameScreen implements Screen, InputProcessor {
         commStyle.fontColor = Color.WHITE;
         commStyle.font = myFontComm;
 
+        Label.LabelStyle labelStyle2 = new Label.LabelStyle();
+        BitmapFont myFont2 = new BitmapFont(Gdx.files.internal("fonts/font-export.fnt"));
+        myFont2.getData().setScale(0.85f);
+        labelStyle2.fontColor = Color.WHITE;
+        labelStyle2.font = myFont2;
+
+
+        /* __________________________________________________________________________________________*/
+        /* --------------                         Label ID Cell                              --------*/
+        /* ------------------------------------------------------------------------------------------*/
+
+        lIdCell = new Label("", labelStyle2);
+        lIdCell.setSize(31, 30);
+        lIdCell.setPosition(63, 856);
+        lIdCell.setAlignment(Align.center);
+        lIdCell.setText(currentCell);
+
+
+        /* __________________________________________________________________________________________*/
+        /* --------------                         Label ID Summon Type                       --------*/
+        /* ------------------------------------------------------------------------------------------*/
+
+        lIdTypeSummon = new Label("", labelStyle2);
+        lIdTypeSummon.setSize(31, 30);
+        lIdTypeSummon.setPosition(160, 856);
+        lIdTypeSummon.setAlignment(Align.center);
+        lIdTypeSummon.setText(currentSummonType);
+
+
+        /* __________________________________________________________________________________________*/
+        /* --------------                          Label ID Pattern                          --------*/
+        /* ------------------------------------------------------------------------------------------*/
+
+        lIdPattern = new Label("", labelStyle2);
+        lIdPattern.setSize(31, 30);
+        lIdPattern.setPosition(258, 856);
+        lIdPattern.setAlignment(Align.center);
+        lIdPattern.setText(currentPattern);
+
+        /* __________________________________________________________________________________________*/
+        /* --------------                    Label ID Opponent Life                          --------*/
+        /* ------------------------------------------------------------------------------------------*/
+
+        lLifeEnemy = new Label("", labelStyle2);
+        lLifeEnemy.setSize(31, 30);
+        lLifeEnemy.setPosition(360, 856);
+        lLifeEnemy.setAlignment(Align.center);
+        lLifeEnemy.setText(opponentLife);
 
         /* __________________________________________________________________________________________*/
         /* --------------                       Label Cronómetro                             --------*/
@@ -231,6 +307,47 @@ public class GameScreen implements Screen, InputProcessor {
         chestSpAtk.setAlignment(Align.center);
 
         /* __________________________________________________________________________________________*/
+        /* --------------                      Labels Unit Stats                            --------*/
+        /* ------------------------------------------------------------------------------------------*/
+
+
+        lUnitLife = new Label("-1", labelStyle2);
+        lUnitLife.setSize(31, 30);
+        lUnitLife.setPosition(1002, 365);
+        lUnitLife.setAlignment(Align.center);
+        lUnitLife.setText(currentUnitLife);
+
+        lUnitMove = new Label("-1", labelStyle2);
+        lUnitMove.setSize(31, 30);
+        lUnitMove.setPosition(1134, 365);
+        lUnitMove.setAlignment(Align.center);
+        lUnitLife.setText(currentUnitMove);
+
+        lAttack = new Label("-1", labelStyle2);
+        lAttack.setSize(31, 30);
+        lAttack.setPosition(1002, 314);
+        lAttack.setAlignment(Align.center);
+        lAttack.setText(currentAtk);
+
+        lDefense = new Label("-1", labelStyle2);
+        lDefense.setSize(31, 30);
+        lDefense.setPosition(1134, 314);
+        lDefense.setAlignment(Align.center);
+        lDefense.setText(currentDef);
+
+        lRange = new Label("-1", labelStyle2);
+        lRange.setSize(31, 30);
+        lRange.setPosition(1002, 264);
+        lRange.setAlignment(Align.center);
+        lRange.setText(currentRange);
+
+        lSpAttack = new Label("-1", labelStyle2);
+        lSpAttack.setSize(31, 30);
+        lSpAttack.setPosition(1134, 264);
+        lSpAttack.setAlignment(Align.center);
+        lSpAttack.setText(currentSpAtk);
+
+        /* __________________________________________________________________________________________*/
         /* --------------                      Label Comm                                    --------*/
         /* ------------------------------------------------------------------------------------------*/
 
@@ -241,6 +358,118 @@ public class GameScreen implements Screen, InputProcessor {
 
 
         //Inicializar botones
+
+        /* __________________________________________________________________________________________*/
+        /* --------                         Botones de Pad de Dirección                      --------*/
+        /* ------------------------------------------------------------------------------------------*/
+        TextureRegionDrawable padUpUp =  new TextureRegionDrawable(personajeAtlas.findRegion("padUpUp"));
+        TextureRegionDrawable padUpDown =  new TextureRegionDrawable(personajeAtlas.findRegion("padUpDown"));
+        ImageButton.ImageButtonStyle styleUp = new ImageButton.ImageButtonStyle();
+        styleUp.up = padUpUp;
+        styleUp.down = padUpDown;
+        btnUp = new ImageButton(styleUp);
+        btnUp.setPosition(1124,481);
+        btnUp.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                String report = gestorProxy.moveUnit(idPersonajeSeleccionado, currentCell, currentPlayer,"up");
+                if (report!=null) {
+                    comm.setText(report);
+                }
+            }
+        });
+
+        TextureRegionDrawable padDownUp =  new TextureRegionDrawable(personajeAtlas.findRegion("padDownUp"));
+        TextureRegionDrawable padDownDown =  new TextureRegionDrawable(personajeAtlas.findRegion("padDownDown"));
+        ImageButton.ImageButtonStyle styleDown = new ImageButton.ImageButtonStyle();
+        styleDown.up = padDownUp;
+        styleDown.down = padDownDown;
+        btnDown = new ImageButton(styleDown);
+        btnDown.setPosition(1125,431);
+        btnDown.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                String report = gestorProxy.moveUnit(idPersonajeSeleccionado, currentCell, currentPlayer,"down");
+                if (report!=null) {
+                    comm.setText(report);
+                }
+            }
+        });
+
+        TextureRegionDrawable padLeftUp =  new TextureRegionDrawable(personajeAtlas.findRegion("padLeftUp"));
+        TextureRegionDrawable padLeftDown =  new TextureRegionDrawable(personajeAtlas.findRegion("padLeftDown"));
+        ImageButton.ImageButtonStyle styleLeft = new ImageButton.ImageButtonStyle();
+        styleLeft.up = padLeftUp;
+        styleLeft.down = padLeftDown;
+        btnLeft = new ImageButton(styleLeft);
+        btnLeft.setPosition(1100,455);
+        btnLeft.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                String report = gestorProxy.moveUnit(idPersonajeSeleccionado, currentCell, currentPlayer,"left");
+                if (report!=null) {
+                    comm.setText(report);
+                }
+            }
+        });
+
+        TextureRegionDrawable padRightUp =  new TextureRegionDrawable(personajeAtlas.findRegion("padRightUp"));
+        TextureRegionDrawable padRightDown =  new TextureRegionDrawable(personajeAtlas.findRegion("padRightDown"));
+        ImageButton.ImageButtonStyle styleRight = new ImageButton.ImageButtonStyle();
+        styleRight.up = padRightUp;
+        styleRight.down = padRightDown;
+        btnRight = new ImageButton(styleRight);
+        btnRight.setPosition(1152,455);
+        btnRight.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                String report = gestorProxy.moveUnit(idPersonajeSeleccionado, currentCell, currentPlayer,"right");
+                if (report!=null) {
+                    comm.setText(report);
+                }
+            }
+        });
+
+        /* __________________________________________________________________________________________*/
+        /* --------                              Botones "Summon-type"                       --------*/
+        /* ------------------------------------------------------------------------------------------*/
+        TextureRegionDrawable summon1Up =  new TextureRegionDrawable(personajeAtlas.findRegion("summon1Up"));
+        TextureRegionDrawable summon1Down =  new TextureRegionDrawable(personajeAtlas.findRegion("summon1Down"));
+        ImageButton.ImageButtonStyle styleSummon1 = new ImageButton.ImageButtonStyle();
+        styleSummon1.up = summon1Up;
+        styleSummon1.down = summon1Down;
+        btnSummonType1 = new ImageButton(styleSummon1);
+        btnSummonType1.setPosition(969,540);
+        btnSummonType1.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                currentSummonType = 1;
+                lIdTypeSummon.setText(currentSummonType);
+            }
+        });
+
+        TextureRegionDrawable summon2Up =  new TextureRegionDrawable(personajeAtlas.findRegion("summon2Up"));
+        TextureRegionDrawable summon2Down =  new TextureRegionDrawable(personajeAtlas.findRegion("summon2Down"));
+        ImageButton.ImageButtonStyle styleSummon2 = new ImageButton.ImageButtonStyle();
+        styleSummon2.up = summon2Up;
+        styleSummon2.down = summon2Down;
+        btnSummonType2 = new ImageButton(styleSummon2);
+        btnSummonType2.setPosition(1047,540);
+        btnSummonType2.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                currentSummonType = 2;
+                lIdTypeSummon.setText(currentSummonType);
+            }
+        });
+
+        TextureRegionDrawable summon3Up =  new TextureRegionDrawable(personajeAtlas.findRegion("summon3Up"));
+        TextureRegionDrawable summon3Down =  new TextureRegionDrawable(personajeAtlas.findRegion("summon3Down"));
+        ImageButton.ImageButtonStyle styleSummon3 = new ImageButton.ImageButtonStyle();
+        styleSummon3.up = summon3Up;
+        styleSummon3.down = summon3Down;
+        btnSummonType3 = new ImageButton(styleSummon3);
+        btnSummonType3.setPosition(1125,540);
+        btnSummonType3.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                currentSummonType = 3;
+                lIdTypeSummon.setText(currentSummonType);
+            }
+        });
 
         /* __________________________________________________________________________________________*/
         /* --------                         Botón de Roll Dados                              --------*/
@@ -328,14 +557,24 @@ public class GameScreen implements Screen, InputProcessor {
         btnSummon.setPosition(939,690);
         btnSummon.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
-
-                if (currentCell==0) {
-                    gestorProxy.startSummon(startingCell1, currentPattern, currentPlayer, currentSummonType);
+                String report;
+                if (currentPlayer.equals("blue")) {
+                    if (currentCell==0) {
+                        report = gestorProxy.startSummon(startingCell1, currentPattern, currentPlayer, currentSummonType);
+                    }
+                    else {
+                        report = gestorProxy.startSummon(currentCell, currentPattern, currentPlayer, currentSummonType);
+                    }
                 }
                 else {
-                    gestorProxy.startSummon(currentCell, currentPattern, currentPlayer, currentSummonType);
+                    if (currentCell==0) {
+                        report = gestorProxy.startSummon(startingCell2, currentPattern, currentPlayer, currentSummonType);
+                    }
+                    else {
+                        report = gestorProxy.startSummon(currentCell, currentPattern, currentPlayer, currentSummonType);
+                    }
                 }
-
+                comm.setText(report);
             }
         });
 
@@ -393,7 +632,7 @@ public class GameScreen implements Screen, InputProcessor {
         btnI.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 currentPattern = "I";
-                System.out.println("Patrón seleccionado: " +currentPattern);
+                lIdPattern.setText(currentPattern);
             }
         });
 
@@ -410,7 +649,7 @@ public class GameScreen implements Screen, InputProcessor {
         btnT.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 currentPattern = "T";
-                System.out.println("Patrón seleccionado: " +currentPattern);
+                lIdPattern.setText(currentPattern);
             }
         });
 
@@ -427,7 +666,7 @@ public class GameScreen implements Screen, InputProcessor {
         btnL1.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 currentPattern = "L1";
-                System.out.println("Patrón seleccionado: " +currentPattern);
+                lIdPattern.setText(currentPattern);
             }
         });
 
@@ -444,7 +683,7 @@ public class GameScreen implements Screen, InputProcessor {
         btnL2.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 currentPattern = "L2";
-                System.out.println("Patrón seleccionado: " +currentPattern);
+                lIdPattern.setText(currentPattern);
             }
         });
 
@@ -461,7 +700,7 @@ public class GameScreen implements Screen, InputProcessor {
         btnZ1.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 currentPattern = "Z1";
-                System.out.println("Patrón seleccionado: " +currentPattern);
+                lIdPattern.setText(currentPattern);
             }
         });
 
@@ -478,7 +717,7 @@ public class GameScreen implements Screen, InputProcessor {
         btnZ2.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 currentPattern = "Z2";
-                System.out.println("Patrón seleccionado: " +currentPattern);
+                lIdPattern.setText(currentPattern);
             }
         });
 
@@ -495,7 +734,7 @@ public class GameScreen implements Screen, InputProcessor {
         btnU.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 currentPattern = "U";
-                System.out.println("Patrón seleccionado: " +currentPattern);
+                lIdPattern.setText(currentPattern);
             }
         });
 
@@ -540,6 +779,23 @@ public class GameScreen implements Screen, InputProcessor {
         stage.addActor(btnZ1);
         stage.addActor(btnZ2);
         stage.addActor(btnU);
+        stage.addActor(lIdCell);
+        stage.addActor(lIdTypeSummon);
+        stage.addActor(lIdPattern);
+        stage.addActor(lLifeEnemy);
+        stage.addActor(lAttack);
+        stage.addActor(lSpAttack);
+        stage.addActor(lUnitLife);
+        stage.addActor(lUnitMove);
+        stage.addActor(lRange);
+        stage.addActor(lDefense);
+        stage.addActor(btnSummonType1);
+        stage.addActor(btnSummonType2);
+        stage.addActor(btnSummonType3);
+        stage.addActor(btnUp);
+        stage.addActor(btnDown);
+        stage.addActor(btnLeft);
+        stage.addActor(btnRight);
     }
 
 
@@ -549,6 +805,7 @@ public class GameScreen implements Screen, InputProcessor {
 
         //Dibujar background
         batch.draw(background, 0,0);
+        batch.draw(unitFrame, 963, 417);
 
         //Dibujar Tablero
         for (Celda c:tablero) {
@@ -580,8 +837,6 @@ public class GameScreen implements Screen, InputProcessor {
         batch.draw(summonDie2, 136,152);
         batch.draw(actionDie, 92,87);
 
-        //Dibujar celdas
-        gestorCelda.changeColor(50, currentPlayer);
 
         batch.end();
         stage.act();
@@ -645,6 +900,7 @@ public class GameScreen implements Screen, InputProcessor {
         for (Celda c : tablero) {
             if (c.getBoundingBox().contains(temp.x,temp.y)) {
                 currentCell = c.getId();
+                lIdCell.setText(currentCell);
                 System.out.println("Celda seleccionada : "+currentCell);
             }
         }
@@ -652,8 +908,21 @@ public class GameScreen implements Screen, InputProcessor {
         for (PersonajeAbstracto p : personajes1) {
             if (p.getRectangle().contains(temp.x,temp.y)) {
                 idPersonajeSeleccionado = p.getIdPersonaje();
-                if (gestorProxy.getInfoPersonaje(idPersonajeSeleccionado, currentPlayer)!=null) {
-                    System.out.println("Llenar info de perfil de personaje.");
+                PersonajeAbstracto pShow= gestorProxy.getInfoPersonaje(idPersonajeSeleccionado, currentPlayer);
+                if (pShow!=null) {
+                    currentAtk = pShow.getAtaque();
+                    lAttack.setText(currentAtk);
+                    currentDef = pShow.getDefensa();
+                    lDefense.setText(currentDef);
+                    currentSpAtk = renderSpecialAttack(pShow.getAtaqueEspecial());
+                    lSpAttack.setText(currentSpAtk);
+                    currentRange = pShow.getRango();
+                    lRange.setText(currentRange);
+                    currentUnitMove = pShow.getMovimiento();
+                    lUnitMove.setText(currentUnitMove);
+                    currentUnitLife = pShow.getVida();
+                    lUnitLife.setText(currentUnitLife);
+                    unitFrame = pShow.gettRegion();
                 }
                 else {
                     comm.setText("Current turn player do not own that unit.");
@@ -664,11 +933,24 @@ public class GameScreen implements Screen, InputProcessor {
         for (PersonajeAbstracto p : personajes2) {
             if (p.getRectangle().contains(temp.x,temp.y)) {
                 idPersonajeSeleccionado = p.getIdPersonaje();
-                if (gestorProxy.getInfoPersonaje(idPersonajeSeleccionado, currentPlayer)!=null) {
-                    System.out.println("Llenar info de perfil de personaje.");
+                PersonajeAbstracto pShow= gestorProxy.getInfoPersonaje(idPersonajeSeleccionado, currentPlayer);
+                if (pShow!=null) {
+                    currentAtk = pShow.getAtaque();
+                    lAttack.setText(currentAtk);
+                    currentDef = pShow.getDefensa();
+                    lDefense.setText(currentDef);
+                    currentSpAtk = renderSpecialAttack(pShow.getAtaqueEspecial());
+                    lSpAttack.setText(currentSpAtk);
+                    currentRange = pShow.getRango();
+                    lRange.setText(currentRange);
+                    currentUnitMove = pShow.getMovimiento();
+                    lUnitMove.setText(currentUnitMove);
+                    currentUnitLife = pShow.getVida();
+                    lUnitLife.setText(currentUnitLife);
+                    unitFrame = pShow.gettRegion();
                 }
                 else {
-                    comm.setText("Current turn player do not own that unit.");
+                    comm.setText("Current turn player does not own that unit.");
                 }
             }
         }
@@ -775,6 +1057,35 @@ public class GameScreen implements Screen, InputProcessor {
         cantDadosTanque=dice[2];
         cantDadosAtk=dice[3];
         cantDadosSpAtk=dice[4];
+    }
+
+    public String renderSpecialAttack(String type) {
+        String renderType;
+        switch (type) {
+            case "healer1":
+            case "healer2":
+            case "unaVidaDobleM":
+                renderType = "+H";
+                break;
+            case "sumar3Ataque":
+            case "doblePoderAtaque":
+            case "ataqueDosCasillas":
+                renderType = "+A";
+                break;
+            case "sumar3Defensa":
+            case "doblePoderDefensa":
+            case "proteccionAliade":
+                renderType = "+D";
+                break;
+            case "bajarDefensa":
+            case "bajar2Defensa":
+                renderType = "-D";
+                break;
+            default:
+                renderType = "S";
+                break;
+        }
+        return renderType;
     }
 
     public void full() {

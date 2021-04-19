@@ -43,7 +43,7 @@ public class CeldaPersonajeSummon extends HandlerSummon {
 
     public int getRandomCell() {
         Random rand = new Random();
-        return rand.nextInt(6);
+        return rand.nextInt(5);
     }
 
 
