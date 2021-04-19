@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class Tanque  extends Personaje {
 
-    final static TextureAtlas personajeAtlas = new TextureAtlas("personajes/personajes.atlas");
+   final static TextureAtlas personajeAtlas = new TextureAtlas("personajes/personajes.atlas");
     protected int idPersonaje;
     protected int vida;
     protected int ataque;
@@ -35,7 +35,7 @@ public class Tanque  extends Personaje {
         this.ataqueEspecial = ataqueEspecial;
         this.rango=1;
         if(personajeActivo.equals("blue")){
-            this.tRegion = personajeAtlas.findRegion("tanqueBlue");
+           this.tRegion = personajeAtlas.findRegion("tanqueBlue");
         }
         if(personajeActivo.equals("red")){
             this.tRegion = personajeAtlas.findRegion("tanqueRed");

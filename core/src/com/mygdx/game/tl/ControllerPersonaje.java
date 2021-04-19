@@ -213,7 +213,7 @@ public class ControllerPersonaje {
     }
 
     private PersonajeAbstracto decorarBajar2Defensa(int idExterno) {
-        PersonajeAbstracto personajeAbstracto = retornarPersonajeDecorador(idExterno);
+        PersonajeAbstracto personajeAbstracto = retornarPersonajeDecoradorEnemigue(idExterno);
         int indexPersonaje = obtenerIndexPersonaje(personajeAbstracto);
         personajeAbstracto= new ArtilleriaBajarDefensa((Personaje) personajeAbstracto);
         personajesArr.set(indexPersonaje,personajeAbstracto);
@@ -343,6 +343,17 @@ public class ControllerPersonaje {
         }
         return null;
     }
+
+
+    public PersonajeAbstracto retornarPersonajeDecoradorEnemigue(int idPersonajes){
+        for(PersonajeAbstracto p: personajesArrEnemigo){
+            if(p.getIdPersonaje() == idPersonajes){
+                return p;
+            }
+        }
+        return null;
+    }
+
 
     private ArrayList<PersonajeAbstracto> retornarPersonajesDecorador(int [] idPersonajes, int tipo){
         ArrayList<PersonajeAbstracto> personajeAbstractos = new ArrayList<>();
