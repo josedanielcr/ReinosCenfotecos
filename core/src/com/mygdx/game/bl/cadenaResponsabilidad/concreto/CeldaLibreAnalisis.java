@@ -12,12 +12,13 @@ public class CeldaLibreAnalisis extends HandlerSummon {
 
     @Override
     public boolean executeTask(Task pTask) {
-        boolean resultado = false;
+        boolean resultado = true;
 
         if (pTask.getType().equals("free")) {
             for (int i=0; i<pTask.getCellsPattern().size(); i++) {
-                if (pTask.getCellsPattern().get(i).getCellColor().getColor().equals("free")) {
-                    resultado = true;
+                if (!pTask.getCellsPattern().get(i).getCellColor().getColor().equals("free")) {
+                    resultado = false;
+                    break;
                 }
             }
         }

@@ -1,6 +1,7 @@
 package com.mygdx.game.bl.proxy.Implementacion;
 
 import com.mygdx.game.bl.celdas.iPrototipo.Celda;
+import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
 import com.mygdx.game.bl.personajes.componente.Personaje;
 import com.mygdx.game.bl.proxy.Interface.ISummonSystem;
 import com.mygdx.game.tl.ControllerCelda;
@@ -28,17 +29,36 @@ public class SummonSystemProxy implements ISummonSystem {
     }
 
     @Override
-    public String summon(int pIdCelda, String pIdPattern, String pJugador) {
+    public String summon(int pIdCelda, String pIdPattern, String pJugador, int pType) {
         if (validateCell(pIdCelda, pJugador)) {
-            return system.summon(pIdCelda, pIdPattern, pJugador);
+            return system.summon(pIdCelda, pIdPattern, pJugador, pType);
         }
         else {
-            return "Error en la convocación: La celda inicial no es de su color.";
+            return "Error: The summoning starting cell is not under your control.";
         }
     }
 
     @Override
-    public Personaje displayStats(int pIdPersonaje, String pJugador) {
+    public PersonajeAbstracto displayStats(int pIdPersonaje, String pJugador) {
+        if (pJugador.equals("blue")) {
+            PersonajeAbstracto pTemp = gPer.retornarPersonajeDecorador(pIdPersonaje);
+            if (pTemp.getDuenno().equals(pJugador)) {
+                return system.displayStats(pIdPersonaje, pJugador);
+            }
+            else {
+                return null;
+            }
+        }
         return null;
+    }
+
+    public String moveUnit(int pIdPersonaje, int pIdCelda, String pIdJugador, String pMovimiento) {
+        PersonajeAbstracto pTemp = gPer.retornarPersonajeDecorador(pIdPersonaje);
+        if (pTemp.getDuenno().equals(pIdJugador)) {
+            return system.moveUnit(pIdPersonaje,pIdCelda,pIdJugador,pMovimiento);
+        }
+        else {
+            return "Unable to move a battle unit that is not under your control.";
+        }
     }
 }

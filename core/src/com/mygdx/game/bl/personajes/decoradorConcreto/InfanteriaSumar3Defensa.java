@@ -112,6 +112,16 @@ public class InfanteriaSumar3Defensa extends ObjetoDecorado{//PUEDE DARLE 3 PUNT
         return this.cPersonaje.gettRegion();
     }
 
+    @Override
+    public String getDuenno() {
+        return this.cPersonaje.getDuenno();
+    }
+
+    @Override
+    public void setDuenno(String duenno) {
+        this.cPersonaje.setDuenno(duenno);
+    }
+
 
     @Override
     public void draw(Batch batch) {

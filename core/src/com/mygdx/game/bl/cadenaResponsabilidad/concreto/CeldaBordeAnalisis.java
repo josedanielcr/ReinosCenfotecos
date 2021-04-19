@@ -11,10 +11,27 @@ public class CeldaBordeAnalisis extends HandlerSummon {
     }
 
     public boolean executeTask(Task pTask) {
-        boolean resultado = false;
+        boolean resultado = true;
 
         if (pTask.getType().equals("border")) {
-            return true;
+            int tam = pTask.getCellsPattern().size();
+            for (int i=0; i<tam;i++) {
+                if (i<tam-1) {
+                    if (pTask.getCellsPattern().get(i).getId()%20==1) {
+                        if (pTask.getCellsPattern().get(i + 1).getId() % 20 == 0) {
+                            resultado = false;
+                            break;
+                        }
+                    }
+                    if (pTask.getCellsPattern().get(i).getId()%20==0) {
+                        if (pTask.getCellsPattern().get(i + 1).getId() % 20 == 1) {
+                            resultado = false;
+                            break;
+                        }
+                    }
+
+                }
+            }
         }
         else {
             if (successor!= null) {

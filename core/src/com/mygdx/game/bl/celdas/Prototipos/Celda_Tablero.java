@@ -15,7 +15,7 @@ public class Celda_Tablero extends Celda {
         this.setId(id);
         this.setBoundingBox(new Rectangle(posXCeldaInicial,posYCeldaInicial, width, height));
         this.setCellColor(new Gray(false));
-
+        this.setIdPersonaje(0);
     }
 
     //***********************************************************************************************

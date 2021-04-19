@@ -18,6 +18,7 @@ public class Celda_Castillo extends Celda {
         this.setCellColor(new Gray(true));
         this.setLifePoints(lifePoints);
         this.setCastillo(false);
+        this.setIdPersonaje(0);
     }
 
     //***********************************************************************************************

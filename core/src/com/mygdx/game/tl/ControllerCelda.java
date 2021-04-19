@@ -20,6 +20,8 @@ public class ControllerCelda {
     private final Celda prototipoCeldaCastillo;
     private final Celda prototipoCeldaTablero;
     public static final TextureAtlas cellAtlas = new TextureAtlas("cells/cells.atlas");
+    private int idCeldaCastillo1;
+    private int idCeldaCastillo2;
 
 
     //***********************************************************************************************
@@ -87,9 +89,11 @@ public class ControllerCelda {
     public void crearCastilloBlue(int pIdCeldaCastilloActual, int pIdCeldaInicial) {
         if (HelperCelda.checkFinalTable(pIdCeldaCastilloActual, pIdCeldaInicial)) {
             int num = HelperCelda.randomCastilloBlue(pIdCeldaInicial);
+            this.idCeldaCastillo1 = num;
             for (Celda c : arrCeldas) {
                 if (c.getId()==num) {
                     c.setCellColor(new Blue(true));
+                    c.setCastillo(true);
                     break;
                 }
             }
@@ -104,10 +108,12 @@ public class ControllerCelda {
     public void crearCastilloRed(int pIdCeldaCastilloActual, int pIdCeldaInicial) {
         if (HelperCelda.checkFinalTable(pIdCeldaCastilloActual, pIdCeldaInicial)) {
             int num = HelperCelda.randomCastilloRed(pIdCeldaInicial);
+            this.idCeldaCastillo2 = num;
             for (Celda c : arrCeldas) {
                 if (c.getId()==num) {
                     c.setCellColor(new Red(true));
                     c.setCastillo(true);
+                    break;
                 }
             }
         }
@@ -143,7 +149,7 @@ public class ControllerCelda {
             colorCell = new Blue(false);
         }
 
-        arrCeldas.get(id).setCellColor(colorCell);
+        arrCeldas.get(id-1).setCellColor(colorCell);
     }
 
     /**
@@ -153,11 +159,30 @@ public class ControllerCelda {
      * */
 
     public Celda getCell(int pId) {
+        Celda cTemp = null;
         for (Celda c : arrCeldas) {
             if (c.getId()==pId) {
-                return c;
+                cTemp = c;
+                break;
             }
         }
-        return null;
+        return cTemp;
+    }
+
+    /**
+     * Método que devuelve el ID de la celda inicial de convocación.
+     * @return El ID de la celda en la que comienza el juego para el Jugador 1.
+     */
+    public int getCellCastleId1() {
+        return idCeldaCastillo1;
+    }
+
+    /**
+     * Método que devuelve el ID de la celda inicial de convocación.
+     * @return El ID de la celda en la que comienza el juego para el Jugador 2.
+     */
+
+    public int getCellCastleId2() {
+        return idCeldaCastillo2;
     }
 }

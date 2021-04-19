@@ -10,7 +10,7 @@ import com.mygdx.game.bl.personajes.componente.Personaje;
 
 public class Infanteria extends Personaje{
 
-    //final static TextureAtlas personajeAtlas = new TextureAtlas("");
+    final static TextureAtlas personajeAtlas = new TextureAtlas("personajes/personajes.atlas");
     protected int idPersonaje;
     protected int vida;
     protected int ataque;
@@ -21,6 +21,7 @@ public class Infanteria extends Personaje{
     protected  String tipo;
     protected String ataqueEspecial;
     protected int rango;
+    protected String duenno;
 
 
     public Infanteria( int idPersonaje, String ataqueEspecial, String personajeActivo, Rectangle boundingBox) {
@@ -34,15 +35,12 @@ public class Infanteria extends Personaje{
         this.ataqueEspecial = ataqueEspecial;
         this.rango=1;
         if(personajeActivo.equals("blue")){
-            //this.tRegion = personajeAtlas.findRegion("");
+            this.tRegion = personajeAtlas.findRegion("infanteriaBlue");
         }
         if(personajeActivo.equals("red")){
-            //this.tRegion = personajeAtlas.findRegion("");
+            this.tRegion = personajeAtlas.findRegion("infanteriaRed");
         }
-        //mientras milton pone el atlas :)
-        //TODO revertir eso
-        TextureAtlas atlas = new TextureAtlas("dice/dice.atlas");
-        this.tRegion=atlas.findRegion("atk");
+        this.duenno = personajeActivo;
     }
 
     public int getIdPersonaje() {
@@ -125,6 +123,17 @@ public class Infanteria extends Personaje{
         this.tRegion = tRegion;
     }
 
+    @Override
+    public String getDuenno() {
+        return duenno;
+    }
+
+    @Override
+    public void setDuenno(String duenno) {
+        this.duenno = duenno;
+    }
+
+    //TODO: hacer estas funciones ahorita
 
     public String obtenerInformacionPersonaje() {
         return "Este personaje es un " +this.getTipo()+ " ,tiene una vida de " +this.getVida() + " ,tiene una defensa de " +this.getDefensa()+ " ," +

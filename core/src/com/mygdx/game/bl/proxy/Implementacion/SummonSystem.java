@@ -8,6 +8,7 @@ import com.mygdx.game.bl.cadenaResponsabilidad.concreto.CeldaPersonajeSummon;
 import com.mygdx.game.bl.cadenaResponsabilidad.objetos.Pattern;
 import com.mygdx.game.bl.cadenaResponsabilidad.objetos.Task;
 import com.mygdx.game.bl.celdas.iPrototipo.Celda;
+import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
 import com.mygdx.game.bl.personajes.componente.Personaje;
 import com.mygdx.game.bl.proxy.Interface.ISummonSystem;
 import com.mygdx.game.tl.ControllerCelda;
@@ -53,7 +54,7 @@ public class SummonSystem implements ISummonSystem {
 
     }
 
-    public String summon(int pIdCelda, String pIdPattern, String pJugador) {
+    public String summon(int pIdCelda, String pIdPattern, String pJugador, int pType) {
         boolean validate;
         String report="";
 
@@ -68,45 +69,44 @@ public class SummonSystem implements ISummonSystem {
         validate = createArrayCellsPattern();
 
         if (validate) {
-            createTasks(pJugador);
+            createTasks(pJugador, pType);
 
             for (Task t : tasks) {
                 continuar = manejador.executeTask(t);
                 if(!continuar) {
-                    report = "Celdas inválidas. Seleccione otra celda de inicio u otro patrón de convocación.";
+                    report = "Invalid Cells. Select another starting cell or summoning pattern.";
                     break;
                 }
             }
             if (continuar) {
-                report = "Convocación exitosa.";
+                report = "Successful summon.";
             }
 
         }
         else {
-            report = "Error: El patrón de convocación excede el límite superior/inferior del tablero.";
+            report = "Summoning pattern exceeds the up/down limit of board.";
         }
         return report;
 
     }
 
     @Override
-    public Personaje displayStats(int pIdPersonaje, String pJugador) {
-        return null;
+    public PersonajeAbstracto displayStats(int pIdPersonaje, String pJugador) {
+        PersonajeAbstracto pTemp = gPer.retornarPersonajeDecorador(pIdPersonaje);
+        return pTemp;
     }
 
     public void addTask(Task pTask) {
         tasks.add(pTask);
     }
 
-    public void createTasks(String pJugador) {
-        if (tasks==null) {
-            tasks = new ArrayList<>();
-        }
+    public void createTasks(String pJugador, int typeSummon) {
+        tasks = new ArrayList<>();
         if (startCell != null) {
-            addTask(new Task("free", startCell, fiveCellPattern, pJugador));
-            addTask(new Task("border", startCell, fiveCellPattern, pJugador));
-            addTask(new Task("color", startCell, fiveCellPattern, pJugador));
-            addTask(new Task("summon", startCell, fiveCellPattern, pJugador));
+            addTask(new Task("free", startCell, fiveCellPattern, pJugador, typeSummon));
+            addTask(new Task("border", startCell, fiveCellPattern, pJugador, typeSummon));
+            addTask(new Task("color", startCell, fiveCellPattern, pJugador, typeSummon));
+            addTask(new Task("summon", startCell, fiveCellPattern, pJugador, typeSummon));
         }
     }
 
@@ -118,8 +118,8 @@ public class SummonSystem implements ISummonSystem {
         player1.add(new Pattern("T", 20, 40, 60, 59, 61));
         player1.add(new Pattern("L1", 20, 40, 60, 80, 79));
         player1.add(new Pattern("L2", 20, 40, 60, 80, 81));
-        player1.add(new Pattern("Z2", 20, 40, 61, 81, 101));
-        player1.add(new Pattern("Z1", 20, 40, 59, 79, 99));
+        player1.add(new Pattern("Z2", 20, 40, 41, 61, 81));
+        player1.add(new Pattern("Z1", 20, 40, 39, 59, 79));
         player1.add(new Pattern("U", 20, 40, 41, 42, 22));
     }
 
@@ -132,8 +132,8 @@ public class SummonSystem implements ISummonSystem {
         player2.add(new Pattern("T", -20, -40, -60, -59, -61));
         player2.add(new Pattern("L1", -20, -40, -60, -80, -81));
         player2.add(new Pattern("L2", -20, -40, -60, -80, -79));
-        player2.add(new Pattern("Z1", -20, -40, -61, -81, -101));
-        player2.add(new Pattern("Z2", -20, -40, -59, -79, -99));
+        player2.add(new Pattern("Z1", -20, -40, -41, -61, -81));
+        player2.add(new Pattern("Z2", -20, -40, -39, -59, -79));
         player2.add(new Pattern("U", -20, -40, -39, -38, -18));
     }
 
@@ -168,7 +168,14 @@ public class SummonSystem implements ISummonSystem {
         positions = new int[]{selectedPattern.getIdCell1(), selectedPattern.getIdCell2(), selectedPattern.getIdCell3(), selectedPattern.getIdCell4(), selectedPattern.getIdCell5()};
 
         for (int i : positions) {
-            Celda referenceCell = gCell.getCell(startCell.getId()+i);
+            int idStartCell = startCell.getId();
+            if (idStartCell>400 && idStartCell<1020) {
+                idStartCell = idStartCell-1019;
+            }
+            if (idStartCell>=1020) {
+                idStartCell = idStartCell-619;
+            }
+            Celda referenceCell = gCell.getCell(idStartCell+i);
             if (referenceCell!=null) {
                 fiveCellPattern.add(referenceCell);
             }
@@ -178,5 +185,9 @@ public class SummonSystem implements ISummonSystem {
             }
         }
         return patternBuilding;
+    }
+
+    public String moveUnit(int pIdPersonaje, int pIdCelda, String pIdJugador, String pMovimiento) {
+        return "ok";
     }
 }

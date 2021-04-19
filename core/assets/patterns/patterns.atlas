@@ -1,0 +1,104 @@
+
+patterns.png
+size: 512, 128
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+iDown
+  rotate: false
+  xy: 391, 36
+  size: 18, 76
+  orig: 18, 76
+  offset: 0, 0
+  index: -1
+iUp
+  rotate: false
+  xy: 371, 36
+  size: 18, 76
+  orig: 18, 76
+  offset: 0, 0
+  index: -1
+l1Down
+  rotate: false
+  xy: 139, 51
+  size: 33, 61
+  orig: 33, 61
+  offset: 0, 0
+  index: -1
+l1Up
+  rotate: false
+  xy: 104, 51
+  size: 33, 61
+  orig: 33, 61
+  offset: 0, 0
+  index: -1
+l2Down
+  rotate: false
+  xy: 271, 50
+  size: 32, 62
+  orig: 32, 62
+  offset: 0, 0
+  index: -1
+l2Up
+  rotate: false
+  xy: 36, 50
+  size: 32, 62
+  orig: 32, 62
+  offset: 0, 0
+  index: -1
+tDown
+  rotate: false
+  xy: 2, 2
+  size: 47, 46
+  orig: 47, 46
+  offset: 0, 0
+  index: -1
+tUp
+  rotate: false
+  xy: 174, 66
+  size: 47, 46
+  orig: 47, 46
+  offset: 0, 0
+  index: -1
+uDown
+  rotate: false
+  xy: 51, 16
+  size: 46, 32
+  orig: 46, 32
+  offset: 0, 0
+  index: -1
+uUp
+  rotate: false
+  xy: 223, 80
+  size: 46, 32
+  orig: 46, 32
+  offset: 0, 0
+  index: -1
+z1Down
+  rotate: false
+  xy: 338, 50
+  size: 31, 62
+  orig: 31, 62
+  offset: 0, 0
+  index: -1
+z1Up
+  rotate: false
+  xy: 305, 50
+  size: 31, 62
+  orig: 31, 62
+  offset: 0, 0
+  index: -1
+z2Down
+  rotate: false
+  xy: 70, 50
+  size: 32, 62
+  orig: 32, 62
+  offset: 0, 0
+  index: -1
+z2Up
+  rotate: false
+  xy: 2, 50
+  size: 32, 62
+  orig: 32, 62
+  offset: 0, 0
+  index: -1

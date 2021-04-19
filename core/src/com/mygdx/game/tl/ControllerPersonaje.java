@@ -20,7 +20,7 @@ public class ControllerPersonaje {
     private static int contGeneral=0;
 
     //controller real
-    public PersonajeAbstracto crearPersonaje(int tipoPersonaje, int tipo, String jugadorActivo, Rectangle boundingBox){
+    public PersonajeAbstracto crearPersonaje(int id, int tipoPersonaje, int tipo, String jugadorActivo, Rectangle boundingBox){
 
         PersonajeAbstracto personajeDeRetorno = null;
         PersonajeFA personaje;
@@ -29,10 +29,10 @@ public class ControllerPersonaje {
                 personaje = new Fabrica_infanteria();
                 if(tipo==1){
 
-                    personajeDeRetorno = crearFabricaPersonaje(personaje,  1,1, jugadorActivo, boundingBox);
+                    personajeDeRetorno = crearFabricaPersonaje(id, personaje,  1,1, jugadorActivo, boundingBox);
                 } else{
 
-                    personajeDeRetorno = crearFabricaPersonaje(personaje, 1,2, jugadorActivo, boundingBox);
+                    personajeDeRetorno = crearFabricaPersonaje(id, personaje, 1,2, jugadorActivo, boundingBox);
 
                 }
 
@@ -40,21 +40,21 @@ public class ControllerPersonaje {
                 break;
             case 2:
                 personaje = new Fabrica_artilleria();
-                if(tipo==1)personajeDeRetorno = crearFabricaPersonaje(personaje, 2,1, jugadorActivo, boundingBox);
-                else personajeDeRetorno = crearFabricaPersonaje(personaje,  2,2, jugadorActivo, boundingBox);
+                if(tipo==1)personajeDeRetorno = crearFabricaPersonaje(id, personaje, 2,1, jugadorActivo, boundingBox);
+                else personajeDeRetorno = crearFabricaPersonaje(id, personaje,  2,2, jugadorActivo, boundingBox);
                 break;
             case 3:
                 personaje = new Fabrica_tanque();
-                if(tipo==1)personajeDeRetorno = crearFabricaPersonaje(personaje,  3,1, jugadorActivo, boundingBox);
-                else personajeDeRetorno = crearFabricaPersonaje(personaje,  3,2, jugadorActivo, boundingBox);
+                if(tipo==1)personajeDeRetorno = crearFabricaPersonaje(id, personaje,  3,1, jugadorActivo, boundingBox);
+                else personajeDeRetorno = crearFabricaPersonaje(id, personaje,  3,2, jugadorActivo, boundingBox);
                 break;
         }
         return personajeDeRetorno;
     }
 
 
-    private PersonajeAbstracto crearFabricaPersonaje(PersonajeFA personaje, int tipoPersonaje, int tipo, String jugadorActivo, Rectangle boundingBox) {//tipo es para ver si es enemigue o no
-        PersonajeAbstracto objPersonaje = personaje.crearPersonaje(obtenerId(), retornarAtaqueEspecial(tipoPersonaje),jugadorActivo, boundingBox);
+    private PersonajeAbstracto crearFabricaPersonaje(int id, PersonajeFA personaje, int tipoPersonaje, int tipo, String jugadorActivo, Rectangle boundingBox) {//tipo es para ver si es enemigue o no
+        PersonajeAbstracto objPersonaje = personaje.crearPersonaje(id, retornarAtaqueEspecial(tipoPersonaje),jugadorActivo, boundingBox);
         if(tipo==1) {
             personajesArr.add(objPersonaje);
         }
@@ -66,7 +66,7 @@ public class ControllerPersonaje {
     }
 
 
-    public void crearPersonajeEnemigo(Rectangle summonArea) {
+    public void crearPersonajeEnemigo(int id, Rectangle summonArea) {
         int random = valorPersonajeRandom();
         int tipoPersonaje;
         if (random<=13) {
@@ -78,7 +78,7 @@ public class ControllerPersonaje {
         else {
             tipoPersonaje = 3;
         }
-        crearPersonaje(tipoPersonaje,2,"red",summonArea);
+        crearPersonaje(id, tipoPersonaje,2,"red",summonArea);
     }
 
     //metodos de impresion
@@ -213,7 +213,7 @@ public class ControllerPersonaje {
     }
 
     private PersonajeAbstracto decorarBajar2Defensa(int idExterno) {
-        PersonajeAbstracto personajeAbstracto = retornarPersonajeDecorador(idExterno);
+        PersonajeAbstracto personajeAbstracto = retornarPersonajeDecoradorEnemigue(idExterno);
         int indexPersonaje = obtenerIndexPersonaje(personajeAbstracto);
         personajeAbstracto= new ArtilleriaBajarDefensa((Personaje) personajeAbstracto);
         personajesArr.set(indexPersonaje,personajeAbstracto);
@@ -281,7 +281,7 @@ public class ControllerPersonaje {
         return 0;
     }
 
-    private int obtenerId(){
+    public int obtenerId(){
         idPersonaje+=1;
         return idPersonaje;
     }
@@ -335,7 +335,7 @@ public class ControllerPersonaje {
         return ataque;
     }
 
-    private PersonajeAbstracto retornarPersonajeDecorador(int idPersonajes){
+    public PersonajeAbstracto retornarPersonajeDecorador(int idPersonajes){
         for(PersonajeAbstracto p: personajesArr){
             if(p.getIdPersonaje() == idPersonajes){
                 return p;
@@ -343,6 +343,17 @@ public class ControllerPersonaje {
         }
         return null;
     }
+
+
+    public PersonajeAbstracto retornarPersonajeDecoradorEnemigue(int idPersonajes){
+        for(PersonajeAbstracto p: personajesArrEnemigo){
+            if(p.getIdPersonaje() == idPersonajes){
+                return p;
+            }
+        }
+        return null;
+    }
+
 
     private ArrayList<PersonajeAbstracto> retornarPersonajesDecorador(int [] idPersonajes, int tipo){
         ArrayList<PersonajeAbstracto> personajeAbstractos = new ArrayList<>();
