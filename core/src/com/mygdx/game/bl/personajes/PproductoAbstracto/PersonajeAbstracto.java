@@ -1,6 +1,7 @@
 package com.mygdx.game.bl.personajes.PproductoAbstracto;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
 public interface PersonajeAbstracto  {
@@ -21,6 +22,8 @@ public interface PersonajeAbstracto  {
      void setTipo(String tipo);
      int getRango();
      void setRango(int pRango);
+     TextureRegion gettRegion();
+     void settRegion(TextureRegion tRegion);
      String getDuenno();
      void setDuenno(String duenno);
      void draw(Batch batch);

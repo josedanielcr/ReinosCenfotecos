@@ -1,0 +1,153 @@
+
+personajes.png
+size: 1024, 128
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+artilleriaBlue
+  rotate: false
+  xy: 323, 21
+  size: 105, 105
+  orig: 105, 105
+  offset: 0, 0
+  index: -1
+artilleriaRed
+  rotate: false
+  xy: 430, 21
+  size: 105, 105
+  orig: 105, 105
+  offset: 0, 0
+  index: -1
+infanteriaBlue
+  rotate: false
+  xy: 537, 21
+  size: 105, 105
+  orig: 105, 105
+  offset: 0, 0
+  index: -1
+infanteriaRed
+  rotate: false
+  xy: 644, 21
+  size: 105, 105
+  orig: 105, 105
+  offset: 0, 0
+  index: -1
+padDownDown
+  rotate: false
+  xy: 859, 6
+  size: 28, 24
+  orig: 28, 24
+  offset: 0, 0
+  index: -1
+padDownUp
+  rotate: false
+  xy: 904, 102
+  size: 28, 24
+  orig: 28, 24
+  offset: 0, 0
+  index: -1
+padLeftDown
+  rotate: false
+  xy: 751, 2
+  size: 25, 28
+  orig: 25, 28
+  offset: 0, 0
+  index: -1
+padLeftUp
+  rotate: false
+  xy: 778, 2
+  size: 25, 28
+  orig: 25, 28
+  offset: 0, 0
+  index: -1
+padRightDown
+  rotate: false
+  xy: 832, 2
+  size: 25, 28
+  orig: 25, 28
+  offset: 0, 0
+  index: -1
+padRightUp
+  rotate: false
+  xy: 805, 2
+  size: 25, 28
+  orig: 25, 28
+  offset: 0, 0
+  index: -1
+padUpDown
+  rotate: false
+  xy: 934, 102
+  size: 28, 24
+  orig: 28, 24
+  offset: 0, 0
+  index: -1
+padUpUp
+  rotate: false
+  xy: 904, 76
+  size: 28, 24
+  orig: 28, 24
+  offset: 0, 0
+  index: -1
+summon1Down
+  rotate: false
+  xy: 853, 32
+  size: 49, 46
+  orig: 49, 46
+  offset: 0, 0
+  index: -1
+summon1Up
+  rotate: false
+  xy: 853, 80
+  size: 49, 46
+  orig: 49, 46
+  offset: 0, 0
+  index: -1
+summon2Down
+  rotate: false
+  xy: 751, 80
+  size: 49, 46
+  orig: 49, 46
+  offset: 0, 0
+  index: -1
+summon2Up
+  rotate: false
+  xy: 802, 32
+  size: 49, 46
+  orig: 49, 46
+  offset: 0, 0
+  index: -1
+summon3Down
+  rotate: false
+  xy: 751, 32
+  size: 49, 46
+  orig: 49, 46
+  offset: 0, 0
+  index: -1
+summon3Up
+  rotate: false
+  xy: 802, 80
+  size: 49, 46
+  orig: 49, 46
+  offset: 0, 0
+  index: -1
+tanqueBlue
+  rotate: false
+  xy: 2, 21
+  size: 105, 105
+  orig: 105, 105
+  offset: 0, 0
+  index: -1
+tanqueRed
+  rotate: false
+  xy: 109, 21
+  size: 105, 105
+  orig: 105, 105
+  offset: 0, 0
+  index: -1
+unitFrame
+  rotate: false
+  xy: 216, 21
+  size: 105, 105
+  orig: 105, 105
+  offset: 0, 0
+  index: -1

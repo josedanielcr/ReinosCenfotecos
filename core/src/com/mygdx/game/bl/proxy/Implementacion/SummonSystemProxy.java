@@ -51,4 +51,14 @@ public class SummonSystemProxy implements ISummonSystem {
         }
         return null;
     }
+
+    public String moveUnit(int pIdPersonaje, int pIdCelda, String pIdJugador, String pMovimiento) {
+        PersonajeAbstracto pTemp = gPer.retornarPersonajeDecorador(pIdPersonaje);
+        if (pTemp.getDuenno().equals(pIdJugador)) {
+            return system.moveUnit(pIdPersonaje,pIdCelda,pIdJugador,pMovimiento);
+        }
+        else {
+            return "Unable to move a battle unit that is not under your control.";
+        }
+    }
 }
