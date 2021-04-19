@@ -22,6 +22,7 @@ public class ControllerCelda {
     public static final TextureAtlas cellAtlas = new TextureAtlas("cells/cells.atlas");
     private int idCeldaCastillo1;
     private int idCeldaCastillo2;
+    private int lastEnemySummonCell;
 
 
     //***********************************************************************************************
@@ -184,5 +185,12 @@ public class ControllerCelda {
 
     public int getCellCastleId2() {
         return idCeldaCastillo2;
+    }
+
+    public int getLastEnemySummonCell(){
+        return lastEnemySummonCell;
+    }
+    public void setLastEnemySummonCell(int pcell){
+       this.lastEnemySummonCell=pcell;
     }
 }

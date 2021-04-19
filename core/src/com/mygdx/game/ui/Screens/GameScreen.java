@@ -15,7 +15,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -133,7 +132,7 @@ public class GameScreen implements Screen, InputProcessor {
     public int gameTime = 60;
     private static int time = 0;
     public int currentCell = 0;
-    public int currentEnemyCell = 0;
+    public int lastEnemySummonCell = 0;
     public int startingCell1;
     public int startingCell2;
     public int idPersonajeSeleccionado = 0;
@@ -558,31 +557,7 @@ public class GameScreen implements Screen, InputProcessor {
         btnSummon.setPosition(939,690);
         btnSummon.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
-                String report;
-                    if (currentPlayer.equals("blue")) {
-                        if(canSummon(currentSummonType)) {
-                            if (currentCell == 0) {
-                                report = gestorProxy.startSummon(startingCell1, currentPattern, currentPlayer, currentSummonType);
-                            } else {
-                                report = gestorProxy.startSummon(currentCell, currentPattern, currentPlayer, currentSummonType);
-                            }
-                            if (report.equals("Summoning successful.")) {
-                                gestorDado.summon(currentSummonType);
-                                updateChest();
-                            }
-                        }else{
-                            report = "Not enough dice to summon that unit.";
-                        }
-                    }else{
-                        if (currentCell==0) {
-                            report = gestorProxy.startSummon(startingCell2, currentPattern, currentPlayer, currentSummonType);
-                        }
-                        else {
-                            //TODO esto es automatico? o va a necesitar de algun input aleatorio
-                            report = gestorProxy.startSummon(currentCell, currentPattern, currentPlayer, currentSummonType);
-                        }
-                    }
-                comm.setText(report);
+               startSummoning();
             }});
 
 
@@ -908,7 +883,6 @@ public class GameScreen implements Screen, InputProcessor {
             if (c.getBoundingBox().contains(temp.x,temp.y)) {
                 currentCell = c.getId();
                 lIdCell.setText(currentCell);
-                System.out.println("Celda seleccionada : "+currentCell);
             }
         }
 
@@ -985,6 +959,15 @@ public class GameScreen implements Screen, InputProcessor {
         return false;
     }
 
+    public void endTurn(){
+        changeTurn();
+        gestorObserver.resetTimer();
+        rolled=false;
+        if(currentPlayer.equals("red")){
+            startSummoning();
+        }
+    }
+
     public void changeTurn(){
         if(currentPlayer.equals("blue")){
             currentPlayer="red";
@@ -998,18 +981,11 @@ public class GameScreen implements Screen, InputProcessor {
             lTurnPlayer.setText("Player 1");
         }else if (currentPlayer.equals("red") ) {
             lTurnPlayer.setText("Player 2");
-            //TODO ejecute el summoning del enemigo
         }
     }
 
-    public void endTurn(){
-        changeTurn();
-        gestorObserver.resetTimer();
-        rolled=false;
-    }
-
     public void updateClock(int value){
-        gameTime=value; //actualiza variable local para dibujar el tiempo restante del turno
+        gameTime=value;
     }
 
     public void renderDice(String rollInvo, String rollInvo2, String rollAccion){
@@ -1117,6 +1093,65 @@ public class GameScreen implements Screen, InputProcessor {
         }
 
         return canSummon;
+    }
+
+    public void startSummoning() {
+        String report;
+        if (currentPlayer.equals("blue")) {
+            if(canSummon(currentSummonType)) {
+                if (currentCell == 0) {
+                    report = gestorProxy.startSummon(startingCell1, currentPattern, currentPlayer, currentSummonType);
+                } else {
+                    report = gestorProxy.startSummon(currentCell, currentPattern, currentPlayer, currentSummonType);
+                }
+                if (report.equals("Summoning successful.")) {
+                    gestorDado.summon(currentSummonType);
+                    updateChest();
+                }
+            }else{
+                report = "Not enough dice to summon that unit.";
+            }
+        }else{
+            if (lastEnemySummonCell==0) {
+                report = gestorProxy.startSummon(startingCell2, "T", currentPlayer, currentSummonType);
+                lastEnemySummonCell=gestorCelda.getLastEnemySummonCell();
+            }else {
+                do {
+                    report = gestorProxy.startSummon(lastEnemySummonCell, getRandomPattern(), currentPlayer, currentSummonType);
+                }while(!report.equals("Summoning successful."));
+            }
+            comm.setText(report);
+            lastEnemySummonCell=gestorCelda.getLastEnemySummonCell();
+            System.out.println(lastEnemySummonCell);
+            endTurn();
+        }
+        comm.setText(report);
+    }
+
+    public String getRandomPattern(){
+        int rnd = (int) ((Math.random()*12)+1);
+        String prefa="";
+        switch(rnd){
+            case 1:
+                prefa="I";
+                break;
+            case 2:
+                prefa="L1";
+                break;
+            case 3:
+                prefa="L2";
+                break;
+            case 4:
+                prefa="Z1";
+                break;
+            case 5:
+                prefa="Z2";
+                break;
+            default:
+                prefa="T";
+                break;
+        }
+        return prefa;
     }
 }
 
