@@ -80,6 +80,7 @@ public class SummonSystem implements ISummonSystem {
             }
             if (continuar) {
                 report = "Summoning successful.";
+                gCell.setLastEnemySummonCell(fiveCellPattern.get(4).getId());
             }
 
         }
