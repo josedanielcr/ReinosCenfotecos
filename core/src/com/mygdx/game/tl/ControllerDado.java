@@ -99,19 +99,19 @@ public class ControllerDado {
         return dice;
     }
 
-    public void summon(String pdado) {
-        switch (pdado) {
-            case "Infanteria":
+    public void summon(int ptipo) {
+        switch (ptipo) {
+            case 1:
                 for(int i=0;i<2;i++){
                     cofreJugador.removeSummonDice(1);
                 }
                 break;
-            case "Artilleria":
+            case 2:
                 for(int i=0;i<3;i++){
                     cofreJugador.removeSummonDice(2);
                 }
                 break;
-            case "Tanque":
+            case 3:
                 for(int i=0;i<4;i++){
                     cofreJugador.removeSummonDice(3);
                 }
