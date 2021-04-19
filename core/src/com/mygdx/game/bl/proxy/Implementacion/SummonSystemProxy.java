@@ -24,7 +24,7 @@ public class SummonSystemProxy implements ISummonSystem {
         if (validatedCell.getCellColor().getColor().equals(pJugador)) {
             validation = true;
         }
-        return true; //TODO  como va a tener el color del jugador si no ha puesto la ficha? revertir esto a validation
+        return validation;
     }
 
     @Override

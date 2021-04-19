@@ -269,7 +269,7 @@ public class GameScreen implements Screen, InputProcessor {
         btnSummon.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 if(canSummon("Infanteria")){ //si tiene suficientes dados en el cofre
-                    if(gestorProxy.startSummon(150,"T","blue").equals("Convocación exitosa.")){ //si no hay problemas de invocacion
+                    if(gestorProxy.startSummon(51,"L1","blue").equals("Convocación exitosa.")){ //si no hay problemas de invocacion
                         gestorDado.summon("Infanteria");
                         updateChest();
                         comm.setText("Convocacion exitosa!");
