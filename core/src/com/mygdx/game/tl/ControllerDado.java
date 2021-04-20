@@ -71,15 +71,18 @@ public class ControllerDado {
         }else{
             return false;
         }
+
     }
 
     private boolean guardarRoll(int ptipo) {
-        if(cofreJugador.guardarRoll(ptipo)) {
-            return true;
-        }else{
-            gameScreen.full();
-            return false;
-        }
+            if (cofreJugador.guardarRoll(ptipo)) {
+                rollsInvocacion = null;
+                rollAccion=null;
+                return true;
+            } else {
+                gameScreen.full();
+                return false;
+            }
     }
 
     public int[] savedDice() {
@@ -97,8 +100,10 @@ public class ControllerDado {
         switch (ptipo) {
             case 1:
                 for(int i=0;i<2;i++) {
-                    if(rollsInvocacion[i].equals("Infanteria")){
-                        discount++;
+                    if(rollsInvocacion!=null) {
+                        if (rollsInvocacion[i].equals("Infanteria")) {
+                            discount++;
+                        }
                     }
                 }
                 for(int i=0;i<(2-discount);i++){
@@ -107,8 +112,10 @@ public class ControllerDado {
                 break;
             case 2:
                 for(int i=0;i<2;i++) {
-                    if(rollsInvocacion[i].equals("Artilleria")){
-                        discount++;
+                    if(rollsInvocacion!=null) {
+                        if (rollsInvocacion[i].equals("Artilleria")) {
+                            discount++;
+                        }
                     }
                 }
                 for(int i=0;i<3-discount;i++){
@@ -117,8 +124,10 @@ public class ControllerDado {
                 break;
             case 3:
                 for(int i=0;i<2;i++) {
-                    if(rollsInvocacion[i].equals("Tanque")){
-                        discount++;
+                    if(rollsInvocacion!=null) {
+                        if (rollsInvocacion[i].equals("Tanque")) {
+                            discount++;
+                        }
                     }
                 }
                 for(int i=0;i<4-discount;i++){
@@ -126,7 +135,6 @@ public class ControllerDado {
                 }
                 break;
         }
-
     }
 
     public Cofre getCofreJugador(){
