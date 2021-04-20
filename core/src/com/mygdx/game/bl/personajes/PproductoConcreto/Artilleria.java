@@ -102,7 +102,6 @@ public class Artilleria extends Personaje {
     public String getAtaqueEspecial() {
         return ataqueEspecial;
     }
-
     public int getRango() {
         return rango;
     }

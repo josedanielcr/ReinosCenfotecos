@@ -522,7 +522,26 @@ public class GameScreen implements Screen, InputProcessor {
         btnSpAtk.setPosition(1083,750);
         btnSpAtk.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
-                comm.setText("Action activated: SP ATTACK.");
+                //todo: validaciones
+                if(cantDadosSpAtk>0){
+                    if(gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado).getAtaqueEspecial().equals("")){
+                        comm.setText("SP ATTACK: already used");
+                    } else{
+                        if(personajes1.size()>1 && personajes2.size()>1){
+                            gestorPersonaje.aplicarAtaqueEspecial(idPersonajeSeleccionado);
+                            System.out.println(gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado));
+                            comm.setText("Action activated: SP ATTACK.");
+                            gestorPersonaje.eliminarAtaqueSP(idPersonajeSeleccionado);
+                            //System.out.println(gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado).obtenerInformacionPersonaje());
+                            cantDadosSpAtk--; // todo: restarle al rol del turno
+                        } else {
+                            //no tendria sentido aplicar un sp attack si solo hay una persona en el juego
+                            comm.setText("there are not enough units");
+                        }
+                    }
+                } else{
+                    comm.setText("there are not enough SP ATTACK dice");
+                }
             }
         });
 
@@ -1046,26 +1065,39 @@ public class GameScreen implements Screen, InputProcessor {
         String renderType;
         switch (type) {
             case "healer1":
+                renderType = "H1";
+                break;
             case "healer2":
+                renderType = "H2";
+                break;
             case "unaVidaDobleM":
-                renderType = "+H";
+                renderType = "+M";
                 break;
             case "sumar3Ataque":
             case "doblePoderAtaque":
-            case "ataqueDosCasillas":
                 renderType = "+A";
                 break;
+            case "ataqueDosCasillas": //significa que tiene mas rango
+                renderType = "+R";
+                break;
             case "sumar3Defensa":
+                renderType = "3D";
+                break;
             case "doblePoderDefensa":
+                renderType = "2D";
+                break;
             case "proteccionAliade":
-                renderType = "+D";
+                renderType = "PA";
                 break;
             case "bajarDefensa":
             case "bajar2Defensa":
                 renderType = "-D";
                 break;
+            case "ataqueBomba":
+                renderType="AB";
+                break;
             default:
-                renderType = "S";
+                renderType = "";
                 break;
         }
         return renderType;
