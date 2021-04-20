@@ -64,52 +64,51 @@ public class Cofre {
 
     //METODOS
 
-    public boolean guardarRoll(String proll1, String proll2, String proll3) {
+    public boolean guardarRoll(int ptipo) {
         boolean added=true;
         ArrayList<String> dados;
 
-        if (proll1.equals("Infanteria") || proll1.equals("Artilleria") || proll1.equals("Tanque")) {
-            if (campoCofre(1)) {
-                if(proll1.equals("Infanteria")){
-                    dados=dadosInfanteria;
-                }else if(proll1.equals("Artilleria")){
-                    dados=dadosArtilleria;
+        switch(ptipo){
+            case 1:
+                dados=dadosInfanteria;
+                if(campoCofre(1)){
+                    dados.add("Infanteria");
                 }else{
-                    dados=dadosTanque;
+                    added=false;
                 }
-                dados.add(proll1);
-            }else{
-                added=false;
-            }
-        }
-
-        if (proll2.equals("Infanteria") || proll2.equals("Artilleria") || proll2.equals("Tanque")) {
-            if (campoCofre(1)) {
-                if(proll2.equals("Infanteria")){
-                    dados=dadosInfanteria;
-                }else if(proll2.equals("Artilleria")){
-                    dados=dadosArtilleria;
+                break;
+            case 2:
+                dados=dadosArtilleria;
+                if(campoCofre(1)){
+                    dados.add("Artilleria");
                 }else{
-                    dados=dadosTanque;
+                    added=false;
                 }
-                dados.add(proll2);
-            }else{
-                added=false;
-            }
-        }
-
-        if (proll3.equals("Ataque")) {
-            if (campoCofre(2)) {
-                dadosAtaque.add(proll1);
-            }else{
-                added=false;
-            }
-        } else if (proll3.equals("AtaqueEspecial")) {
-            if (campoCofre(3)) {
-                dadosAtaqueEspecial.add(proll1);
-            }else{
-                added=false;
-            }
+                break;
+            case 3:
+                dados=dadosTanque;
+                if(campoCofre(1)){
+                    dados.add("Tanque");
+                }else{
+                    added=false;
+                }
+                break;
+            case 4:
+                dados=dadosAtaque;
+                if(campoCofre(2)){
+                    dados.add("Ataque");
+                }else{
+                    added=false;
+                }
+                break;
+            case 5:
+                dados=dadosAtaqueEspecial;
+                if(campoCofre(3)){
+                    dados.add("AtaqueEspecial");
+                }else{
+                    added=false;
+                }
+                break;
         }
 
         return added;

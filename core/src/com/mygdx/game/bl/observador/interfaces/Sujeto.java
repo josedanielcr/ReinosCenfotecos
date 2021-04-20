@@ -1,4 +1,4 @@
-package com.mygdx.game.bl.jugadores.interfaces;
+package com.mygdx.game.bl.observador.interfaces;
 
 public interface Sujeto {
     void agregarObservador(Observer observer);

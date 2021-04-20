@@ -16,22 +16,23 @@ public class ControllerDado {
 
     //para probar
     private static Cofre cofreJugador;
-    private static Cofre cofreCompu;
 
     public ControllerDado(GameScreen gs) {
         cofreJugador = new Cofre();
-        cofreCompu = new Cofre();
         this.gameScreen=gs;
     }
 
     public void rodarDado() {
         crearDado(1);
         crearDado(2);
+
         if(rollAccion.equals("Movimiento")){
             crearDado(3);
             gameScreen.renderDice(rollsInvocacion[0],rollsInvocacion[1], getMovimiento());
+            gameScreen.setRolledDice(rollsInvocacion[0],rollsInvocacion[1],null);
         }else {
             gameScreen.renderDice(rollsInvocacion[0], rollsInvocacion[1], rollAccion);
+            gameScreen.setRolledDice(rollsInvocacion[0], rollsInvocacion[1], rollAccion);
         }
     }
 
@@ -63,13 +64,8 @@ public class ControllerDado {
         return rollMovimiento;
     }
 
-    public boolean addToChest(int pplayer){
-        if(rollsInvocacion!=null && rollAccion!=null) {
-            if (pplayer == 1) {
-                guardarRoll(rollsInvocacion[0], rollsInvocacion[1], rollAccion);
-            } else {
-                guardarRollCompu(rollsInvocacion[0], rollsInvocacion[1], rollAccion);
-            }
+    public boolean addToChest(int ptipo){
+        if(guardarRoll(ptipo)) {
             gameScreen.updateChest();
             return true;
         }else{
@@ -77,16 +73,13 @@ public class ControllerDado {
         }
     }
 
-    private void guardarRoll(String prol, String prol2, String prol3) {
-        if(!cofreJugador.guardarRoll(prol,prol2,prol3)) {
+    private boolean guardarRoll(int ptipo) {
+        if(cofreJugador.guardarRoll(ptipo)) {
+            return true;
+        }else{
             gameScreen.full();
+            return false;
         }
-        rollsInvocacion = null;
-        rollAccion = null;
-    }
-
-    private void guardarRollCompu(String prol, String prol2, String prol3){
-        cofreCompu.guardarRoll(prol,prol2,prol3);
     }
 
     public int[] savedDice() {
@@ -100,19 +93,35 @@ public class ControllerDado {
     }
 
     public void summon(int ptipo) {
+        int discount=0;
         switch (ptipo) {
             case 1:
-                for(int i=0;i<2;i++){
+                for(int i=0;i<2;i++) {
+                    if(rollsInvocacion[i].equals("Infanteria")){
+                        discount++;
+                    }
+                }
+                for(int i=0;i<(2-discount);i++){
                     cofreJugador.removeSummonDice(1);
                 }
                 break;
             case 2:
-                for(int i=0;i<3;i++){
+                for(int i=0;i<2;i++) {
+                    if(rollsInvocacion[i].equals("Artilleria")){
+                        discount++;
+                    }
+                }
+                for(int i=0;i<3-discount;i++){
                     cofreJugador.removeSummonDice(2);
                 }
                 break;
             case 3:
-                for(int i=0;i<4;i++){
+                for(int i=0;i<2;i++) {
+                    if(rollsInvocacion[i].equals("Tanque")){
+                        discount++;
+                    }
+                }
+                for(int i=0;i<4-discount;i++){
                     cofreJugador.removeSummonDice(3);
                 }
                 break;

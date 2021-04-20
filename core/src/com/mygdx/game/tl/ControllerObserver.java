@@ -1,9 +1,9 @@
 package com.mygdx.game.tl;
 
 import com.mygdx.game.ui.Screens.GameScreen;
-import com.mygdx.game.bl.jugadores.concreto.ObserverTimer;
-import com.mygdx.game.bl.jugadores.concreto.SujetoTimer;
-import com.mygdx.game.bl.jugadores.interfaces.Observer;
+import com.mygdx.game.bl.observador.concreto.ObserverTimer;
+import com.mygdx.game.bl.observador.concreto.SujetoTimer;
+import com.mygdx.game.bl.observador.interfaces.Observer;
 
 public class ControllerObserver {
     private final SujetoTimer timer;
