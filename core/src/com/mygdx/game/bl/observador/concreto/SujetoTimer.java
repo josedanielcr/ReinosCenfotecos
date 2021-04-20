@@ -1,7 +1,7 @@
-package com.mygdx.game.bl.jugadores.concreto;
+package com.mygdx.game.bl.observador.concreto;
 
-import com.mygdx.game.bl.jugadores.interfaces.Observer;
-import com.mygdx.game.bl.jugadores.interfaces.Sujeto;
+import com.mygdx.game.bl.observador.interfaces.Observer;
+import com.mygdx.game.bl.observador.interfaces.Sujeto;
 
 import java.util.ArrayList;
 import java.util.Timer;
