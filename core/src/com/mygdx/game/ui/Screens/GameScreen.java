@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.bl.celdas.iPrototipo.Celda;
@@ -28,6 +29,8 @@ import com.mygdx.game.tl.*;
 import com.mygdx.game.ui.MyGdxGame;
 
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 public class GameScreen implements Screen, InputProcessor {
@@ -368,7 +371,7 @@ public class GameScreen implements Screen, InputProcessor {
         styleUp.up = padUpUp;
         styleUp.down = padUpDown;
         btnUp = new ImageButton(styleUp);
-        btnUp.setPosition(1124,481);
+        btnUp.setPosition(1124,483);
         btnUp.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 String report = gestorProxy.moveUnit(idPersonajeSeleccionado, currentCell, currentPlayer,"up");
@@ -911,24 +914,26 @@ public class GameScreen implements Screen, InputProcessor {
             }
         }
 
-        for (PersonajeAbstracto p : personajes2) {
-            if (p.getRectangle().contains(temp.x,temp.y)) {
-                idPersonajeSeleccionado = p.getIdPersonaje();
-                PersonajeAbstracto pShow= gestorProxy.getInfoPersonaje(idPersonajeSeleccionado, currentPlayer);
-                if (pShow!=null) {
-                    currentAtk = pShow.getAtaque();
+        for (PersonajeAbstracto p2 : personajes2) {
+            if (p2.getRectangle().contains(temp.x,temp.y)) {
+                idPersonajeSeleccionado = p2.getIdPersonaje();
+                System.out.println(idPersonajeSeleccionado);
+                System.out.println(currentPlayer);
+                PersonajeAbstracto pShow2= gestorProxy.getInfoPersonaje(idPersonajeSeleccionado, currentPlayer);
+                if (pShow2!=null) {
+                    currentAtk = pShow2.getAtaque();
                     lAttack.setText(currentAtk);
-                    currentDef = pShow.getDefensa();
+                    currentDef = pShow2.getDefensa();
                     lDefense.setText(currentDef);
-                    currentSpAtk = renderSpecialAttack(pShow.getAtaqueEspecial());
+                    currentSpAtk = renderSpecialAttack(pShow2.getAtaqueEspecial());
                     lSpAttack.setText(currentSpAtk);
-                    currentRange = pShow.getRango();
+                    currentRange = pShow2.getRango();
                     lRange.setText(currentRange);
-                    currentUnitMove = pShow.getMovimiento();
+                    currentUnitMove = pShow2.getMovimiento();
                     lUnitMove.setText(currentUnitMove);
-                    currentUnitLife = pShow.getVida();
+                    currentUnitLife = pShow2.getVida();
                     lUnitLife.setText(currentUnitLife);
-                    unitFrame = pShow.gettRegion();
+                    unitFrame = pShow2.gettRegion();
                 }
                 else {
                     comm.setText("Current turn player does not own that unit.");
@@ -959,7 +964,7 @@ public class GameScreen implements Screen, InputProcessor {
         return false;
     }
 
-    public void endTurn(){
+    public void endTurn() {
         changeTurn();
         gestorObserver.resetTimer();
         rolled=false;
@@ -982,6 +987,7 @@ public class GameScreen implements Screen, InputProcessor {
         }else if (currentPlayer.equals("red") ) {
             lTurnPlayer.setText("Player 2");
         }
+
     }
 
     public void updateClock(int value){
@@ -1096,7 +1102,7 @@ public class GameScreen implements Screen, InputProcessor {
     }
 
     public void startSummoning() {
-        String report;
+        String report="Initializing...";
         if (currentPlayer.equals("blue")) {
             if(canSummon(currentSummonType)) {
                 if (currentCell == 0) {
@@ -1112,20 +1118,41 @@ public class GameScreen implements Screen, InputProcessor {
                 report = "Not enough dice to summon that unit.";
             }
         }else{
-            if (lastEnemySummonCell==0) {
-                report = gestorProxy.startSummon(startingCell2, "T", currentPlayer, currentSummonType);
-                lastEnemySummonCell=gestorCelda.getLastEnemySummonCell();
-            }else {
-                do {
-                    report = gestorProxy.startSummon(lastEnemySummonCell, getRandomPattern(), currentPlayer, currentSummonType);
-                }while(!report.equals("Summoning successful."));
+
+            Random rd = new Random();
+            boolean fiftyChance = rd.nextBoolean();
+
+            if (fiftyChance) {
+                if (lastEnemySummonCell==0) {
+                    report = gestorProxy.startSummon(startingCell2, "T", currentPlayer, currentSummonType);
+                    lastEnemySummonCell=gestorCelda.getLastEnemySummonCell();
+                }else {
+                    int count = 0;
+                    do {
+                        report = gestorProxy.startSummon(lastEnemySummonCell, getRandomPattern(), currentPlayer, currentSummonType);
+                        count++;
+                    }while(!report.equals("Summoning successful.") && count < 10);
+                }
             }
+
+            else {
+                report="Player 2 does not want to perform a summon.";
+            }
+
+
             comm.setText(report);
             lastEnemySummonCell=gestorCelda.getLastEnemySummonCell();
             System.out.println(lastEnemySummonCell);
-            endTurn();
+            comm.setText(report + ". Processing IA...");
+            float delay=8;
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    comm.setText("Turn of Player 2 completed.");
+                    endTurn();
+                }
+            },delay);
         }
-        comm.setText(report);
     }
 
     public String getRandomPattern(){

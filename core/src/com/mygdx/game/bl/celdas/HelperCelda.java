@@ -1,6 +1,6 @@
 package com.mygdx.game.bl.celdas;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class HelperCelda {
 
@@ -59,8 +59,7 @@ public class HelperCelda {
      */
     public static int randomCastilloBlue(int idInicialCastillo) {
         int seleccion;
-        Random rand = new Random();
-        seleccion = rand.nextInt(20);
+        seleccion = ThreadLocalRandom.current().nextInt(5,16);
         return idInicialCastillo+seleccion;
     }
 
@@ -71,8 +70,7 @@ public class HelperCelda {
      */
     public static int randomCastilloRed (int idInicialCastillo) {
         int seleccion;
-        Random rand = new Random();
-        seleccion = rand.nextInt(20);
+        seleccion = ThreadLocalRandom.current().nextInt(5,16);
         return idInicialCastillo+20+seleccion;
     }
 

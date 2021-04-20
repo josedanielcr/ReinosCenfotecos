@@ -93,7 +93,14 @@ public class SummonSystem implements ISummonSystem {
 
     @Override
     public PersonajeAbstracto displayStats(int pIdPersonaje, String pJugador) {
-        PersonajeAbstracto pTemp = gPer.retornarPersonajeDecorador(pIdPersonaje);
+        PersonajeAbstracto pTemp = null;
+        if (pJugador.equals("blue")) {
+            pTemp = gPer.retornarPersonajeDecorador(pIdPersonaje);
+        }
+        if (pJugador.equals("red")) {
+            pTemp = gPer.retornarPersonajeDecoradorEnemigue(pIdPersonaje);
+
+        }
         return pTemp;
     }
 
@@ -190,7 +197,7 @@ public class SummonSystem implements ISummonSystem {
 
     public String moveUnit(int pIdPersonaje, int pIdCelda, String pIdJugador, String pMovimiento) {
         String report = "";
-        int nextMoveValue = getNextMoveValue(pIdJugador, pMovimiento);
+        int nextMoveValue = getNextMoveValue(pMovimiento);
 
         if (pIdCelda+nextMoveValue>400) {
             report = "Movement action exceeds upper limit of board.";
@@ -210,15 +217,24 @@ public class SummonSystem implements ISummonSystem {
         }
         else {
             Celda targetCell = gCell.getCell(pIdCelda+nextMoveValue);
-            if (targetCell.getIdPersonaje()!=0) {
+            if (targetCell.getIdPersonaje()==0) {
                 if (targetCell.getCellColor().getColor().equals("free")) {
                     report = "Invalid move. Target cell is not claimed by a player.";
                 }
                 else {
-                    gPer.retornarPersonajeDecorador(pIdPersonaje).setRectangle(targetCell.getBoundingBox());
-                    targetCell.setIdPersonaje(pIdPersonaje);
-                    gCell.getCell(pIdCelda).setIdPersonaje(0);
-                    report="Sucessfull move action";
+                    if (pIdJugador.equals("blue")) {
+                        gPer.retornarPersonajeDecorador(pIdPersonaje).setRectangle(targetCell.getBoundingBox());
+                        targetCell.setIdPersonaje(pIdPersonaje);
+                        gCell.getCell(pIdCelda).setIdPersonaje(0);
+                        report="Successful move action.";
+                    }
+                    if (pIdJugador.equals("red")) {
+                        gPer.retornarPersonajeDecoradorEnemigue(pIdPersonaje).setRectangle(targetCell.getBoundingBox());
+                        targetCell.setIdPersonaje(pIdPersonaje);
+                        gCell.getCell(pIdCelda).setIdPersonaje(0);
+                        report="Successful move action.";
+                    }
+
                 }
             }
             else {
@@ -228,40 +244,21 @@ public class SummonSystem implements ISummonSystem {
         return report;
     }
 
-    public int getNextMoveValue(String pJugador, String pMov) {
+    public int getNextMoveValue(String pMov) {
         int nextMoveValue = 0;
-        if (pJugador.equals("blue")) {
-            switch (pMov) {
-                case "up":
-                    nextMoveValue = 20;
-                    break;
-                case "down":
-                    nextMoveValue = -20;
-                    break;
-                case "left":
-                    nextMoveValue = -1;
-                    break;
-                default:
-                    nextMoveValue = 1;
-                    break;
-            }
-        }
-
-        if (pJugador.equals("red")) {
-            switch (pMov) {
-                case "up":
-                    nextMoveValue = -20;
-                    break;
-                case "down":
-                    nextMoveValue = 20;
-                    break;
-                case "left":
-                    nextMoveValue = 1;
-                    break;
-                default:
-                    nextMoveValue = -1;
-                    break;
-            }
+        switch (pMov) {
+            case "up":
+                nextMoveValue = 20;
+                break;
+            case "down":
+                nextMoveValue = -20;
+                break;
+            case "left":
+                nextMoveValue = -1;
+                break;
+            default:
+                nextMoveValue = 1;
+                break;
         }
         return nextMoveValue;
     }
