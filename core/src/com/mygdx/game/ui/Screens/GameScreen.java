@@ -146,6 +146,7 @@ public class GameScreen implements Screen, InputProcessor {
     private boolean fullChest=false;
     private String currentPattern="I";
     private int currentSummonType=1;
+    boolean firstTurnPlayer2Summon = true;
 
     int cantDadosArtilleria = 0;
     int cantDadosInfanteria = 0;
@@ -1122,10 +1123,11 @@ public class GameScreen implements Screen, InputProcessor {
             Random rd = new Random();
             boolean fiftyChance = rd.nextBoolean();
 
-            if (fiftyChance) {
+            if (fiftyChance || firstTurnPlayer2Summon) {
                 if (lastEnemySummonCell==0) {
                     report = gestorProxy.startSummon(startingCell2, "T", currentPlayer, currentSummonType);
                     lastEnemySummonCell=gestorCelda.getLastEnemySummonCell();
+                    firstTurnPlayer2Summon= false;
                 }else {
                     int count = 0;
                     do {
