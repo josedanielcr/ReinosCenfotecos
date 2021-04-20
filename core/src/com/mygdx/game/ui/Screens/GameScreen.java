@@ -545,11 +545,11 @@ public class GameScreen implements Screen, InputProcessor {
                             cantDadosSpAtk--; // todo: restarle al rol del turno
                         } else {
                             //no tendria sentido aplicar un sp attack si solo hay una persona en el juego
-                            comm.setText("there are not enough units");
+                            comm.setText("there aren't enough units");
                         }
                     }
                 } else{
-                    comm.setText("there are not enough SP ATTACK dice");
+                    comm.setText("there aren't enough SP ATTACK dice");
                 }
             }
         });
@@ -608,10 +608,9 @@ public class GameScreen implements Screen, InputProcessor {
         btnAddChest.addListener(new ClickListener() {
             boolean added;
             public void clicked(InputEvent event, float x, float y){
-                //TODO que si se haya usado un dado este turno, que no se pueda guardar
                 int cont;
                 if(currentPlayer.equals("blue") && !addedToChest) {
-                    if(extraDadosInfanteria!=0) {
+                    if(extraDadosInfanteria>0) {
                         cont=0;
                         for (int i = 0; i < extraDadosInfanteria; i++) {
                             added = gestorDado.addToChest(1);
@@ -619,20 +618,23 @@ public class GameScreen implements Screen, InputProcessor {
                                 cont++;
                             } else {
                                 comm.setText("Error: Chest is full. At least 1 die was not saved.");
+                                addedToChest=false;
                             }
                         }
 
                         for (int i = 0; i < cont; i++) {
                             if (summonDie.toString().equals("infanteria")) {
                                 summonDie = diceAtlas.findRegion("summon");
+                                extraDadosInfanteria--;
                             } else if (summonDie2.toString().equals("infanteria")) {
                                 summonDie2 = diceAtlas.findRegion("summon");
+                                extraDadosInfanteria--;
                             }
                         }
                         addedToChest=true;
                     }
 
-                    if(extraDadosArtilleria!=0) {
+                    if(extraDadosArtilleria>0) {
                         cont=0;
                         for (int i = 0; i < extraDadosArtilleria; i++) {
                             added = gestorDado.addToChest(2);
@@ -640,20 +642,23 @@ public class GameScreen implements Screen, InputProcessor {
                                 cont++;
                             } else {
                                 comm.setText("Error: Chest is full. At least 1 die was not saved.");
+                                addedToChest=false;
                             }
                         }
 
                         for (int i = 0; i < cont; i++) {
                             if (summonDie.toString().equals("artilleria")) {
                                 summonDie = diceAtlas.findRegion("summon");
+                                extraDadosArtilleria--;
                             } else if (summonDie2.toString().equals("artilleria")) {
                                 summonDie2 = diceAtlas.findRegion("summon");
+                                extraDadosArtilleria--;
                             }
                         }
                         addedToChest=true;
                     }
 
-                    if(extraDadosTanque!=0) {
+                    if(extraDadosTanque>0) {
                         cont=0;
                         for (int i = 0; i < extraDadosTanque; i++) {
                             added = gestorDado.addToChest(3);
@@ -661,14 +666,17 @@ public class GameScreen implements Screen, InputProcessor {
                                 cont++;
                             } else {
                                 comm.setText("Error: Chest is full. At least 1 die was not saved.");
+                                addedToChest=false;
                             }
                         }
 
                         for (int i = 0; i < cont; i++) {
                             if (summonDie.toString().equals("tanque")) {
                                 summonDie = diceAtlas.findRegion("summon");
+                                extraDadosTanque--;
                             } else if (summonDie2.toString().equals("tanque")) {
                                 summonDie2 = diceAtlas.findRegion("summon");
+                                extraDadosTanque--;
                             }
                         }
                         addedToChest=true;
@@ -691,12 +699,12 @@ public class GameScreen implements Screen, InputProcessor {
                     }
 
                     if(!addedToChest){
-                        comm.setText("There are no dice to ");
+                        comm.setText("There are no dice to save.");
                     }
 
                 }else{
                     if(!fullChest) {
-                        comm.setText("Solo se pueden guardar dados 1 vez por turno.");
+                        comm.setText("You've already put your dice in the chest this turn.");
                     }
                 }
             }});
@@ -1222,7 +1230,7 @@ public class GameScreen implements Screen, InputProcessor {
         fullChest=true;
     }
 
-    public boolean canSummon(int ptipo){ //TODO que cuente los dados del cofre y del rol
+    public boolean canSummon(int ptipo){
 
         boolean canSummon=false;
         if(ptipo==1){
@@ -1252,6 +1260,7 @@ public class GameScreen implements Screen, InputProcessor {
                     report = gestorProxy.startSummon(currentCell, currentPattern, currentPlayer, currentSummonType);
                 }
                 if (report.equals("Summoning successful.")) {
+                    fullChest=false;
                     gestorDado.summon(currentSummonType);
                     switch (currentSummonType) {
                         case 1:
@@ -1298,11 +1307,11 @@ public class GameScreen implements Screen, InputProcessor {
                             break;
                     }
                     fullChest=false;
-                    updateChest();
                 }
             }else{
                 report = "Not enough dice to summon that unit.";
             }
+            updateChest();
         }else{
             if (lastEnemySummonCell==0) {
                 report = gestorProxy.startSummon(startingCell2, "T", currentPlayer, currentSummonType);
