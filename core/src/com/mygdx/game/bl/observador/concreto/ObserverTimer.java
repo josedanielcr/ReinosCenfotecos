@@ -1,7 +1,7 @@
-package com.mygdx.game.bl.jugadores.concreto;
+package com.mygdx.game.bl.observador.concreto;
 
 import com.mygdx.game.ui.Screens.GameScreen;
-import com.mygdx.game.bl.jugadores.interfaces.Observer;
+import com.mygdx.game.bl.observador.interfaces.Observer;
 
 public class ObserverTimer implements Observer {
     private String nombre;
@@ -30,7 +30,7 @@ public class ObserverTimer implements Observer {
 
     private void updateTurn(int value){
         if(value==0){
-            gs.changeTurn();
+            gs.endTurn();
         }else{
             gs.updateClock(value); //dibuja
         }
