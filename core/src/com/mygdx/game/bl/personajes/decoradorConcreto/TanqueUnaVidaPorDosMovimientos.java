@@ -121,4 +121,9 @@ public class TanqueUnaVidaPorDosMovimientos extends ObjetoDecorado {
     public void draw(Batch batch) {
         cPersonaje.draw(batch);
     }
+
+    @Override
+    public void setAtaqueEspecial(String ataque) {
+        this.cPersonaje.setAtaqueEspecial(ataque);
+    }
 }

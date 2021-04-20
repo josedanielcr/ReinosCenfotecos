@@ -101,22 +101,23 @@ public class ControllerPersonaje {
 
 
     //decorador principal
-    public ArrayList<PersonajeAbstracto> aplicarAtaqueEspecial(int idPropietarie, int[] idExternos){
-
+    public ArrayList<PersonajeAbstracto> aplicarAtaqueEspecial(int idPropietarie){
+        int [] idExternos = obtenerIdActuales(idPropietarie);
         String ataque = retornarAtaqueEpropietarie(idPropietarie);
         ArrayList<PersonajeAbstracto> personajeDecorados = new ArrayList<>();
-        switch (ataque){
+        switch (ataque) {
             case "healer1":
-                personajeDecorados.add(decorarHealer1(idExternos[0]));
+                personajeDecorados.add(decorarHealer1(obtenerIdRandom(idPropietarie)));
                 break;
             case "sumar3Ataque":
-                personajeDecorados.add(decorarSumar3Ataque(idExternos[0]));
+                personajeDecorados.add(decorarSumar3Ataque(obtenerIdRandom(idPropietarie)));
                 break;
             case "sumar3Defensa":
-                personajeDecorados.add(decorarSumar3Defensa(idExternos[0]));
+                personajeDecorados.add(decorarSumar3Defensa(obtenerIdRandom(idPropietarie)));
                 break;
+                //este es el 5 casillas de distancia
             case "bajarDefensa":
-                personajeDecorados.add(decorarBajarDefensa(idExternos[0]));
+                personajeDecorados.add(decorarBajarDefensa(obtenerIdRandom(idPropietarie)));
                 break;
             case "healer2":
                 personajeDecorados = decorarHealer2(idExternos);
@@ -134,17 +135,17 @@ public class ControllerPersonaje {
                 personajeDecorados.add(decorarUnaVidaDobleM(idPropietarie));
                 break;
             case "ataqueBomba":
-                decorarAtaqueBomba(idPropietarie,idExternos);
+                decorarAtaqueBomba(idPropietarie);
                 break;
             case "proteccionAliade":
-                decorarProteccionAliade(idPropietarie,idExternos);
+                decorarProteccionAliade(idPropietarie, idExternos);
                 break;
+            //este es el 5 casillas de distancia
             case "bajar2Defensa":
-                personajeDecorados.add(decorarBajar2Defensa(idExternos[0]));
+                personajeDecorados.add(decorarBajar2Defensa(obtenerIdRandom(idPropietarie)));
                 break;
         }
         return personajeDecorados;
-
     }
 
     //decoradores especificos
@@ -233,10 +234,30 @@ public class ControllerPersonaje {
         return personajes;
     }
 
-    private void decorarAtaqueBomba(int idPropietarie, int[] idExternos) {
+    private void decorarAtaqueBomba(int idPropietarie) {
         eliminarPersonaje(idPropietarie);
-        ArrayList<PersonajeAbstracto> personajes = retornarPersonajesDecorador(idExternos, 2);
+        ArrayList<PersonajeAbstracto> personajes = enemiguesRandom();
         eliminarEnemigues(personajes);
+    }
+
+    private ArrayList<PersonajeAbstracto> enemiguesRandom() {
+        int divisor = 0;
+        if(personajesArrEnemigo.size()<8){
+            divisor = 2;
+        } else{
+            divisor = 4;
+        }
+        ArrayList<PersonajeAbstracto> pAbstract = new ArrayList<>();
+        int cant = (int) Math.floor(personajesArrEnemigo.size()/divisor);
+        int cont=0;
+        for(PersonajeAbstracto p: personajesArrEnemigo){
+            if(cont==cant){
+                break;
+            }
+            pAbstract.add(p);
+            cont++;
+        }
+        return pAbstract;
     }
 
 
@@ -272,9 +293,31 @@ public class ControllerPersonaje {
         }
     }
 
-    private int obtenerIndexPersonaje(PersonajeAbstracto p){
+
+    private int[] obtenerIdActuales(int idPropietarie){
+        int [] id = new int[personajesArr.size()];
+        int cont=0;
+        for(PersonajeAbstracto p: personajesArr){
+            int idTmp = p.getIdPersonaje();
+            if(idTmp != idPropietarie){
+                id[cont] = idTmp;
+            }
+            cont++;
+        }
+        return id;
+    }
+
+    public int obtenerIndexPersonaje(PersonajeAbstracto p){
         for(int i = 0; i<personajesArr.size(); i++){
             if(personajesArr.get(i) == p){
+                return i;
+            }
+        }
+        return 0;
+    }
+    public int obtenerIndexPersonajeEnemigue(PersonajeAbstracto p){
+        for(int i = 0; i<personajesArrEnemigo.size(); i++){
+            if(personajesArrEnemigo.get(i) == p){
                 return i;
             }
         }
@@ -284,6 +327,16 @@ public class ControllerPersonaje {
     public int obtenerId(){
         idPersonaje+=1;
         return idPersonaje;
+    }
+
+    public int obtenerIdRandom(int idPropietarie){
+        for (PersonajeAbstracto personajeAbstracto : personajesArr) {
+            int id = personajeAbstracto.getIdPersonaje();
+            if (id != idPropietarie) {
+                return id;
+            }
+        }
+        return 0;
     }
 
     public int valorPersonajeRandom(){
@@ -311,6 +364,14 @@ public class ControllerPersonaje {
                 return ataques[r3];
         }
         return null;
+    }
+
+    public void eliminarAtaqueSP(int idPropietarie){
+        for(PersonajeAbstracto p: personajesArr){
+            if(p.getIdPersonaje() == idPropietarie){
+                p.setAtaqueEspecial("");
+            }
+        }
     }
 
     private int retornarMovimientoPersonaje(int tipoPersonaje) {

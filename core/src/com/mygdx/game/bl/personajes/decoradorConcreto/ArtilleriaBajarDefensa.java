@@ -90,6 +90,11 @@ public class ArtilleriaBajarDefensa extends ObjetoDecorado {//le baja 2 de defen
     }
 
     @Override
+    public void setAtaqueEspecial(String ataque) {
+        this.cPersonaje.setAtaqueEspecial(ataque);
+    }
+
+    @Override
     public int getRango() {
         return this.cPersonaje.getRango()+4;
     }
