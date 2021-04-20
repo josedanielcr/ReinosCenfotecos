@@ -1,4 +1,5 @@
 package com.mygdx.game.ui;
+import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.tl.ControllerPersonaje;
 
 import java.io.BufferedReader;

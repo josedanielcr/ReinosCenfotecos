@@ -74,12 +74,13 @@ public class SummonSystem implements ISummonSystem {
             for (Task t : tasks) {
                 continuar = manejador.executeTask(t);
                 if(!continuar) {
-                    report = "Invalid Cells. Select another starting cell or summoning pattern.";
+                    report = "Invalid cells. Select another starting cell or summoning pattern.";
                     break;
                 }
             }
             if (continuar) {
-                report = "Successful summon.";
+                report = "Summoning successful.";
+                gCell.setLastEnemySummonCell(fiveCellPattern.get(4).getId());
             }
 
         }
