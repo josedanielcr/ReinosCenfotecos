@@ -526,6 +526,8 @@ public class GameScreen implements Screen, InputProcessor {
         btnSpAtk.setPosition(1083,750);
         btnSpAtk.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                //TODO se cae si no le hago click a una unidad antes de apretar el boton, y el de bajar defensa al parecer le baja defensa al enemigo.
+                //TODO si hay 2 unidades aliadas y 1 enemiga, dice que not enough units on the battlefield
                 spAttack();
             }
         });
@@ -1414,7 +1416,7 @@ public class GameScreen implements Screen, InputProcessor {
                     if (personajes1.size() > 1 && personajes2.size() > 1) {
                         //TODO no entiendo este metodo. dice que retorna un arrayList pero no veo donde se use. falta un indicador de ataque especial exitoso aqui
                         gestorPersonaje.aplicarAtaqueEspecial(idPersonajeSeleccionado);
-                        //TODO este print hacia algo?
+                        //TODO este print hacia algo? y el de la linea 1421 deberia estar comentado?
                         System.out.println(gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado));
                         report="Sp attack activated.";
                         gestorPersonaje.eliminarAtaqueSP(idPersonajeSeleccionado);
