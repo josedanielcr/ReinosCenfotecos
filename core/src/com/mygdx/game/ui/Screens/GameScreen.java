@@ -1182,7 +1182,11 @@ public class GameScreen implements Screen, InputProcessor {
                 renderType = "+M";
                 break;
             case "sumar3Ataque":
+                renderType="3A";
+                break;
             case "doblePoderAtaque":
+                renderType = "2PA";
+                break;
             case "ataqueDosCasillas": //significa que tiene mas rango
                 renderType = "+R";
                 break;
@@ -1196,8 +1200,11 @@ public class GameScreen implements Screen, InputProcessor {
                 renderType = "PA";
                 break;
             case "bajarDefensa":
-            case "bajar2Defensa":
+
                 renderType = "-D";
+                break;
+            case "bajar2Defensa":
+                renderType = "-2D";
                 break;
             case "ataqueBomba":
                 renderType="AB";
@@ -1325,7 +1332,7 @@ public class GameScreen implements Screen, InputProcessor {
             comm.setText(report);
             lastEnemySummonCell=gestorCelda.getLastEnemySummonCell();
             comm.setText(report + ". Processing IA...");
-            float delay=8;
+            float delay=1;
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {

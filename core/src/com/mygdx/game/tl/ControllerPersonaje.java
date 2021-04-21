@@ -104,6 +104,8 @@ public class ControllerPersonaje {
     //decorador principal
     public ArrayList<PersonajeAbstracto> aplicarAtaqueEspecial(int idPropietarie){
         int [] idExternos = obtenerIdActuales(idPropietarie);
+
+
         String ataque = retornarAtaqueEpropietarie(idPropietarie);
         ArrayList<PersonajeAbstracto> personajeDecorados = new ArrayList<>();
         switch (ataque) {
@@ -118,7 +120,7 @@ public class ControllerPersonaje {
                 break;
                 //este es el 5 casillas de distancia
             case "bajarDefensa":
-                personajeDecorados.add(decorarBajarDefensa(obtenerIdRandom(idPropietarie)));
+                decorarBajarDefensa(obtenerIdRandomEnemigo());
                 break;
             case "healer2":
                 personajeDecorados = decorarHealer2(idExternos);
@@ -143,7 +145,7 @@ public class ControllerPersonaje {
                 break;
             //este es el 5 casillas de distancia
             case "bajar2Defensa":
-                personajeDecorados.add(decorarBajar2Defensa(obtenerIdRandom(idPropietarie)));
+                decorarBajar2Defensa(obtenerIdRandomEnemigo());
                 break;
         }
         return personajeDecorados;
@@ -178,7 +180,7 @@ public class ControllerPersonaje {
         PersonajeAbstracto personajeAbstracto = retornarPersonajeDecoradorEnemigue(idExterno);
         int indexPersonaje = obtenerIndexPersonajeEnemigue(personajeAbstracto);
         personajeAbstracto= new InfanteriaBajarDefensa((Personaje) personajeAbstracto);
-        personajesArr.set(indexPersonaje,personajeAbstracto);
+        personajesArrEnemigo.set(indexPersonaje,personajeAbstracto);
         return personajeAbstracto;
     }
 
@@ -218,7 +220,7 @@ public class ControllerPersonaje {
         PersonajeAbstracto personajeAbstracto = retornarPersonajeDecoradorEnemigue(idExterno);
         int indexPersonaje = obtenerIndexPersonaje(personajeAbstracto);
         personajeAbstracto= new ArtilleriaBajarDefensa((Personaje) personajeAbstracto);
-        personajesArr.set(indexPersonaje,personajeAbstracto);
+        personajesArrEnemigo.set(indexPersonaje,personajeAbstracto);
         return personajeAbstracto;
     }
 
@@ -264,15 +266,15 @@ public class ControllerPersonaje {
 
     private void decorarProteccionAliade(int idPropietarie, int[] idExternos) {
         PersonajeAbstracto personaje = retornarPersonajeDecorador(idPropietarie);
-        personaje = new TanqueProtector((Personaje) personaje);
         int indexPersonaje1 = obtenerIndexPersonaje(personaje);
+        personaje = new TanqueProtector((Personaje) personaje);
         personajesArr.set(indexPersonaje1,personaje);
+
         ArrayList<PersonajeAbstracto> personajes = retornarPersonajesDecorador(idExternos, 1);
-        for(PersonajeAbstracto p: personajes){
-            int indexPersonaje = obtenerIndexPersonaje(p);
-            p = new PersonajeProtegido((Personaje) p);
-            personajesArr.set(indexPersonaje,p);
-        }
+        PersonajeAbstracto p = personajes.get(0);
+        int indexPersonaje = obtenerIndexPersonaje(p);
+        p = new PersonajeProtegido((Personaje) p);
+        personajesArr.set(indexPersonaje,p);
     }
 
     /**/
@@ -308,6 +310,8 @@ public class ControllerPersonaje {
         return id;
     }
 
+
+
     public int obtenerIndexPersonaje(PersonajeAbstracto p){
         for(int i = 0; i<personajesArr.size(); i++){
             if(personajesArr.get(i) == p){
@@ -337,6 +341,19 @@ public class ControllerPersonaje {
                 return id;
             }
         }
+        return 0;
+    }
+    public int obtenerIdRandomEnemigo(){
+        int random=ThreadLocalRandom.current().nextInt(1,personajesArrEnemigo.size()+1);
+        for (PersonajeAbstracto personajeAbstracto : personajesArrEnemigo) {
+            int id = personajeAbstracto.getIdPersonaje();
+            if (id == random) {
+                System.out.println(id);
+                return id;
+
+            }
+        }
+
         return 0;
     }
 

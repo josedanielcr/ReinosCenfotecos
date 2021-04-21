@@ -74,7 +74,7 @@ public class SummonSystem implements ISummonSystem {
             for (Task t : tasks) {
                 continuar = manejador.executeTask(t);
                 if(!continuar) {
-                    report = "Invalid cells. Select another starting cell or summoning pattern.";
+                    report = "Invalid cells. Select another starting cell or pattern.";
                     break;
                 }
             }
