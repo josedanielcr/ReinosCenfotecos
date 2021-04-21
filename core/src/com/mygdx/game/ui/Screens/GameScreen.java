@@ -517,13 +517,6 @@ public class GameScreen implements Screen, InputProcessor {
         btnAtk.setPosition(939,750);
         btnAtk.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
-                String attackResult = gestorEstrategia.executeAttack(currentPlayer, currentCell, idPersonajeSeleccionado, firstPlayer1Cell, firstPlayer2Cell, startingCell1, startingCell2);
-                opponentLife = gestorCelda.getCell(startingCell2).getLifePoints();
-                comm.setText(attackResult);
-                if (attackResult.equals("End of Game.")) {
-                    endOfGame();
-                }
-                //TODO hacer que esta linea funcione con lo de arriba
                 attack();
             }
         });
@@ -540,8 +533,6 @@ public class GameScreen implements Screen, InputProcessor {
         btnSpAtk.setPosition(1083,750);
         btnSpAtk.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
-                //TODO se cae si no le hago click a una unidad antes de apretar el boton, y el de bajar defensa al parecer le baja defensa al enemigo.
-                //TODO si hay 2 unidades aliadas y 1 enemiga, dice que not enough units on the battlefield
                 spAttack();
             }
         });
@@ -1092,6 +1083,7 @@ public class GameScreen implements Screen, InputProcessor {
     }
 
     public void renderDice(String rollInvo, String rollInvo2, String rollAccion){
+        System.out.println("Action die: "+rollAccion);
         switch (rollInvo) {
             case "Infanteria":
                 summonDie = diceAtlas.findRegion("infanteria");
@@ -1128,7 +1120,7 @@ public class GameScreen implements Screen, InputProcessor {
         }else{
             movementDice=true;
             int movimiento = Integer.parseInt(rollAccion);
-            for (int i=0;i<6;i++){
+            for (int i=1;i<=6;i++){
                 if(i==movimiento){
                     actionDie = diceAtlas.findRegion(String.valueOf(i));
                 }
@@ -1333,8 +1325,7 @@ public class GameScreen implements Screen, InputProcessor {
             lastEnemySummonCell=gestorCelda.getLastEnemySummonCell();
             System.out.println(lastEnemySummonCell);
             comm.setText(report + ". Processing IA...");
-            //TODO pasar a 8
-            float delay=1;
+            float delay=8;
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
@@ -1401,8 +1392,11 @@ public class GameScreen implements Screen, InputProcessor {
         String report;
         if (currentPlayer.equals("blue")) {
             if(canAttack()) {
-                report = "Attack successful."; //TODO meter aqui el metodo
-                if (report.equals("Attack successful.")) {
+                report = gestorEstrategia.executeAttack(currentPlayer, currentCell, idPersonajeSeleccionado, firstPlayer1Cell, firstPlayer2Cell, startingCell1, startingCell2);
+                opponentLife = gestorCelda.getCell(startingCell2).getLifePoints();
+                if (report.equals("End of Game.")){
+                    endOfGame();
+                }else if(!report.equals("There is not an enemy unit inside the range of attack.")){
                     gestorDado.attack();
                     if(extraDadosAtk!=0) {
                         if (actionDie.toString().equals("atk")) {
@@ -1428,13 +1422,9 @@ public class GameScreen implements Screen, InputProcessor {
                     report="Sp attack already used.";
                 } else {
                     if (personajes1.size() > 1 && personajes2.size() > 1) {
-                        //TODO no entiendo este metodo. dice que retorna un arrayList pero no veo donde se use. falta un indicador de ataque especial exitoso aqui
                         gestorPersonaje.aplicarAtaqueEspecial(idPersonajeSeleccionado);
-                        //TODO este print hacia algo? y el de la linea 1421 deberia estar comentado?
-                        System.out.println(gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado));
                         report="Sp attack activated.";
                         gestorPersonaje.eliminarAtaqueSP(idPersonajeSeleccionado);
-                        //System.out.println(gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado).obtenerInformacionPersonaje());
 
                         gestorDado.spAttack();
                         if (extraDadosSpAtk != 0) {

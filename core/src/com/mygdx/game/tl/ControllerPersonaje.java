@@ -175,8 +175,8 @@ public class ControllerPersonaje {
     }
 
     private PersonajeAbstracto decorarBajarDefensa(int idExterno) {
-        PersonajeAbstracto personajeAbstracto = retornarPersonajeDecorador(idExterno);
-        int indexPersonaje = obtenerIndexPersonaje(personajeAbstracto);
+        PersonajeAbstracto personajeAbstracto = retornarPersonajeDecoradorEnemigue(idExterno);
+        int indexPersonaje = obtenerIndexPersonajeEnemigue(personajeAbstracto);
         personajeAbstracto= new InfanteriaBajarDefensa((Personaje) personajeAbstracto);
         personajesArr.set(indexPersonaje,personajeAbstracto);
         return personajeAbstracto;

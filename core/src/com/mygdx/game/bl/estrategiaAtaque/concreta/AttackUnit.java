@@ -37,7 +37,6 @@ public class AttackUnit extends AbstractAttack {
         if(atk<=def){
             int nuevaDefensa = def-atk;
             msj = gPer.resolverAtaqueDefensa(idDefending, nuevaDefensa);
-
         }
         return msj;
     }
