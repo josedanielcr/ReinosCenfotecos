@@ -1332,7 +1332,7 @@ public class GameScreen implements Screen, InputProcessor {
             lastEnemySummonCell=gestorCelda.getLastEnemySummonCell();
             System.out.println(lastEnemySummonCell);
             comm.setText(report + ". Processing IA...");
-            float delay=8;
+            float delay=1;
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
