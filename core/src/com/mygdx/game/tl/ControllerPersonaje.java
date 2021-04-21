@@ -266,15 +266,15 @@ public class ControllerPersonaje {
 
     private void decorarProteccionAliade(int idPropietarie, int[] idExternos) {
         PersonajeAbstracto personaje = retornarPersonajeDecorador(idPropietarie);
-        personaje = new TanqueProtector((Personaje) personaje);
         int indexPersonaje1 = obtenerIndexPersonaje(personaje);
+        personaje = new TanqueProtector((Personaje) personaje);
         personajesArr.set(indexPersonaje1,personaje);
+
         ArrayList<PersonajeAbstracto> personajes = retornarPersonajesDecorador(idExternos, 1);
-        for(PersonajeAbstracto p: personajes){
-            int indexPersonaje = obtenerIndexPersonaje(p);
-            p = new PersonajeProtegido((Personaje) p);
-            personajesArr.set(indexPersonaje,p);
-        }
+        PersonajeAbstracto p = personajes.get(0);
+        int indexPersonaje = obtenerIndexPersonaje(p);
+        p = new PersonajeProtegido((Personaje) p);
+        personajesArr.set(indexPersonaje,p);
     }
 
     /**/
