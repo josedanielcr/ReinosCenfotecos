@@ -40,25 +40,54 @@ public class SummonSystemProxy implements ISummonSystem {
 
     @Override
     public PersonajeAbstracto displayStats(int pIdPersonaje, String pJugador) {
+        PersonajeAbstracto pTemp = null;
         if (pJugador.equals("blue")) {
-            PersonajeAbstracto pTemp = gPer.retornarPersonajeDecorador(pIdPersonaje);
-            if (pTemp.getDuenno().equals(pJugador)) {
-                return system.displayStats(pIdPersonaje, pJugador);
+            pTemp = gPer.retornarPersonajeDecorador(pIdPersonaje);
+            if (pTemp!=null) {
+                if (pTemp.getDuenno().equals(pJugador)) {
+                    return system.displayStats(pIdPersonaje, pJugador);
+                }
             }
-            else {
-                return null;
-            }
+
+
         }
-        return null;
+        if (pJugador.equals("red")) {
+            pTemp = gPer.retornarPersonajeDecoradorEnemigue(pIdPersonaje);
+            if (pTemp!=null) {
+                if (pTemp.getDuenno().equals(pJugador)) {
+                    return system.displayStats(pIdPersonaje, pJugador);
+                }
+            }
+
+        }
+        return pTemp;
     }
 
     public String moveUnit(int pIdPersonaje, int pIdCelda, String pIdJugador, String pMovimiento) {
-        PersonajeAbstracto pTemp = gPer.retornarPersonajeDecorador(pIdPersonaje);
-        if (pTemp.getDuenno().equals(pIdJugador)) {
-            return system.moveUnit(pIdPersonaje,pIdCelda,pIdJugador,pMovimiento);
+        String report="Select a battle unit first.";
+        PersonajeAbstracto pTemp;
+        if (pIdJugador.equals("blue")) {
+            pTemp = gPer.retornarPersonajeDecorador(pIdPersonaje);
+            if (pTemp!=null) {
+                if (pTemp.getDuenno().equals(pIdJugador)) {
+                    report = system.moveUnit(pIdPersonaje,pIdCelda,pIdJugador,pMovimiento);
+                }
+                else {
+                    report = "Unable to move a battle unit that is not under your control.";
+                }
+            }
         }
-        else {
-            return "Unable to move a battle unit that is not under your control.";
+        if (pIdJugador.equals("red")) {
+            pTemp = gPer.retornarPersonajeDecoradorEnemigue(pIdPersonaje);
+            if (pTemp!=null) {
+                if (pTemp.getDuenno().equals(pIdJugador)) {
+                    report = system.moveUnit(pIdPersonaje,pIdCelda,pIdJugador,pMovimiento);
+                }
+                else {
+                    report = "Unable to move a battle unit that is not under your control.";
+                }
+            }
         }
+        return report;
     }
 }
