@@ -388,34 +388,7 @@ public class GameScreen implements Screen, InputProcessor {
         btnUp.addListener(new ClickListener() {
             //TODO validacion Successful move action.
             public void clicked(InputEvent event, float x, float y) {
-                if (movementDice) {
-                    PersonajeAbstracto gPer = gestorProxy.getInfoPersonaje(idPersonajeSeleccionado, currentPlayer);
-                    int unitMaxMove = gPer.getMovimiento();
-                    maxMoveThisTurn=Integer.parseInt(actionDie.toString());
-                    if(unitMaxMove<maxMoveThisTurn){
-                        maxMoveThisTurn=unitMaxMove;
-                    }
-                    movementLeft = maxMoveThisTurn - movementsMade;
-
-                    if(movementLeft!=0 && movementsMade<maxMoveThisTurn) {
-                        String report = gestorProxy.moveUnit(idPersonajeSeleccionado, currentCell, currentPlayer, "up");
-                        if (report.equals("ok")) {
-                            movementsMade++;
-                        }
-                        if (report != null) {
-                            comm.setText(report);
-                        }
-                    }else{
-                        comm.setText("No more movements available this turn.");
-                    }
-
-                    if(movementLeft==0){
-                        actionDie=diceAtlas.findRegion("movement");
-                        movementDice=false;
-                    }
-                }else{
-                    comm.setText("You do not have a movement die available.");
-                }
+               move("up");
             }
         });
 
@@ -428,10 +401,7 @@ public class GameScreen implements Screen, InputProcessor {
         btnDown.setPosition(1125,431);
         btnDown.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
-                String report = gestorProxy.moveUnit(idPersonajeSeleccionado, currentCell, currentPlayer,"down");
-                if (report!=null) {
-                    comm.setText(report);
-                }
+                move("down");
             }
         });
 
@@ -444,10 +414,7 @@ public class GameScreen implements Screen, InputProcessor {
         btnLeft.setPosition(1100,455);
         btnLeft.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
-                String report = gestorProxy.moveUnit(idPersonajeSeleccionado, currentCell, currentPlayer,"left");
-                if (report!=null) {
-                    comm.setText(report);
-                }
+                move("left");
             }
         });
 
@@ -460,10 +427,7 @@ public class GameScreen implements Screen, InputProcessor {
         btnRight.setPosition(1152,455);
         btnRight.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
-                String report = gestorProxy.moveUnit(idPersonajeSeleccionado, currentCell, currentPlayer,"right");
-                if (report!=null) {
-                    comm.setText(report);
-                }
+                move("right");
             }
         });
 
@@ -1373,7 +1337,8 @@ public class GameScreen implements Screen, InputProcessor {
             lastEnemySummonCell=gestorCelda.getLastEnemySummonCell();
             System.out.println(lastEnemySummonCell);
             comm.setText(report + ". Processing IA...");
-            float delay=8;
+            //TODO revertir a 8
+            float delay=1;
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
@@ -1411,6 +1376,30 @@ public class GameScreen implements Screen, InputProcessor {
         return prefa;
     }
 
+    public void move(String dir) {
+        if (movementDice) {
+            PersonajeAbstracto gPer = gestorProxy.getInfoPersonaje(idPersonajeSeleccionado, currentPlayer);
+            int unitMaxMove = gPer.getMovimiento();
+            maxMoveThisTurn=Integer.parseInt(actionDie.toString());
+            if(unitMaxMove<maxMoveThisTurn){
+                maxMoveThisTurn=unitMaxMove;
+            }
+            movementLeft = maxMoveThisTurn - movementsMade;
+
+            if(movementLeft!=0 && movementsMade<maxMoveThisTurn) {
+                String report = gestorProxy.moveUnit(idPersonajeSeleccionado, currentCell, currentPlayer, dir);
+                if (report.equals("Successful move action.")) {
+                    movementsMade++;
+                }
+                comm.setText(report);
+            }else{
+                comm.setText("You do not have a movement die available.");
+                movementDice=false;
+            }
+        }else{
+            comm.setText("You do not have a movement die available.");
+        }
+    }
 }
 
 
