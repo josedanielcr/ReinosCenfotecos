@@ -519,7 +519,6 @@ public class ControllerPersonaje {
 
     public void setLastEnemySummonId(int pid){
         this.lastEnemySummonId=pid;
-        System.out.println("lastEnemySummonId: "+pid);
     }
 
     public int getLastEnemySummonId() {

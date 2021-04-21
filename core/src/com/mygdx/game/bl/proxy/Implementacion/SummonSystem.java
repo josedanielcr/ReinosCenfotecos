@@ -26,7 +26,6 @@ public class SummonSystem implements ISummonSystem {
     private Celda startCell;
     private ControllerCelda gCell;
     private ControllerPersonaje gPer;
-    private int idLastPersonajeConvocado;
 
 
     public SummonSystem(ControllerCelda gCell, ControllerPersonaje gPer) {
@@ -249,7 +248,7 @@ public class SummonSystem implements ISummonSystem {
     }
 
     public int getNextMoveValue(String pMov) {
-        int nextMoveValue = 0;
+        int nextMoveValue;
         switch (pMov) {
             case "up":
                 nextMoveValue = 20;

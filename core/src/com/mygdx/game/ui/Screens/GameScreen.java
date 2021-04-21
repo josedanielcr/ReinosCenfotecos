@@ -30,7 +30,6 @@ import com.mygdx.game.ui.MyGdxGame;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 
 public class GameScreen implements Screen, InputProcessor {
@@ -137,8 +136,8 @@ public class GameScreen implements Screen, InputProcessor {
     private static int time = 0;
     public int currentCell = 0;
     public int lastEnemySummonCell = 0;
-    public int[] summonedEnemyIds = new int[20];
-    public int lastEnemySummonId = -1;
+    public int summonedEnemyUnitsCont = 0;
+    public int enemyIdToMove = 0;
     public int startingCell1;
     public int startingCell2;
     public int firstPlayer1Cell;
@@ -1084,7 +1083,6 @@ public class GameScreen implements Screen, InputProcessor {
     }
 
     public void renderDice(String rollInvo, String rollInvo2, String rollAccion){
-        System.out.println("Action die: "+rollAccion);
         switch (rollInvo) {
             case "Infanteria":
                 summonDie = diceAtlas.findRegion("infanteria");
@@ -1315,7 +1313,8 @@ public class GameScreen implements Screen, InputProcessor {
                         count++;
                     }while(!report.equals("Summoning successful.") && count < 10);
                 }
-                lastEnemySummonId=gestorPersonaje.getLastEnemySummonId();
+                summonedEnemyUnitsCont++;
+                enemyIdToMove=summonedEnemyUnitsCont;
             }
 
             else {
@@ -1326,8 +1325,7 @@ public class GameScreen implements Screen, InputProcessor {
             comm.setText(report);
             lastEnemySummonCell=gestorCelda.getLastEnemySummonCell();
             comm.setText(report + ". Processing IA...");
-            //TODO cambiar esto a 8, y moverlo a move unit
-            float delay=3;
+            float delay=8;
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
@@ -1392,6 +1390,44 @@ public class GameScreen implements Screen, InputProcessor {
         }
     }
 
+    public void moveEnemy() {
+        String report;
+        int move = (int) (Math.random()*2);
+        if(move==1) {
+            if(summonedEnemyUnitsCont>0) {
+                int rnd = (int) (Math.random() * 2);
+                String enemyDir = "";
+                switch (rnd) {
+                    case 1:
+                        enemyDir = "up";
+                        break;
+                    case 2:
+                        enemyDir = "down";
+                        break;
+                    case 3:
+                        enemyDir = "left";
+                        break;
+                    case 4:
+                        enemyDir = "right";
+                        break;
+                }
+                report = gestorProxy.moveUnit(enemyIdToMove, lastEnemySummonCell, "red", enemyDir);
+                if(report.equals("Successful move action.")){
+                    comm.setText(report);
+                }
+            }
+        }
+
+        changeEnemyToMove();
+    }
+
+    public void changeEnemyToMove(){
+        enemyIdToMove++;
+        if(enemyIdToMove>summonedEnemyUnitsCont){
+            enemyIdToMove=1;
+        }
+    }
+
     public void attack() {
         String report;
         if (currentPlayer.equals("blue")) {
@@ -1415,53 +1451,16 @@ public class GameScreen implements Screen, InputProcessor {
             }
             updateChest();
             comm.setText(report);
-        }
-    }
-
-    public void moveEnemy() {
-        String report;
-        int move = (int) (Math.random()*2);
-        if(move==1) {
-            if(lastEnemySummonId!=-1) {
-                int rnd = (int) (Math.random() * 2);
-                String enemyDir = "";
-                switch (rnd) {
-                    case 1:
-                        enemyDir = "up";
-                        break;
-                    case 2:
-                        enemyDir = "down";
-                        break;
-                    case 3:
-                        enemyDir = "left";
-                        break;
-                    case 4:
-                        enemyDir = "right";
-                        break;
+        }else{
+            int move = (int) (Math.random()*3);
+            if(move==1) {
+                if(summonedEnemyUnitsCont>0){
+                    //TODO JD y meli meter aqui la funcion de ataque
                 }
-
-                report = gestorProxy.moveUnit(lastEnemySummonId, lastEnemySummonCell, currentPlayer, enemyDir);
-                System.out.println(report);
-
-                if(!report.equals("Successful move action.")){
-                    report = gestorProxy.moveUnit(lastEnemySummonId, lastEnemySummonCell, currentPlayer, "down");
-                }
-
-                if(!report.equals("Successful move action.")) {
-                    report = gestorProxy.moveUnit(lastEnemySummonId, lastEnemySummonCell, currentPlayer, "left");
-                }
-
-                if(!report.equals("Successful move action.")) {
-                    report = gestorProxy.moveUnit(lastEnemySummonId, lastEnemySummonCell, currentPlayer, "right");
-                }
-
-                if(!report.equals("Successful move action.")) {
-                    gestorProxy.moveUnit(lastEnemySummonId, lastEnemySummonCell, currentPlayer, "up");
-                }
-
             }
         }
     }
+
 
     public void spAttack() {
         if (currentPlayer.equals("blue")) {
