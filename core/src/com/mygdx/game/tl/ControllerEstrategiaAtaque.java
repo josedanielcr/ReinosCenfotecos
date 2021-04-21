@@ -21,7 +21,7 @@ public class ControllerEstrategiaAtaque {
 
         if (pIdJugador.equals("blue")) {
             PersonajeAbstracto attackingUnit = gPer.retornarPersonajeDecorador(pIdPersonaje);
-            if (pIdCelda==pWinCondition1) {
+            if (pIdCelda==pWinCondition2) {
                 Attack atk = new Attack(attackingUnit.getAtaque(), idCastillo2);
                 selectStrategy(atk);
                 report = atk.getStrategy().executeAttack();
@@ -41,7 +41,7 @@ public class ControllerEstrategiaAtaque {
         }
         if (pIdJugador.equals("red")) {
             PersonajeAbstracto attackingUnit = gPer.retornarPersonajeDecorador(pIdPersonaje);
-            if (pIdCelda==pWinCondition2) {
+            if (pIdCelda==pWinCondition1) {
                 Attack atk = new Attack(attackingUnit.getAtaque(), idCastillo1);
                 selectStrategy(atk);
                 report = atk.getStrategy().executeAttack();
@@ -79,8 +79,8 @@ public class ControllerEstrategiaAtaque {
         PersonajeAbstracto defendingUnit=null;
         boolean unitFound = false;
         Celda cellVision1 = gCell.getCell(pIdCelda+(20*pRange));
-        Celda cellVision2 = gCell.getCell(pIdCelda+(-20*pRange));
-        Celda cellVision3 = gCell.getCell(pIdCelda+(pRange));
+        Celda cellVision2 = gCell.getCell(pIdCelda+(-20*pRange));//PARECE OK
+        Celda cellVision3 = gCell.getCell(pIdCelda+(pRange)); //PARECE OK
         Celda cellVision4 = gCell.getCell(pIdCelda+(-pRange));
 
         if (cellVision1!=null) {
@@ -125,7 +125,7 @@ public class ControllerEstrategiaAtaque {
                 unitFound = true;
             }
         }
-        else if (cellVision4!=null && !unitFound) {
+        if (cellVision4!=null && !unitFound) {
             int idDefending = cellVision4.getIdPersonaje();
             if (idDefending!=0) {
                 if (pJugador.equals("blue")) {
@@ -134,9 +134,6 @@ public class ControllerEstrategiaAtaque {
                 if (pJugador.equals("red")) {
                     defendingUnit=gPer.retornarPersonajeDecorador(idDefending);
                 }
-            }
-            if (defendingUnit!=null) {
-                unitFound = true;
             }
         }
 
