@@ -328,7 +328,7 @@ public class GameScreen implements Screen, InputProcessor {
         lUnitLife.setAlignment(Align.center);
         lUnitLife.setText(currentUnitLife);
 
-        lUnitMove = new Label("-1", labelStyle2);
+        lUnitMove = new Label("0", labelStyle2);
         lUnitMove.setSize(31, 30);
         lUnitMove.setPosition(1134, 365);
         lUnitMove.setAlignment(Align.center);
@@ -346,13 +346,13 @@ public class GameScreen implements Screen, InputProcessor {
         lDefense.setAlignment(Align.center);
         lDefense.setText(currentDef);
 
-        lRange = new Label("-1", labelStyle2);
+        lRange = new Label("0", labelStyle2);
         lRange.setSize(31, 30);
         lRange.setPosition(1002, 264);
         lRange.setAlignment(Align.center);
         lRange.setText(currentRange);
 
-        lSpAttack = new Label("-1", labelStyle2);
+        lSpAttack = new Label("0", labelStyle2);
         lSpAttack.setSize(31, 30);
         lSpAttack.setPosition(1134, 264);
         lSpAttack.setAlignment(Align.center);
@@ -379,7 +379,7 @@ public class GameScreen implements Screen, InputProcessor {
         styleUp.up = padUpUp;
         styleUp.down = padUpDown;
         btnUp = new ImageButton(styleUp);
-        btnUp.setPosition(1124,481);
+        btnUp.setPosition(1124,483);
         btnUp.addListener(new ClickListener() {
             //TODO validacion Successful move action.
             public void clicked(InputEvent event, float x, float y){
@@ -1203,9 +1203,6 @@ public class GameScreen implements Screen, InputProcessor {
                 break;
             case "sumar3Ataque":
             case "doblePoderAtaque":
-            case "ataqueDosCasillas":
-                renderType = "+A";
-                break;
             case "ataqueDosCasillas": //significa que tiene mas rango
                 renderType = "+R";
                 break;
@@ -1257,7 +1254,7 @@ public class GameScreen implements Screen, InputProcessor {
     }
 
     public void startSummoning() {
-        String report="Initializing...";
+        String report;
         if (currentPlayer.equals("blue")) {
             if(canSummon(currentSummonType)) {
                 if (currentCell == 0) {
