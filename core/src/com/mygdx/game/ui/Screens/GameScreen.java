@@ -29,6 +29,8 @@ import com.mygdx.game.tl.*;
 import com.mygdx.game.ui.MyGdxGame;
 
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 public class GameScreen implements Screen, InputProcessor {
@@ -144,6 +146,7 @@ public class GameScreen implements Screen, InputProcessor {
     private boolean fullChest=false;
     private String currentPattern="I";
     private int currentSummonType=1;
+    boolean firstTurnPlayer2Summon = true;
 
     //Variables de dados
     int cantDadosArtilleria = 0;
@@ -325,7 +328,7 @@ public class GameScreen implements Screen, InputProcessor {
         lUnitLife.setAlignment(Align.center);
         lUnitLife.setText(currentUnitLife);
 
-        lUnitMove = new Label("-1", labelStyle2);
+        lUnitMove = new Label("0", labelStyle2);
         lUnitMove.setSize(31, 30);
         lUnitMove.setPosition(1134, 365);
         lUnitMove.setAlignment(Align.center);
@@ -343,13 +346,13 @@ public class GameScreen implements Screen, InputProcessor {
         lDefense.setAlignment(Align.center);
         lDefense.setText(currentDef);
 
-        lRange = new Label("-1", labelStyle2);
+        lRange = new Label("0", labelStyle2);
         lRange.setSize(31, 30);
         lRange.setPosition(1002, 264);
         lRange.setAlignment(Align.center);
         lRange.setText(currentRange);
 
-        lSpAttack = new Label("-1", labelStyle2);
+        lSpAttack = new Label("0", labelStyle2);
         lSpAttack.setSize(31, 30);
         lSpAttack.setPosition(1134, 264);
         lSpAttack.setAlignment(Align.center);
@@ -376,7 +379,7 @@ public class GameScreen implements Screen, InputProcessor {
         styleUp.up = padUpUp;
         styleUp.down = padUpDown;
         btnUp = new ImageButton(styleUp);
-        btnUp.setPosition(1124,481);
+        btnUp.setPosition(1124,483);
         btnUp.addListener(new ClickListener() {
             //TODO validacion Successful move action.
             public void clicked(InputEvent event, float x, float y){
@@ -1021,24 +1024,26 @@ public class GameScreen implements Screen, InputProcessor {
             }
         }
 
-        for (PersonajeAbstracto p : personajes2) {
-            if (p.getRectangle().contains(temp.x,temp.y)) {
-                idPersonajeSeleccionado = p.getIdPersonaje();
-                PersonajeAbstracto pShow= gestorProxy.getInfoPersonaje(idPersonajeSeleccionado, currentPlayer);
-                if (pShow!=null) {
-                    currentAtk = pShow.getAtaque();
+        for (PersonajeAbstracto p2 : personajes2) {
+            if (p2.getRectangle().contains(temp.x,temp.y)) {
+                idPersonajeSeleccionado = p2.getIdPersonaje();
+                System.out.println(idPersonajeSeleccionado);
+                System.out.println(currentPlayer);
+                PersonajeAbstracto pShow2= gestorProxy.getInfoPersonaje(idPersonajeSeleccionado, currentPlayer);
+                if (pShow2!=null) {
+                    currentAtk = pShow2.getAtaque();
                     lAttack.setText(currentAtk);
-                    currentDef = pShow.getDefensa();
+                    currentDef = pShow2.getDefensa();
                     lDefense.setText(currentDef);
-                    currentSpAtk = renderSpecialAttack(pShow.getAtaqueEspecial());
+                    currentSpAtk = renderSpecialAttack(pShow2.getAtaqueEspecial());
                     lSpAttack.setText(currentSpAtk);
-                    currentRange = pShow.getRango();
+                    currentRange = pShow2.getRango();
                     lRange.setText(currentRange);
-                    currentUnitMove = pShow.getMovimiento();
+                    currentUnitMove = pShow2.getMovimiento();
                     lUnitMove.setText(currentUnitMove);
-                    currentUnitLife = pShow.getVida();
+                    currentUnitLife = pShow2.getVida();
                     lUnitLife.setText(currentUnitLife);
-                    unitFrame = pShow.gettRegion();
+                    unitFrame = pShow2.gettRegion();
                 }
                 else {
                     comm.setText("Current turn player does not own that unit.");
@@ -1069,7 +1074,7 @@ public class GameScreen implements Screen, InputProcessor {
         return false;
     }
 
-    public void endTurn(){
+    public void endTurn() {
         changeTurn();
         gestorObserver.resetTimer();
         if(currentPlayer.equals("red")){
@@ -1198,8 +1203,6 @@ public class GameScreen implements Screen, InputProcessor {
                 break;
             case "sumar3Ataque":
             case "doblePoderAtaque":
-                renderType = "+A";
-                break;
             case "ataqueDosCasillas": //significa que tiene mas rango
                 renderType = "+R";
                 break;
@@ -1313,26 +1316,42 @@ public class GameScreen implements Screen, InputProcessor {
             }
             updateChest();
         }else{
-            if (lastEnemySummonCell==0) {
-                report = gestorProxy.startSummon(startingCell2, "T", currentPlayer, currentSummonType);
-                lastEnemySummonCell=gestorCelda.getLastEnemySummonCell();
-            }else {
-                do {
-                    report = gestorProxy.startSummon(lastEnemySummonCell, getRandomPattern(), currentPlayer, currentSummonType);
-                }while(!report.equals("Summoning successful."));
+
+            Random rd = new Random();
+            boolean fiftyChance = rd.nextBoolean();
+
+            if (fiftyChance || firstTurnPlayer2Summon) {
+                if (lastEnemySummonCell==0) {
+                    report = gestorProxy.startSummon(startingCell2, "T", currentPlayer, currentSummonType);
+                    lastEnemySummonCell=gestorCelda.getLastEnemySummonCell();
+                    firstTurnPlayer2Summon= false;
+                }else {
+                    int count = 0;
+                    do {
+                        report = gestorProxy.startSummon(lastEnemySummonCell, getRandomPattern(), currentPlayer, currentSummonType);
+                        count++;
+                    }while(!report.equals("Summoning successful.") && count < 10);
+                }
             }
+
+            else {
+                report="Player 2 does not want to perform a summon.";
+            }
+
+
             comm.setText(report);
             lastEnemySummonCell=gestorCelda.getLastEnemySummonCell();
-            float delay=15;
+            System.out.println(lastEnemySummonCell);
+            comm.setText(report + ". Processing IA...");
+            float delay=8;
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
-                    comm.setText("Processing...");
+                    comm.setText("Turn of Player 2 completed.");
                     endTurn();
                 }
             },delay);
         }
-        comm.setText(report);
         updateChest();
     }
 

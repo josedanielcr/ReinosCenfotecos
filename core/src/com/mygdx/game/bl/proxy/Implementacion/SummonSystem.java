@@ -80,7 +80,10 @@ public class SummonSystem implements ISummonSystem {
             }
             if (continuar) {
                 report = "Summoning successful.";
-                gCell.setLastEnemySummonCell(fiveCellPattern.get(4).getId());
+                if (pJugador.equals("red")) {
+                    gCell.setLastEnemySummonCell(fiveCellPattern.get(4).getId());
+                }
+
             }
 
         }
@@ -93,7 +96,14 @@ public class SummonSystem implements ISummonSystem {
 
     @Override
     public PersonajeAbstracto displayStats(int pIdPersonaje, String pJugador) {
-        PersonajeAbstracto pTemp = gPer.retornarPersonajeDecorador(pIdPersonaje);
+        PersonajeAbstracto pTemp = null;
+        if (pJugador.equals("blue")) {
+            pTemp = gPer.retornarPersonajeDecorador(pIdPersonaje);
+        }
+        if (pJugador.equals("red")) {
+            pTemp = gPer.retornarPersonajeDecoradorEnemigue(pIdPersonaje);
+
+        }
         return pTemp;
     }
 
@@ -189,6 +199,70 @@ public class SummonSystem implements ISummonSystem {
     }
 
     public String moveUnit(int pIdPersonaje, int pIdCelda, String pIdJugador, String pMovimiento) {
-        return "ok";
+        String report = "";
+        int nextMoveValue = getNextMoveValue(pMovimiento);
+
+        if (pIdCelda+nextMoveValue>400) {
+            report = "Movement action exceeds upper limit of board.";
+        }
+        else if (pIdCelda+nextMoveValue<1) {
+            report = "Movement action exceeds lower limit of board.";
+        }
+        else if (pIdCelda%20==1) {
+            if ((pIdCelda+nextMoveValue) % 20 == 0) {
+                report = "Invalid action. Unit is at the border limit.";
+            }
+        }
+        else if (pIdCelda%20==0) {
+            if ((pIdCelda+nextMoveValue) % 20 == 1) {
+                report = "Invalid action. Unit is at the border limit.";
+            }
+        }
+        else {
+            Celda targetCell = gCell.getCell(pIdCelda+nextMoveValue);
+            if (targetCell.getIdPersonaje()==0) {
+                if (targetCell.getCellColor().getColor().equals("free")) {
+                    report = "Invalid move. Target cell is not claimed by a player.";
+                }
+                else {
+                    if (pIdJugador.equals("blue")) {
+                        gPer.retornarPersonajeDecorador(pIdPersonaje).setRectangle(targetCell.getBoundingBox());
+                        targetCell.setIdPersonaje(pIdPersonaje);
+                        gCell.getCell(pIdCelda).setIdPersonaje(0);
+                        report="Successful move action.";
+                    }
+                    if (pIdJugador.equals("red")) {
+                        gPer.retornarPersonajeDecoradorEnemigue(pIdPersonaje).setRectangle(targetCell.getBoundingBox());
+                        targetCell.setIdPersonaje(pIdPersonaje);
+                        gCell.getCell(pIdCelda).setIdPersonaje(0);
+                        report="Successful move action.";
+                    }
+
+                }
+            }
+            else {
+                report = "Target cell is occupied by another unit.";
+            }
+        }
+        return report;
+    }
+
+    public int getNextMoveValue(String pMov) {
+        int nextMoveValue = 0;
+        switch (pMov) {
+            case "up":
+                nextMoveValue = 20;
+                break;
+            case "down":
+                nextMoveValue = -20;
+                break;
+            case "left":
+                nextMoveValue = -1;
+                break;
+            default:
+                nextMoveValue = 1;
+                break;
+        }
+        return nextMoveValue;
     }
 }
