@@ -37,16 +37,13 @@ public class Celda_Castillo extends Celda {
 
     @Override
     public void setObjectCell(String codigo) {
-         if (this.getLifePoints()==1) {
+         if (this.getLifePoints()<1) {
             if (codigo.equals("blue")) {
-                this.getCellColor().setColoredCell(cellAtlas.findRegion("blueCastleCell1"));
+                this.getCellColor().setColoredCell(cellAtlas.findRegion("emptyCastleCell"));
             }
             if (codigo.equals("red")) {
-                this.getCellColor().setColoredCell(cellAtlas.findRegion("redCastleCell1"));
+                this.getCellColor().setColoredCell(cellAtlas.findRegion("emptyCastleCell"));
             }
-        }
-        if (this.getLifePoints()==0) {
-            this.getCellColor().setColoredCell(cellAtlas.findRegion("deadCastleCell"));
         }
     }
 

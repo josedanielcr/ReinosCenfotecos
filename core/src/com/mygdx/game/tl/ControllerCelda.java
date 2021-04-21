@@ -187,10 +187,70 @@ public class ControllerCelda {
         return idCeldaCastillo2;
     }
 
+    /**
+     * Método que devuelve el ID de la primera celda conquistada por el Jugador 1.
+     * @return El ID de la primera celda conquistada.
+     */
+    public int getStartingCellId1() {
+        return idCeldaCastillo1-999;
+    }
+
+    /**
+     * Método que devuelve el ID de la primera celda conquistada por el Jugador 2.
+     * @return El ID de la primera celda conquistada.
+     */
+    public int getStartingCellId2() {
+        return idCeldaCastillo2-639;
+    }
+
+    /**
+     * Método que permite obtener la última celda de convocación de la IA computadora.
+     * @return Retorna el ID de la celda base para realizar la próxima convocación.
+     */
     public int getLastEnemySummonCell(){
         return lastEnemySummonCell;
     }
-    public void setLastEnemySummonCell(int pcell){
-       this.lastEnemySummonCell=pcell;
+
+    /**
+     * Método que permite establecer la última celda de convocación de la IA Computadora.
+     * @param pCell El ID de la celda de referencia para la IA Computadora.
+     */
+    public void setLastEnemySummonCell(int pCell){
+       this.lastEnemySummonCell=pCell;
+    }
+
+    /**
+     * Método que actualiza el estado de la celda con su castillo.
+     * @param pAtk El ataque del personaje atacante del castillo.
+     * @param pIdCastleCell El Id de la celda castillo objetivo.
+     * @return Retorna true si el castillo fue destruido por el ataque.
+     */
+    public boolean updateCastle(int pAtk, int pIdCastleCell) {
+        boolean isDestroyed;
+        Celda attackedCastle = getCell(pIdCastleCell);
+        if (attackedCastle.getLifePoints()<=0) {
+            attackedCastle.setLifePoints(0);
+            isDestroyed = true;
+            attackedCastle.setObjectCell(attackedCastle.getCellColor().getColor());
+        }
+        else {
+            attackedCastle.setLifePoints(attackedCastle.getLifePoints()-pAtk);
+            isDestroyed = false;
+            attackedCastle.setObjectCell(attackedCastle.getCellColor().getColor());
+        }
+        return isDestroyed;
+    }
+
+    /**
+     * Método que actualiza el estado de ocupación de una celda al ser destruida la unidad ocupante.
+     * @param pUnitId El ID de la unidad destruida.
+     */
+    public void removeUnitReference(int pUnitId) {
+        for (Celda c : arrCeldas) {
+            if (c.getIdPersonaje()==pUnitId) {
+                c.setIdPersonaje(0);
+                break;
+            }
+        }
     }
 }
