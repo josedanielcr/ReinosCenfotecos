@@ -137,6 +137,8 @@ public class GameScreen implements Screen, InputProcessor {
     private static int time = 0;
     public int currentCell = 0;
     public int lastEnemySummonCell = 0;
+    public int[] summonedEnemyIds = new int[20];
+    public int lastEnemySummonId = -1;
     public int startingCell1;
     public int startingCell2;
     public int firstPlayer1Cell;
@@ -1058,7 +1060,6 @@ public class GameScreen implements Screen, InputProcessor {
         gestorObserver.resetTimer();
         if(currentPlayer.equals("red")){
             startSummoning();
-            //TODO talvez meter movimiento aleatorio
         }
     }
 
@@ -1314,6 +1315,7 @@ public class GameScreen implements Screen, InputProcessor {
                         count++;
                     }while(!report.equals("Summoning successful.") && count < 10);
                 }
+                lastEnemySummonId=gestorPersonaje.getLastEnemySummonId();
             }
 
             else {
@@ -1323,16 +1325,18 @@ public class GameScreen implements Screen, InputProcessor {
 
             comm.setText(report);
             lastEnemySummonCell=gestorCelda.getLastEnemySummonCell();
-            System.out.println(lastEnemySummonCell);
             comm.setText(report + ". Processing IA...");
-            float delay=8;
+            //TODO cambiar esto a 8, y moverlo a move unit
+            float delay=3;
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
                     comm.setText("Turn of Player 2 completed.");
+                    moveEnemy();
                     endTurn();
                 }
             },delay);
+
         }
         updateChest();
     }
@@ -1414,6 +1418,51 @@ public class GameScreen implements Screen, InputProcessor {
         }
     }
 
+    public void moveEnemy() {
+        String report;
+        int move = (int) (Math.random()*2);
+        if(move==1) {
+            if(lastEnemySummonId!=-1) {
+                int rnd = (int) (Math.random() * 2);
+                String enemyDir = "";
+                switch (rnd) {
+                    case 1:
+                        enemyDir = "up";
+                        break;
+                    case 2:
+                        enemyDir = "down";
+                        break;
+                    case 3:
+                        enemyDir = "left";
+                        break;
+                    case 4:
+                        enemyDir = "right";
+                        break;
+                }
+
+                report = gestorProxy.moveUnit(lastEnemySummonId, lastEnemySummonCell, currentPlayer, enemyDir);
+                System.out.println(report);
+
+                if(!report.equals("Successful move action.")){
+                    report = gestorProxy.moveUnit(lastEnemySummonId, lastEnemySummonCell, currentPlayer, "down");
+                }
+
+                if(!report.equals("Successful move action.")) {
+                    report = gestorProxy.moveUnit(lastEnemySummonId, lastEnemySummonCell, currentPlayer, "left");
+                }
+
+                if(!report.equals("Successful move action.")) {
+                    report = gestorProxy.moveUnit(lastEnemySummonId, lastEnemySummonCell, currentPlayer, "right");
+                }
+
+                if(!report.equals("Successful move action.")) {
+                    gestorProxy.moveUnit(lastEnemySummonId, lastEnemySummonCell, currentPlayer, "up");
+                }
+
+            }
+        }
+    }
+
     public void spAttack() {
         if (currentPlayer.equals("blue")) {
             String report;
@@ -1453,10 +1502,6 @@ public class GameScreen implements Screen, InputProcessor {
 
     public boolean canSpAttack(){
         return cantDadosSpAtk+extraDadosSpAtk > 0;
-    }
-
-    public void moveEnemy(int lastEnemySummonCell){
-
     }
 
     public void endOfGame() {

@@ -26,6 +26,7 @@ public class SummonSystem implements ISummonSystem {
     private Celda startCell;
     private ControllerCelda gCell;
     private ControllerPersonaje gPer;
+    private int idLastPersonajeConvocado;
 
 
     public SummonSystem(ControllerCelda gCell, ControllerPersonaje gPer) {
