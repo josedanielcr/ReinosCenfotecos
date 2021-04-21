@@ -49,6 +49,7 @@ public class GameScreen implements Screen, InputProcessor {
     private static ControllerDado gestorDado;
     private static ControllerPersonaje gestorPersonaje;
     private static ControllerProxy gestorProxy;
+    private static ControllerEstrategiaAtaque gestorEstrategia;
 
     //graphics
     private final SpriteBatch batch;
@@ -138,6 +139,8 @@ public class GameScreen implements Screen, InputProcessor {
     public int lastEnemySummonCell = 0;
     public int startingCell1;
     public int startingCell2;
+    public int firstPlayer1Cell;
+    public int firstPlayer2Cell;
     public int idPersonajeSeleccionado = 0;
     private int opponentLife;
     private boolean rolled;
@@ -195,11 +198,15 @@ public class GameScreen implements Screen, InputProcessor {
         gestorPersonaje = new ControllerPersonaje();
         gestorProxy = new ControllerProxy(gestorCelda, gestorPersonaje);
         gestorDado = new ControllerDado(this);
+        gestorEstrategia = new ControllerEstrategiaAtaque(gestorCelda, gestorPersonaje);
+
 
         //Inicializar variables
         startingCell1 = gestorCelda.getCellCastleId1();
         startingCell2 = gestorCelda.getCellCastleId2();
         opponentLife = gestorCelda.getCell(startingCell2).getLifePoints();
+        firstPlayer1Cell = gestorCelda.getStartingCellId1();
+        firstPlayer2Cell = gestorCelda.getStartingCellId2();
 
         //Inicializar background
 
@@ -386,7 +393,6 @@ public class GameScreen implements Screen, InputProcessor {
         btnUp = new ImageButton(styleUp);
         btnUp.setPosition(1124,483);
         btnUp.addListener(new ClickListener() {
-            //TODO validacion Successful move action.
             public void clicked(InputEvent event, float x, float y) {
                move("up");
             }
@@ -511,7 +517,7 @@ public class GameScreen implements Screen, InputProcessor {
         btnAtk.setPosition(939,750);
         btnAtk.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
-                comm.setText("Action activated: ATTACK.");
+                attack();
             }
         });
 
@@ -527,26 +533,7 @@ public class GameScreen implements Screen, InputProcessor {
         btnSpAtk.setPosition(1083,750);
         btnSpAtk.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
-                //todo: validaciones
-                if(cantDadosSpAtk>0){
-                    if(gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado).getAtaqueEspecial().equals("")){
-                        comm.setText("SP ATTACK: already used");
-                    } else{
-                        if(personajes1.size()>1 && personajes2.size()>1){
-                            gestorPersonaje.aplicarAtaqueEspecial(idPersonajeSeleccionado);
-                            System.out.println(gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado));
-                            comm.setText("Action activated: SP ATTACK.");
-                            gestorPersonaje.eliminarAtaqueSP(idPersonajeSeleccionado);
-                            //System.out.println(gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado).obtenerInformacionPersonaje());
-                            cantDadosSpAtk--; // todo: restarle al rol del turno
-                        } else {
-                            //no tendria sentido aplicar un sp attack si solo hay una persona en el juego
-                            comm.setText("there aren't enough units");
-                        }
-                    }
-                } else{
-                    comm.setText("there aren't enough SP ATTACK dice");
-                }
+                spAttack();
             }
         });
 
@@ -680,9 +667,9 @@ public class GameScreen implements Screen, InputProcessor {
                     }
 
                     if(!movementDice){
-                        //TODO talvez a futuro implementacion para quitar esto si se usa?
-                        if(actionDie.toString().equals("Ataque")){
+                        if(actionDie.toString().equals("atk")){
                             added=gestorDado.addToChest(4);
+                            extraDadosAtk--;
                         }else{
                             added=gestorDado.addToChest(5);
                         }
@@ -1021,8 +1008,6 @@ public class GameScreen implements Screen, InputProcessor {
         for (PersonajeAbstracto p2 : personajes2) {
             if (p2.getRectangle().contains(temp.x,temp.y)) {
                 idPersonajeSeleccionado = p2.getIdPersonaje();
-                System.out.println(idPersonajeSeleccionado);
-                System.out.println(currentPlayer);
                 PersonajeAbstracto pShow2= gestorProxy.getInfoPersonaje(idPersonajeSeleccionado, currentPlayer);
                 if (pShow2!=null) {
                     currentAtk = pShow2.getAtaque();
@@ -1073,6 +1058,7 @@ public class GameScreen implements Screen, InputProcessor {
         gestorObserver.resetTimer();
         if(currentPlayer.equals("red")){
             startSummoning();
+            //TODO talvez meter movimiento aleatorio
         }
     }
 
@@ -1097,6 +1083,7 @@ public class GameScreen implements Screen, InputProcessor {
     }
 
     public void renderDice(String rollInvo, String rollInvo2, String rollAccion){
+        System.out.println("Action die: "+rollAccion);
         switch (rollInvo) {
             case "Infanteria":
                 summonDie = diceAtlas.findRegion("infanteria");
@@ -1133,7 +1120,7 @@ public class GameScreen implements Screen, InputProcessor {
         }else{
             movementDice=true;
             int movimiento = Integer.parseInt(rollAccion);
-            for (int i=0;i<6;i++){
+            for (int i=1;i<=6;i++){
                 if(i==movimiento){
                     actionDie = diceAtlas.findRegion(String.valueOf(i));
                 }
@@ -1308,6 +1295,7 @@ public class GameScreen implements Screen, InputProcessor {
             }else{
                 report = "Not enough dice to summon that unit.";
             }
+            comm.setText(report);
             updateChest();
         }else{
 
@@ -1337,8 +1325,7 @@ public class GameScreen implements Screen, InputProcessor {
             lastEnemySummonCell=gestorCelda.getLastEnemySummonCell();
             System.out.println(lastEnemySummonCell);
             comm.setText(report + ". Processing IA...");
-            //TODO revertir a 8
-            float delay=1;
+            float delay=8;
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
@@ -1399,6 +1386,89 @@ public class GameScreen implements Screen, InputProcessor {
         }else{
             comm.setText("You do not have a movement die available.");
         }
+    }
+
+    public void attack() {
+        String report;
+        if (currentPlayer.equals("blue")) {
+            if(canAttack()) {
+                report = gestorEstrategia.executeAttack(currentPlayer, currentCell, idPersonajeSeleccionado, firstPlayer1Cell, firstPlayer2Cell, startingCell1, startingCell2);
+                opponentLife = gestorCelda.getCell(startingCell2).getLifePoints();
+                if (report.equals("End of Game.")){
+                    endOfGame();
+                }else if(!report.equals("There is not an enemy unit inside the range of attack.")){
+                    gestorDado.attack();
+                    if(extraDadosAtk!=0) {
+                        if (actionDie.toString().equals("atk")) {
+                            actionDie = diceAtlas.findRegion("movement");
+                            extraDadosAtk--;
+                        }
+                    }
+                    fullChest=false;
+                }
+            }else{
+                report = "Not enough dice to attack.";
+            }
+            updateChest();
+            comm.setText(report);
+        }
+    }
+
+    public void spAttack() {
+        if (currentPlayer.equals("blue")) {
+            String report;
+            if (canSpAttack()) {
+                if (gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado).getAtaqueEspecial().equals("")) {
+                    report="Sp attack already used.";
+                } else {
+                    if (personajes1.size() > 1 && personajes2.size() > 1) {
+                        gestorPersonaje.aplicarAtaqueEspecial(idPersonajeSeleccionado);
+                        report="Sp attack activated.";
+                        gestorPersonaje.eliminarAtaqueSP(idPersonajeSeleccionado);
+
+                        gestorDado.spAttack();
+                        if (extraDadosSpAtk != 0) {
+                            if (actionDie.toString().equals("spatk")) {
+                                actionDie = diceAtlas.findRegion("movement");
+                                extraDadosSpAtk--;
+                            }
+                        }
+                        fullChest = false;
+
+                    } else {
+                        report="Not enough units on the battlefield.";
+                    }
+                }
+            } else {
+                report = "Not enough dice for a sp attack.";
+            }
+            updateChest();
+            comm.setText(report);
+        }
+    }
+
+    public boolean canAttack(){
+        return cantDadosAtk+extraDadosAtk > 0;
+    }
+
+    public boolean canSpAttack(){
+        return cantDadosSpAtk+extraDadosSpAtk > 0;
+    }
+
+    public void moveEnemy(int lastEnemySummonCell){
+
+    }
+
+    public void endOfGame() {
+        float delay=6;
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                comm.setText("A player's Castle has collapsed!");
+                endTurn();
+            }
+        },delay);
+        parent.changeScreen(MyGdxGame.ENDGAME);
     }
 }
 

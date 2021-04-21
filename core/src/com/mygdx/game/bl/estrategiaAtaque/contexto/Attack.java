@@ -55,4 +55,12 @@ public class Attack {
     public int getIdDefending() {
         return idDefending;
     }
+
+    public boolean isUnit() {
+        return idCastle == 0;
+    }
+
+    public boolean isCastle() {
+        return idDefending == 0 && def == 0;
+    }
 }

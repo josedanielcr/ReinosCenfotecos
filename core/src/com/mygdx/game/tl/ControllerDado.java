@@ -55,8 +55,6 @@ public class ControllerDado {
                 dado = fabrica.crearDado(3);
                 rollMovimiento=dado.rollDie();
                 break;
-            default:
-                System.out.println("No sirvió");
         }
     }
 
@@ -135,6 +133,22 @@ public class ControllerDado {
                 }
                 break;
         }
+    }
+
+    public void attack(){
+        if(rollAccion!=null) {
+            if(rollAccion.equals("Ataque")) {
+                rollAccion=null;
+            }else{
+                cofreJugador.removeAttackDice();
+            }
+        }else{
+            cofreJugador.removeAttackDice();
+        }
+    }
+
+    public void spAttack(){
+        cofreJugador.removeSpAttackDice();
     }
 
     public Cofre getCofreJugador(){

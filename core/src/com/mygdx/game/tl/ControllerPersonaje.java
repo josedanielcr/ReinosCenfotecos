@@ -19,6 +19,7 @@ public class ControllerPersonaje {
     private static int idPersonaje;
     private static int contGeneral=0;
 
+
     //controller real
     public PersonajeAbstracto crearPersonaje(int id, int tipoPersonaje, int tipo, String jugadorActivo, Rectangle boundingBox){
 
@@ -174,8 +175,8 @@ public class ControllerPersonaje {
     }
 
     private PersonajeAbstracto decorarBajarDefensa(int idExterno) {
-        PersonajeAbstracto personajeAbstracto = retornarPersonajeDecorador(idExterno);
-        int indexPersonaje = obtenerIndexPersonaje(personajeAbstracto);
+        PersonajeAbstracto personajeAbstracto = retornarPersonajeDecoradorEnemigue(idExterno);
+        int indexPersonaje = obtenerIndexPersonajeEnemigue(personajeAbstracto);
         personajeAbstracto= new InfanteriaBajarDefensa((Personaje) personajeAbstracto);
         personajesArr.set(indexPersonaje,personajeAbstracto);
         return personajeAbstracto;
@@ -443,4 +444,77 @@ public class ControllerPersonaje {
     public ArrayList<PersonajeAbstracto> getArrayEnemigos() {
         return personajesArrEnemigo;
     }
+
+    //FUNCIONES DE ATAQUE
+
+    public String resolverAtaqueDefensa(int idPersonajeAtacado, int nuevaDefensa){
+        int arrayAbuscar=1;
+        PersonajeAbstracto pAtacado= null;
+        pAtacado= retornarPersonajeDecoradorEnemigue(idPersonajeAtacado);
+        if(pAtacado==null){
+            pAtacado= retornarPersonajeDecorador(idPersonajeAtacado);
+            arrayAbuscar=2;
+        }
+
+        pAtacado.setDefensa(nuevaDefensa);
+        int indexAtacado;
+        switch (arrayAbuscar){
+
+            case 1:
+                indexAtacado= obtenerIndexPersonajeEnemigue(pAtacado);
+                personajesArrEnemigo.set(indexAtacado,pAtacado);
+                break;
+            case 2:
+                indexAtacado= obtenerIndexPersonaje(pAtacado);
+                personajesArr.set(indexAtacado,pAtacado);
+                break;
+        }
+        return "Battle unit was attacked...its defense was lowered.";
+    }
+
+    public String matarPersonaje(int idPersonajeAtacado){
+        int arrayAbuscar=1;
+        PersonajeAbstracto pAtacado= null;
+        pAtacado= retornarPersonajeDecoradorEnemigue(idPersonajeAtacado);
+        if(pAtacado==null){
+            pAtacado= retornarPersonajeDecorador(idPersonajeAtacado);
+            arrayAbuscar=2;
+        }
+        switch (arrayAbuscar){
+            case 1:
+                personajesArrEnemigo.remove(pAtacado);
+                break;
+            case 2:
+                personajesArr.remove(pAtacado);
+                break;
+        }
+        return "Battle unit was destroyed.";
+    }
+
+    public String resolverAtaqueVida(int idPersonajeAtacado, int nuevaVida){
+        int arrayAbuscar=1;
+        PersonajeAbstracto pAtacado= null;
+        pAtacado= retornarPersonajeDecoradorEnemigue(idPersonajeAtacado);
+        if(pAtacado==null){
+            pAtacado= retornarPersonajeDecorador(idPersonajeAtacado);
+            arrayAbuscar=2;
+        }
+
+        pAtacado.setVida(nuevaVida);
+        pAtacado.setDefensa(0);
+        int indexAtacado;
+        switch (arrayAbuscar){
+
+            case 1:
+                indexAtacado= obtenerIndexPersonajeEnemigue(pAtacado);
+                personajesArrEnemigo.set(indexAtacado,pAtacado);
+                break;
+            case 2:
+                indexAtacado= obtenerIndexPersonaje(pAtacado);
+                personajesArr.set(indexAtacado,pAtacado);
+                break;
+        }
+        return "Battle unit was attacked...life points reduced.";
+    }
+
 }
