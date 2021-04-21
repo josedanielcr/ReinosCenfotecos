@@ -527,26 +527,6 @@ public class GameScreen implements Screen, InputProcessor {
         btnSpAtk.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 spAttack();
-                //todo: validaciones restarle al rol del turno
-                if(cantDadosSpAtk>0){
-                    if(gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado).getAtaqueEspecial().equals("")){
-                        comm.setText("SP ATTACK: already used");
-                    } else{
-                        if(personajes1.size()>1 && personajes2.size()>1){
-                            gestorPersonaje.aplicarAtaqueEspecial(idPersonajeSeleccionado);
-                            System.out.println(gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado));
-                            comm.setText("Action activated: SP ATK.");
-                            gestorPersonaje.eliminarAtaqueSP(idPersonajeSeleccionado);
-                            //System.out.println(gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado).obtenerInformacionPersonaje());
-                            cantDadosSpAtk--;
-                        } else {
-                            //no tendria sentido aplicar un sp attack si solo hay una persona en el juego
-                            comm.setText("There aren't enough units.");
-                        }
-                    }
-                } else{
-                    comm.setText("There aren't enough SP ATK dice.");
-                }
             }
         });
 
@@ -1425,37 +1405,33 @@ public class GameScreen implements Screen, InputProcessor {
     }
 
     public void spAttack() {
-        String report;
         if (currentPlayer.equals("blue")) {
+            String report;
             if (canSpAttack()) {
-                report = "Sp attack successful."; //TODO meter aqui el metodo
-
                 if (gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado).getAtaqueEspecial().equals("")) {
-                    comm.setText("SP ATTACK: already used");
+                    report="Sp attack already used.";
                 } else {
                     if (personajes1.size() > 1 && personajes2.size() > 1) {
-                        //TODO no entiendo este metodo. dice que retorna un arrayList pero o veo donde se use. falta un indicador de ataque especial exitoso aqui
+                        //TODO no entiendo este metodo. dice que retorna un arrayList pero no veo donde se use. falta un indicador de ataque especial exitoso aqui
                         gestorPersonaje.aplicarAtaqueEspecial(idPersonajeSeleccionado);
                         //TODO este print hacia algo?
                         System.out.println(gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado));
-                        comm.setText("Action activated: SP ATK.");
+                        report="Sp attack activated.";
                         gestorPersonaje.eliminarAtaqueSP(idPersonajeSeleccionado);
                         //System.out.println(gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado).obtenerInformacionPersonaje());
-                        cantDadosSpAtk--;
-                    } else {
-                        //no tendria sentido aplicar un sp attack si solo hay una persona en el juego
-                        comm.setText("There aren't enough units.");
-                    }
-                }
-                if (report.equals("Sp attack successful.")) {
-                    if (extraDadosSpAtk != 0) {
+
                         gestorDado.spAttack();
-                        if (actionDie.toString().equals("spatk")) {
-                            actionDie = diceAtlas.findRegion("movement");
-                            extraDadosSpAtk--;
+                        if (extraDadosSpAtk != 0) {
+                            if (actionDie.toString().equals("spatk")) {
+                                actionDie = diceAtlas.findRegion("movement");
+                                extraDadosSpAtk--;
+                            }
                         }
+                        fullChest = false;
+
+                    } else {
+                        report="Not enough units on the battlefield.";
                     }
-                    fullChest = false;
                 }
             } else {
                 report = "Not enough dice for a sp attack.";
