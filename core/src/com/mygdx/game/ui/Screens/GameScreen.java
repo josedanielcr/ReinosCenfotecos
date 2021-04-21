@@ -49,6 +49,7 @@ public class GameScreen implements Screen, InputProcessor {
     private static ControllerDado gestorDado;
     private static ControllerPersonaje gestorPersonaje;
     private static ControllerProxy gestorProxy;
+    private static ControllerEstrategiaAtaque gestorEstrategia;
 
     //graphics
     private final SpriteBatch batch;
@@ -138,6 +139,8 @@ public class GameScreen implements Screen, InputProcessor {
     public int lastEnemySummonCell = 0;
     public int startingCell1;
     public int startingCell2;
+    public int firstPlayer1Cell;
+    public int firstPlayer2Cell;
     public int idPersonajeSeleccionado = 0;
     private int opponentLife;
     private boolean rolled;
@@ -195,11 +198,15 @@ public class GameScreen implements Screen, InputProcessor {
         gestorPersonaje = new ControllerPersonaje();
         gestorProxy = new ControllerProxy(gestorCelda, gestorPersonaje);
         gestorDado = new ControllerDado(this);
+        gestorEstrategia = new ControllerEstrategiaAtaque(gestorCelda, gestorPersonaje);
+
 
         //Inicializar variables
         startingCell1 = gestorCelda.getCellCastleId1();
         startingCell2 = gestorCelda.getCellCastleId2();
         opponentLife = gestorCelda.getCell(startingCell2).getLifePoints();
+        firstPlayer1Cell = gestorCelda.getStartingCellId1();
+        firstPlayer2Cell = gestorCelda.getStartingCellId2();
 
         //Inicializar background
 
@@ -510,6 +517,13 @@ public class GameScreen implements Screen, InputProcessor {
         btnAtk.setPosition(939,750);
         btnAtk.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                String attackResult = gestorEstrategia.executeAttack(currentPlayer, currentCell, idPersonajeSeleccionado, firstPlayer1Cell, firstPlayer2Cell, startingCell1, startingCell2);
+                opponentLife = gestorCelda.getCell(startingCell2).getLifePoints();
+                comm.setText(attackResult);
+                if (attackResult.equals("End of Game.")) {
+                    endOfGame();
+                }
+                //TODO hacer que esta linea funcione con lo de arriba
                 attack();
             }
         });
@@ -1453,6 +1467,18 @@ public class GameScreen implements Screen, InputProcessor {
 
     public void moveEnemy(int lastEnemySummonCell){
 
+    }
+
+    public void endOfGame() {
+        float delay=6;
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                comm.setText("A player's Castle has collapsed!");
+                endTurn();
+            }
+        },delay);
+        parent.changeScreen(MyGdxGame.ENDGAME);
     }
 }
 
