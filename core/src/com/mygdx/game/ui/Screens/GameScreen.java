@@ -29,6 +29,8 @@ import com.mygdx.game.tl.*;
 import com.mygdx.game.ui.MyGdxGame;
 
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 public class GameScreen implements Screen, InputProcessor {
@@ -139,11 +141,17 @@ public class GameScreen implements Screen, InputProcessor {
     public int idPersonajeSeleccionado = 0;
     private int opponentLife;
     private boolean rolled;
-    private boolean notMovement;
+    private boolean movementDice;
     private boolean addedToChest=false;
     private boolean fullChest=false;
     private String currentPattern="I";
     private int currentSummonType=1;
+    boolean firstTurnPlayer2Summon = true;
+
+    //variables de movimiento
+    private int movementLeft;
+    private int movementsMade=0;
+    private int maxMoveThisTurn=0;
 
     //Variables de dados
     int cantDadosArtilleria = 0;
@@ -325,7 +333,7 @@ public class GameScreen implements Screen, InputProcessor {
         lUnitLife.setAlignment(Align.center);
         lUnitLife.setText(currentUnitLife);
 
-        lUnitMove = new Label("-1", labelStyle2);
+        lUnitMove = new Label("0", labelStyle2);
         lUnitMove.setSize(31, 30);
         lUnitMove.setPosition(1134, 365);
         lUnitMove.setAlignment(Align.center);
@@ -343,13 +351,13 @@ public class GameScreen implements Screen, InputProcessor {
         lDefense.setAlignment(Align.center);
         lDefense.setText(currentDef);
 
-        lRange = new Label("-1", labelStyle2);
+        lRange = new Label("0", labelStyle2);
         lRange.setSize(31, 30);
         lRange.setPosition(1002, 264);
         lRange.setAlignment(Align.center);
         lRange.setText(currentRange);
 
-        lSpAttack = new Label("-1", labelStyle2);
+        lSpAttack = new Label("0", labelStyle2);
         lSpAttack.setSize(31, 30);
         lSpAttack.setPosition(1134, 264);
         lSpAttack.setAlignment(Align.center);
@@ -376,14 +384,11 @@ public class GameScreen implements Screen, InputProcessor {
         styleUp.up = padUpUp;
         styleUp.down = padUpDown;
         btnUp = new ImageButton(styleUp);
-        btnUp.setPosition(1124,481);
+        btnUp.setPosition(1124,483);
         btnUp.addListener(new ClickListener() {
             //TODO validacion Successful move action.
-            public void clicked(InputEvent event, float x, float y){
-                String report = gestorProxy.moveUnit(idPersonajeSeleccionado, currentCell, currentPlayer,"up");
-                if (report!=null) {
-                    comm.setText(report);
-                }
+            public void clicked(InputEvent event, float x, float y) {
+               move("up");
             }
         });
 
@@ -396,10 +401,7 @@ public class GameScreen implements Screen, InputProcessor {
         btnDown.setPosition(1125,431);
         btnDown.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
-                String report = gestorProxy.moveUnit(idPersonajeSeleccionado, currentCell, currentPlayer,"down");
-                if (report!=null) {
-                    comm.setText(report);
-                }
+                move("down");
             }
         });
 
@@ -412,10 +414,7 @@ public class GameScreen implements Screen, InputProcessor {
         btnLeft.setPosition(1100,455);
         btnLeft.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
-                String report = gestorProxy.moveUnit(idPersonajeSeleccionado, currentCell, currentPlayer,"left");
-                if (report!=null) {
-                    comm.setText(report);
-                }
+                move("left");
             }
         });
 
@@ -428,10 +427,7 @@ public class GameScreen implements Screen, InputProcessor {
         btnRight.setPosition(1152,455);
         btnRight.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
-                String report = gestorProxy.moveUnit(idPersonajeSeleccionado, currentCell, currentPlayer,"right");
-                if (report!=null) {
-                    comm.setText(report);
-                }
+                move("right");
             }
         });
 
@@ -545,11 +541,11 @@ public class GameScreen implements Screen, InputProcessor {
                             cantDadosSpAtk--; // todo: restarle al rol del turno
                         } else {
                             //no tendria sentido aplicar un sp attack si solo hay una persona en el juego
-                            comm.setText("there are not enough units");
+                            comm.setText("there aren't enough units");
                         }
                     }
                 } else{
-                    comm.setText("there are not enough SP ATTACK dice");
+                    comm.setText("there aren't enough SP ATTACK dice");
                 }
             }
         });
@@ -574,6 +570,7 @@ public class GameScreen implements Screen, InputProcessor {
                 extraDadosTanque=0;
                 extraDadosAtk=0;
                 extraDadosSpAtk=0;
+                movementsMade=0;
                 endTurn();
             }
         });
@@ -608,10 +605,9 @@ public class GameScreen implements Screen, InputProcessor {
         btnAddChest.addListener(new ClickListener() {
             boolean added;
             public void clicked(InputEvent event, float x, float y){
-                //TODO que si se haya usado un dado este turno, que no se pueda guardar
                 int cont;
                 if(currentPlayer.equals("blue") && !addedToChest) {
-                    if(extraDadosInfanteria!=0) {
+                    if(extraDadosInfanteria>0) {
                         cont=0;
                         for (int i = 0; i < extraDadosInfanteria; i++) {
                             added = gestorDado.addToChest(1);
@@ -619,20 +615,23 @@ public class GameScreen implements Screen, InputProcessor {
                                 cont++;
                             } else {
                                 comm.setText("Error: Chest is full. At least 1 die was not saved.");
+                                addedToChest=false;
                             }
                         }
 
                         for (int i = 0; i < cont; i++) {
                             if (summonDie.toString().equals("infanteria")) {
                                 summonDie = diceAtlas.findRegion("summon");
+                                extraDadosInfanteria--;
                             } else if (summonDie2.toString().equals("infanteria")) {
                                 summonDie2 = diceAtlas.findRegion("summon");
+                                extraDadosInfanteria--;
                             }
                         }
                         addedToChest=true;
                     }
 
-                    if(extraDadosArtilleria!=0) {
+                    if(extraDadosArtilleria>0) {
                         cont=0;
                         for (int i = 0; i < extraDadosArtilleria; i++) {
                             added = gestorDado.addToChest(2);
@@ -640,20 +639,23 @@ public class GameScreen implements Screen, InputProcessor {
                                 cont++;
                             } else {
                                 comm.setText("Error: Chest is full. At least 1 die was not saved.");
+                                addedToChest=false;
                             }
                         }
 
                         for (int i = 0; i < cont; i++) {
                             if (summonDie.toString().equals("artilleria")) {
                                 summonDie = diceAtlas.findRegion("summon");
+                                extraDadosArtilleria--;
                             } else if (summonDie2.toString().equals("artilleria")) {
                                 summonDie2 = diceAtlas.findRegion("summon");
+                                extraDadosArtilleria--;
                             }
                         }
                         addedToChest=true;
                     }
 
-                    if(extraDadosTanque!=0) {
+                    if(extraDadosTanque>0) {
                         cont=0;
                         for (int i = 0; i < extraDadosTanque; i++) {
                             added = gestorDado.addToChest(3);
@@ -661,20 +663,23 @@ public class GameScreen implements Screen, InputProcessor {
                                 cont++;
                             } else {
                                 comm.setText("Error: Chest is full. At least 1 die was not saved.");
+                                addedToChest=false;
                             }
                         }
 
                         for (int i = 0; i < cont; i++) {
                             if (summonDie.toString().equals("tanque")) {
                                 summonDie = diceAtlas.findRegion("summon");
+                                extraDadosTanque--;
                             } else if (summonDie2.toString().equals("tanque")) {
                                 summonDie2 = diceAtlas.findRegion("summon");
+                                extraDadosTanque--;
                             }
                         }
                         addedToChest=true;
                     }
 
-                    if(notMovement){
+                    if(!movementDice){
                         //TODO talvez a futuro implementacion para quitar esto si se usa?
                         if(actionDie.toString().equals("Ataque")){
                             added=gestorDado.addToChest(4);
@@ -691,12 +696,12 @@ public class GameScreen implements Screen, InputProcessor {
                     }
 
                     if(!addedToChest){
-                        comm.setText("There are no dice to ");
+                        comm.setText("There are no dice to save.");
                     }
 
                 }else{
                     if(!fullChest) {
-                        comm.setText("Solo se pueden guardar dados 1 vez por turno.");
+                        comm.setText("You've already put your dice in the chest this turn.");
                     }
                 }
             }});
@@ -1013,24 +1018,26 @@ public class GameScreen implements Screen, InputProcessor {
             }
         }
 
-        for (PersonajeAbstracto p : personajes2) {
-            if (p.getRectangle().contains(temp.x,temp.y)) {
-                idPersonajeSeleccionado = p.getIdPersonaje();
-                PersonajeAbstracto pShow= gestorProxy.getInfoPersonaje(idPersonajeSeleccionado, currentPlayer);
-                if (pShow!=null) {
-                    currentAtk = pShow.getAtaque();
+        for (PersonajeAbstracto p2 : personajes2) {
+            if (p2.getRectangle().contains(temp.x,temp.y)) {
+                idPersonajeSeleccionado = p2.getIdPersonaje();
+                System.out.println(idPersonajeSeleccionado);
+                System.out.println(currentPlayer);
+                PersonajeAbstracto pShow2= gestorProxy.getInfoPersonaje(idPersonajeSeleccionado, currentPlayer);
+                if (pShow2!=null) {
+                    currentAtk = pShow2.getAtaque();
                     lAttack.setText(currentAtk);
-                    currentDef = pShow.getDefensa();
+                    currentDef = pShow2.getDefensa();
                     lDefense.setText(currentDef);
-                    currentSpAtk = renderSpecialAttack(pShow.getAtaqueEspecial());
+                    currentSpAtk = renderSpecialAttack(pShow2.getAtaqueEspecial());
                     lSpAttack.setText(currentSpAtk);
-                    currentRange = pShow.getRango();
+                    currentRange = pShow2.getRango();
                     lRange.setText(currentRange);
-                    currentUnitMove = pShow.getMovimiento();
+                    currentUnitMove = pShow2.getMovimiento();
                     lUnitMove.setText(currentUnitMove);
-                    currentUnitLife = pShow.getVida();
+                    currentUnitLife = pShow2.getVida();
                     lUnitLife.setText(currentUnitLife);
-                    unitFrame = pShow.gettRegion();
+                    unitFrame = pShow2.gettRegion();
                 }
                 else {
                     comm.setText("Current turn player does not own that unit.");
@@ -1061,7 +1068,7 @@ public class GameScreen implements Screen, InputProcessor {
         return false;
     }
 
-    public void endTurn(){
+    public void endTurn() {
         changeTurn();
         gestorObserver.resetTimer();
         if(currentPlayer.equals("red")){
@@ -1119,12 +1126,12 @@ public class GameScreen implements Screen, InputProcessor {
 
         if (rollAccion.equals("Ataque")){
             actionDie = diceAtlas.findRegion("atk");
-            notMovement=true;
+            movementDice=false;
         }else if (rollAccion.equals("AtaqueEspecial")){
             actionDie = diceAtlas.findRegion("spatk");
-            notMovement=true;
+            movementDice=false;
         }else{
-            notMovement=false;
+            movementDice=true;
             int movimiento = Integer.parseInt(rollAccion);
             for (int i=0;i<6;i++){
                 if(i==movimiento){
@@ -1190,8 +1197,6 @@ public class GameScreen implements Screen, InputProcessor {
                 break;
             case "sumar3Ataque":
             case "doblePoderAtaque":
-                renderType = "+A";
-                break;
             case "ataqueDosCasillas": //significa que tiene mas rango
                 renderType = "+R";
                 break;
@@ -1222,7 +1227,7 @@ public class GameScreen implements Screen, InputProcessor {
         fullChest=true;
     }
 
-    public boolean canSummon(int ptipo){ //TODO que cuente los dados del cofre y del rol
+    public boolean canSummon(int ptipo){
 
         boolean canSummon=false;
         if(ptipo==1){
@@ -1252,6 +1257,7 @@ public class GameScreen implements Screen, InputProcessor {
                     report = gestorProxy.startSummon(currentCell, currentPattern, currentPlayer, currentSummonType);
                 }
                 if (report.equals("Summoning successful.")) {
+                    fullChest=false;
                     gestorDado.summon(currentSummonType);
                     switch (currentSummonType) {
                         case 1:
@@ -1298,32 +1304,49 @@ public class GameScreen implements Screen, InputProcessor {
                             break;
                     }
                     fullChest=false;
-                    updateChest();
                 }
             }else{
                 report = "Not enough dice to summon that unit.";
             }
+            updateChest();
         }else{
-            if (lastEnemySummonCell==0) {
-                report = gestorProxy.startSummon(startingCell2, "T", currentPlayer, currentSummonType);
-                lastEnemySummonCell=gestorCelda.getLastEnemySummonCell();
-            }else {
-                do {
-                    report = gestorProxy.startSummon(lastEnemySummonCell, getRandomPattern(), currentPlayer, currentSummonType);
-                }while(!report.equals("Summoning successful."));
+
+            Random rd = new Random();
+            boolean fiftyChance = rd.nextBoolean();
+
+            if (fiftyChance || firstTurnPlayer2Summon) {
+                if (lastEnemySummonCell==0) {
+                    report = gestorProxy.startSummon(startingCell2, "T", currentPlayer, currentSummonType);
+                    lastEnemySummonCell=gestorCelda.getLastEnemySummonCell();
+                    firstTurnPlayer2Summon= false;
+                }else {
+                    int count = 0;
+                    do {
+                        report = gestorProxy.startSummon(lastEnemySummonCell, getRandomPattern(), currentPlayer, currentSummonType);
+                        count++;
+                    }while(!report.equals("Summoning successful.") && count < 10);
+                }
             }
+
+            else {
+                report="Player 2 does not want to perform a summon.";
+            }
+
+
             comm.setText(report);
             lastEnemySummonCell=gestorCelda.getLastEnemySummonCell();
-            float delay=15;
+            System.out.println(lastEnemySummonCell);
+            comm.setText(report + ". Processing IA...");
+            //TODO revertir a 8
+            float delay=1;
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
-                    comm.setText("Processing...");
+                    comm.setText("Turn of Player 2 completed.");
                     endTurn();
                 }
             },delay);
         }
-        comm.setText(report);
         updateChest();
     }
 
@@ -1353,6 +1376,30 @@ public class GameScreen implements Screen, InputProcessor {
         return prefa;
     }
 
+    public void move(String dir) {
+        if (movementDice) {
+            PersonajeAbstracto gPer = gestorProxy.getInfoPersonaje(idPersonajeSeleccionado, currentPlayer);
+            int unitMaxMove = gPer.getMovimiento();
+            maxMoveThisTurn=Integer.parseInt(actionDie.toString());
+            if(unitMaxMove<maxMoveThisTurn){
+                maxMoveThisTurn=unitMaxMove;
+            }
+            movementLeft = maxMoveThisTurn - movementsMade;
+
+            if(movementLeft!=0 && movementsMade<maxMoveThisTurn) {
+                String report = gestorProxy.moveUnit(idPersonajeSeleccionado, currentCell, currentPlayer, dir);
+                if (report.equals("Successful move action.")) {
+                    movementsMade++;
+                }
+                comm.setText(report);
+            }else{
+                comm.setText("You do not have a movement die available.");
+                movementDice=false;
+            }
+        }else{
+            comm.setText("You do not have a movement die available.");
+        }
+    }
 }
 
 

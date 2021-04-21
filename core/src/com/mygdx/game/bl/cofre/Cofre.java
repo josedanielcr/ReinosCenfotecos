@@ -161,13 +161,19 @@ public class Cofre {
     public void removeSummonDice(int tipo){
         switch(tipo){
             case 1:
-                dadosInfanteria.remove(0);
+                if(dadosInfanteria.size()!=0) {
+                    dadosInfanteria.remove(0);
+                }
                 break;
             case 2:
-                dadosArtilleria.remove(0);
+                if(dadosArtilleria.size()!=0) {
+                    dadosArtilleria.remove(0);
+                }
                 break;
             case 3:
-                dadosTanque.remove(0);
+                if(dadosTanque.size()!=0) {
+                    dadosTanque.remove(0);
+                }
                 break;
         }
     }
