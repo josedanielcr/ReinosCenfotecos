@@ -120,7 +120,7 @@ public class ControllerPersonaje {
                 break;
                 //este es el 5 casillas de distancia
             case "bajarDefensa":
-                decorarBajarDefensa(obtenerIdRandomEnemigo());//no esta funcionando
+                decorarBajarDefensa(obtenerIdRandomEnemigo());
                 break;
             case "healer2":
                 personajeDecorados = decorarHealer2(idExternos);
