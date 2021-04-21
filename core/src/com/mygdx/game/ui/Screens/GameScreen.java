@@ -386,7 +386,6 @@ public class GameScreen implements Screen, InputProcessor {
         btnUp = new ImageButton(styleUp);
         btnUp.setPosition(1124,483);
         btnUp.addListener(new ClickListener() {
-            //TODO validacion Successful move action.
             public void clicked(InputEvent event, float x, float y) {
                move("up");
             }
@@ -511,7 +510,7 @@ public class GameScreen implements Screen, InputProcessor {
         btnAtk.setPosition(939,750);
         btnAtk.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
-                comm.setText("Action activated: ATTACK.");
+                attack();
             }
         });
 
@@ -527,7 +526,8 @@ public class GameScreen implements Screen, InputProcessor {
         btnSpAtk.setPosition(1083,750);
         btnSpAtk.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
-                //todo: validaciones
+                spAttack();
+                //todo: validaciones restarle al rol del turno
                 if(cantDadosSpAtk>0){
                     if(gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado).getAtaqueEspecial().equals("")){
                         comm.setText("SP ATTACK: already used");
@@ -535,17 +535,17 @@ public class GameScreen implements Screen, InputProcessor {
                         if(personajes1.size()>1 && personajes2.size()>1){
                             gestorPersonaje.aplicarAtaqueEspecial(idPersonajeSeleccionado);
                             System.out.println(gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado));
-                            comm.setText("Action activated: SP ATTACK.");
+                            comm.setText("Action activated: SP ATK.");
                             gestorPersonaje.eliminarAtaqueSP(idPersonajeSeleccionado);
                             //System.out.println(gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado).obtenerInformacionPersonaje());
-                            cantDadosSpAtk--; // todo: restarle al rol del turno
+                            cantDadosSpAtk--;
                         } else {
                             //no tendria sentido aplicar un sp attack si solo hay una persona en el juego
-                            comm.setText("there aren't enough units");
+                            comm.setText("There aren't enough units.");
                         }
                     }
                 } else{
-                    comm.setText("there aren't enough SP ATTACK dice");
+                    comm.setText("There aren't enough SP ATK dice.");
                 }
             }
         });
@@ -680,9 +680,9 @@ public class GameScreen implements Screen, InputProcessor {
                     }
 
                     if(!movementDice){
-                        //TODO talvez a futuro implementacion para quitar esto si se usa?
-                        if(actionDie.toString().equals("Ataque")){
+                        if(actionDie.toString().equals("atk")){
                             added=gestorDado.addToChest(4);
+                            extraDadosAtk--;
                         }else{
                             added=gestorDado.addToChest(5);
                         }
@@ -1021,8 +1021,6 @@ public class GameScreen implements Screen, InputProcessor {
         for (PersonajeAbstracto p2 : personajes2) {
             if (p2.getRectangle().contains(temp.x,temp.y)) {
                 idPersonajeSeleccionado = p2.getIdPersonaje();
-                System.out.println(idPersonajeSeleccionado);
-                System.out.println(currentPlayer);
                 PersonajeAbstracto pShow2= gestorProxy.getInfoPersonaje(idPersonajeSeleccionado, currentPlayer);
                 if (pShow2!=null) {
                     currentAtk = pShow2.getAtaque();
@@ -1073,6 +1071,7 @@ public class GameScreen implements Screen, InputProcessor {
         gestorObserver.resetTimer();
         if(currentPlayer.equals("red")){
             startSummoning();
+            //TODO talvez meter movimiento aleatorio
         }
     }
 
@@ -1308,6 +1307,7 @@ public class GameScreen implements Screen, InputProcessor {
             }else{
                 report = "Not enough dice to summon that unit.";
             }
+            comm.setText(report);
             updateChest();
         }else{
 
@@ -1337,7 +1337,7 @@ public class GameScreen implements Screen, InputProcessor {
             lastEnemySummonCell=gestorCelda.getLastEnemySummonCell();
             System.out.println(lastEnemySummonCell);
             comm.setText(report + ". Processing IA...");
-            //TODO revertir a 8
+            //TODO pasar a 8
             float delay=1;
             Timer.schedule(new Timer.Task() {
                 @Override
@@ -1399,6 +1399,82 @@ public class GameScreen implements Screen, InputProcessor {
         }else{
             comm.setText("You do not have a movement die available.");
         }
+    }
+
+    public void attack() {
+        String report;
+        if (currentPlayer.equals("blue")) {
+            if(canAttack()) {
+                report = "Attack successful."; //TODO meter aqui el metodo
+                if (report.equals("Attack successful.")) {
+                    gestorDado.attack();
+                    if(extraDadosAtk!=0) {
+                        if (actionDie.toString().equals("atk")) {
+                            actionDie = diceAtlas.findRegion("movement");
+                            extraDadosAtk--;
+                        }
+                    }
+                    fullChest=false;
+                }
+            }else{
+                report = "Not enough dice to attack.";
+            }
+            updateChest();
+            comm.setText(report);
+        }
+    }
+
+    public void spAttack() {
+        String report;
+        if (currentPlayer.equals("blue")) {
+            if (canSpAttack()) {
+                report = "Sp attack successful."; //TODO meter aqui el metodo
+
+                if (gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado).getAtaqueEspecial().equals("")) {
+                    comm.setText("SP ATTACK: already used");
+                } else {
+                    if (personajes1.size() > 1 && personajes2.size() > 1) {
+                        //TODO no entiendo este metodo. dice que retorna un arrayList pero o veo donde se use. falta un indicador de ataque especial exitoso aqui
+                        gestorPersonaje.aplicarAtaqueEspecial(idPersonajeSeleccionado);
+                        //TODO este print hacia algo?
+                        System.out.println(gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado));
+                        comm.setText("Action activated: SP ATK.");
+                        gestorPersonaje.eliminarAtaqueSP(idPersonajeSeleccionado);
+                        //System.out.println(gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado).obtenerInformacionPersonaje());
+                        cantDadosSpAtk--;
+                    } else {
+                        //no tendria sentido aplicar un sp attack si solo hay una persona en el juego
+                        comm.setText("There aren't enough units.");
+                    }
+                }
+                if (report.equals("Sp attack successful.")) {
+                    if (extraDadosSpAtk != 0) {
+                        gestorDado.spAttack();
+                        if (actionDie.toString().equals("spatk")) {
+                            actionDie = diceAtlas.findRegion("movement");
+                            extraDadosSpAtk--;
+                        }
+                    }
+                    fullChest = false;
+                }
+            } else {
+                report = "Not enough dice for a sp attack.";
+            }
+            updateChest();
+            comm.setText(report);
+        }
+    }
+
+    public boolean canAttack(){
+        return cantDadosAtk+extraDadosAtk > 0;
+    }
+
+    public boolean canSpAttack(){
+        return cantDadosSpAtk+extraDadosSpAtk > 0;
+    }
+
+    public void moveEnemy(int lastEnemySummonCell){
+
     }
 }
 

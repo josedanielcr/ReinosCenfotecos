@@ -177,4 +177,16 @@ public class Cofre {
                 break;
         }
     }
+
+    public void removeAttackDice() {
+        if(dadosAtaque.size()!=0) {
+            dadosAtaque.remove(0);
+        }
+    }
+
+    public void removeSpAttackDice(){
+        if(dadosAtaqueEspecial.size()!=0){
+            dadosAtaqueEspecial.remove(0);
+        }
+    }
 }

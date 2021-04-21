@@ -19,6 +19,7 @@ public class ControllerPersonaje {
     private static int idPersonaje;
     private static int contGeneral=0;
 
+
     //controller real
     public PersonajeAbstracto crearPersonaje(int id, int tipoPersonaje, int tipo, String jugadorActivo, Rectangle boundingBox){
 
