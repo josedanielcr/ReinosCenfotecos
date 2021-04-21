@@ -1322,8 +1322,8 @@ public class GameScreen implements Screen, InputProcessor {
                         count++;
                     }while(!report.equals("Summoning successful.") && count < 10);
                 }
+                enemyIdToMove=gestorPersonaje.getLastEnemySummonId();
                 summonedEnemyUnitsCont++;
-                enemyIdToMove=summonedEnemyUnitsCont;
             }
 
             else {
@@ -1334,16 +1334,15 @@ public class GameScreen implements Screen, InputProcessor {
             comm.setText(report);
             lastEnemySummonCell=gestorCelda.getLastEnemySummonCell();
             comm.setText(report + ". Processing IA...");
-            float delay=1;
+            float delay=10;
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
                     comm.setText("Turn of Player 2 completed.");
-                    moveEnemy();
+//                    moveEnemy();
                     endTurn();
                 }
             },delay);
-
         }
         updateChest();
     }
@@ -1399,10 +1398,10 @@ public class GameScreen implements Screen, InputProcessor {
         }
     }
 
-    public void moveEnemy() {
+    public void moveEnemy() { //problema con celda despues de moverse. faltan pruebas
         String report;
         int move = (int) (Math.random()*2);
-        if(move==1) {
+        if(move!=0) {
             if(summonedEnemyUnitsCont>0) {
                 int rnd = (int) (Math.random() * 2);
                 String enemyDir = "";
@@ -1420,20 +1419,14 @@ public class GameScreen implements Screen, InputProcessor {
                         enemyDir = "right";
                         break;
                 }
+                System.out.println(enemyIdToMove);
                 report = gestorProxy.moveUnit(enemyIdToMove, lastEnemySummonCell, "red", enemyDir);
                 if(report.equals("Successful move action.")){
                     comm.setText(report);
                 }
+
+                System.out.println(report);
             }
-        }
-
-        changeEnemyToMove();
-    }
-
-    public void changeEnemyToMove(){
-        enemyIdToMove++;
-        if(enemyIdToMove>summonedEnemyUnitsCont){
-            enemyIdToMove=1;
         }
     }
 
@@ -1506,15 +1499,13 @@ public class GameScreen implements Screen, InputProcessor {
     }
 
     public void endOfGame() {
-        float delay=6;
+        float delay=4;
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
-                comm.setText("A player's Castle has collapsed!");
-                endTurn();
+                parent.changeScreen(MyGdxGame.ENDGAME);
             }
         },delay);
-        parent.changeScreen(MyGdxGame.ENDGAME);
     }
 }
 
