@@ -228,7 +228,7 @@ public class ControllerCelda {
     public boolean updateCastle(int pAtk, int pIdCastleCell) {
         boolean isDestroyed;
         Celda attackedCastle = getCell(pIdCastleCell);
-        if (attackedCastle.getLifePoints()<=0) {
+        if (attackedCastle.getLifePoints()-pAtk<=0) {
             attackedCastle.setLifePoints(0);
             isDestroyed = true;
             attackedCastle.setObjectCell(attackedCastle.getCellColor().getColor());
@@ -236,7 +236,6 @@ public class ControllerCelda {
         else {
             attackedCastle.setLifePoints(attackedCastle.getLifePoints()-pAtk);
             isDestroyed = false;
-            attackedCastle.setObjectCell(attackedCastle.getCellColor().getColor());
         }
         return isDestroyed;
     }

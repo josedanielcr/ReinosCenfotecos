@@ -233,9 +233,14 @@ public class SummonSystem implements ISummonSystem {
                     }
                     if (pIdJugador.equals("red")) {
                         gPer.retornarPersonajeDecoradorEnemigue(pIdPersonaje).setRectangle(targetCell.getBoundingBox());
-                        targetCell.setIdPersonaje(pIdPersonaje);
-                        gCell.getCell(pIdCelda).setIdPersonaje(0);
-                        report="Successful move action.";
+                        if(gPer!=null) {
+                            targetCell.setIdPersonaje(pIdPersonaje);
+                            gCell.getCell(pIdCelda).setIdPersonaje(0);
+                            report = "Successful move action.";
+                        }else{
+                            report ="";
+                            System.out.println("Unit was destroyed already.");
+                        }
                     }
 
                 }
