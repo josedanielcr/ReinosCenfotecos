@@ -1,6 +1,7 @@
 package com.mygdx.game.bl.estrategiaAtaque.concreta;
 
 import com.mygdx.game.bl.estrategiaAtaque.base.AbstractAttack;
+import com.mygdx.game.bl.personajes.PproductoAbstracto.PersonajeAbstracto;
 
 public class AttackUnit extends AbstractAttack {
     private int atk;
@@ -21,6 +22,20 @@ public class AttackUnit extends AbstractAttack {
     @Override
     public String executeAttack() {
         //Método de ataque de Melissa y JD
-        return null;
+        String msj="";
+        if(atk>def){
+            int nuevaVida = atk - def;
+            if(nuevaVida==0){
+                //TODO: llamar en el gestor a resolverAtaqueDefensa(int idPersonajeAtacado, int nuevaDefensa)
+            }else {
+                //TODO: llamar en el gestor a matarPersonaje(int idPersonajeAtacado)
+            }
+        }
+        if(atk<=def){
+            int nuevaDefensa =def-atk;
+            //TODO: llamar en el gestor a resolverAtaqueVida(int idPersonajeAtacado, int nuevaVida)
+
+        }
+        return msj;
     }
 }
