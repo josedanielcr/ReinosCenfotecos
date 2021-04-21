@@ -137,6 +137,7 @@ public class GameScreen implements Screen, InputProcessor {
     public int currentCell = 0;
     public int lastEnemySummonCell = 0;
     public int summonedEnemyUnitsCont = 0;
+    public int summonedPlayerUnitsCont = 0;
     public int enemyIdToMove = 0;
     public int startingCell1;
     public int startingCell2;
@@ -1298,6 +1299,7 @@ public class GameScreen implements Screen, InputProcessor {
                     }
                     fullChest=false;
                 }
+                summonedPlayerUnitsCont++;
             }else{
                 report = "Not enough dice to summon that unit.";
             }
@@ -1458,19 +1460,12 @@ public class GameScreen implements Screen, InputProcessor {
             }
             updateChest();
             comm.setText(report);
-        }else{
-            int move = (int) (Math.random()*3);
-            if(move==1) {
-                if(summonedEnemyUnitsCont>0){
-                    //TODO JD y meli meter aqui la funcion de ataque
-                }
-            }
         }
     }
 
 
     public void spAttack() {
-        if (currentPlayer.equals("blue")) {
+        if (currentPlayer.equals("blue") && summonedPlayerUnitsCont>=2) {
             String report;
             if (canSpAttack()) {
                 if (gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado).getAtaqueEspecial().equals("")) {
