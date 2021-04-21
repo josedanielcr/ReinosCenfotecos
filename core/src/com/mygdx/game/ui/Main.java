@@ -42,10 +42,12 @@ public class Main {
             System.out.println(controllerPersonaje.retornarPersonajesEnemigos());
         }
         if(opcion == 5){
-            int [] ids = {2,3};
-            int id = 1;
-            controllerPersonaje.aplicarAtaqueEspecial(id);
-            System.out.println(controllerPersonaje.retornarPersonajes());
+
+            int idAtacante = 1;
+            int idAtacado = 2;
+            System.out.println(controllerPersonaje.ataqueRealizado(1,2,"red"));
+            //controllerPersonaje.aplicarAtaqueEspecial(id);
+           // System.out.println(controllerPersonaje.retornarPersonajes());
         }
 
         if(opcion == 7){

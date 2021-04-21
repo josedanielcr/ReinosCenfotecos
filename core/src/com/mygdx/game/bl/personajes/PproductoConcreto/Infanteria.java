@@ -10,7 +10,7 @@ import com.mygdx.game.bl.personajes.componente.Personaje;
 
 public class Infanteria extends Personaje{
 
-    final static TextureAtlas personajeAtlas = new TextureAtlas("personajes/personajes.atlas");
+    //final static TextureAtlas personajeAtlas = new TextureAtlas("personajes/personajes.atlas");
     protected int idPersonaje;
     protected int vida;
     protected int ataque;
@@ -35,10 +35,10 @@ public class Infanteria extends Personaje{
         this.ataqueEspecial = ataqueEspecial;
         this.rango=1;
         if(personajeActivo.equals("blue")){
-            this.tRegion = personajeAtlas.findRegion("infanteriaBlue");
+            //this.tRegion = personajeAtlas.findRegion("infanteriaBlue");
         }
         if(personajeActivo.equals("red")){
-            this.tRegion = personajeAtlas.findRegion("infanteriaRed");
+            //this.tRegion = personajeAtlas.findRegion("infanteriaRed");
         }
         this.duenno = personajeActivo;
     }

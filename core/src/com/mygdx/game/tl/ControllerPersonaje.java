@@ -292,7 +292,12 @@ public class ControllerPersonaje {
             }
         }
     }
+    private void eliminarEnemigue(int idEnemigue){
+        PersonajeAbstracto personajeAbstracto = retornarPersonajeDecoradorEnemigue(idEnemigue);
+        int indexPersonaje = obtenerIndexPersonajeEnemigue(personajeAbstracto);
+        personajesArrEnemigo.remove(indexPersonaje);
 
+    }
 
     private int[] obtenerIdActuales(int idPropietarie){
         int [] id = new int[personajesArr.size()];
@@ -434,6 +439,103 @@ public class ControllerPersonaje {
             }
         }
         return personajeAbstractos;
+    }
+
+    public String ataqueRealizado(int idPersonajeAtacante, int idPersonajeAtacado, String jugadorActivo){//que sirva tanto para blue como para red
+     //todo:aplicar funci[on set en arrayList
+        String msj="";
+
+        if(jugadorActivo.equals("blue")) {
+            PersonajeAbstracto pAtacante= retornarPersonajeDecorador(idPersonajeAtacante);
+            PersonajeAbstracto pAtacado= retornarPersonajeDecoradorEnemigue(idPersonajeAtacado);
+            int poderAtaque=pAtacante.getAtaque();
+
+            int indexAtacado= obtenerIndexPersonajeEnemigue(pAtacado);
+            if (pAtacado.getDefensa() == 0 && pAtacado.getVida() < poderAtaque) {
+                eliminarEnemigue(idPersonajeAtacado);
+                msj = "Personaje muerto";
+            }
+            if (pAtacado.getDefensa() == 0 && pAtacado.getVida() > poderAtaque) {
+                pAtacado.setVida(pAtacado.getVida() - poderAtaque);
+                msj = "vida bajada";
+                personajesArrEnemigo.set(indexAtacado,pAtacado);
+            }
+            if (pAtacado.getDefensa() == 0 && pAtacado.getVida() == poderAtaque) {
+                eliminarEnemigue(idPersonajeAtacado);
+                msj = "personaje muerto";
+            }
+            if (pAtacado.getDefensa() == poderAtaque) {
+                pAtacado.setDefensa(0);
+                msj = "defensa bajada";
+                personajesArrEnemigo.set(indexAtacado,pAtacado);
+            }
+            if (pAtacado.getDefensa() < poderAtaque && pAtacado.getDefensa() > 0) {
+                int restaDefensa = poderAtaque - pAtacado.getDefensa();
+                pAtacado.setDefensa(0);
+                pAtacado.setVida(pAtacado.getVida() - restaDefensa);
+                msj = "personaje atacado";
+                personajesArrEnemigo.set(indexAtacado,pAtacado);
+                if (pAtacado.getVida() <= 0) {
+                    eliminarEnemigue(idPersonajeAtacado);
+                    msj = "personaje muerto";
+                }
+            }
+
+            if (pAtacado.getDefensa() > poderAtaque) {
+                pAtacado.setDefensa(pAtacado.getDefensa() - poderAtaque);
+                msj = "defensa bajada";
+                personajesArrEnemigo.set(indexAtacado,pAtacado);
+            }
+
+            System.out.println(pAtacado.obtenerInformacionPersonaje());
+        }
+        else {
+            PersonajeAbstracto pAtacante= retornarPersonajeDecoradorEnemigue(idPersonajeAtacante);
+            PersonajeAbstracto pAtacado= retornarPersonajeDecorador(idPersonajeAtacado);
+            int poderAtaque=pAtacante.getAtaque();
+            int indexAtacado= obtenerIndexPersonaje(pAtacado);
+            if (pAtacado.getDefensa() == 0 && pAtacado.getVida() < poderAtaque) {
+                eliminarPersonaje(idPersonajeAtacado);
+                msj = "Personaje muerto";
+            }
+            if (pAtacado.getDefensa() == 0 && pAtacado.getVida() > poderAtaque) {
+                pAtacado.setVida(pAtacado.getVida() - poderAtaque);
+                msj = "vida bajada";
+                personajesArr.set(indexAtacado,pAtacado);
+            }
+            if (pAtacado.getDefensa() == 0 && pAtacado.getVida() == poderAtaque) {
+                eliminarPersonaje(idPersonajeAtacado);
+                msj = "personaje muerto";
+            }
+            if (pAtacado.getDefensa() == poderAtaque) {
+                pAtacado.setDefensa(0);
+                msj = "defensa bajada";
+                personajesArr.set(indexAtacado,pAtacado);
+            }
+            if (pAtacado.getDefensa() < poderAtaque && pAtacado.getDefensa() > 0) {
+                int restaDefensa = poderAtaque - pAtacado.getDefensa();
+                pAtacado.setDefensa(0);
+                pAtacado.setVida(pAtacado.getVida() - restaDefensa);
+                msj = "personaje atacado";
+                personajesArr.set(indexAtacado,pAtacado);
+                if (pAtacado.getVida() <= 0) {
+                    eliminarPersonaje(idPersonajeAtacado);
+                    msj = "personaje muerto";
+                }
+            }
+            if (pAtacado.getDefensa() > poderAtaque) {
+                pAtacado.setDefensa(pAtacado.getDefensa() - poderAtaque);
+                msj = "defensa bajada";
+                personajesArr.set(indexAtacado,pAtacado);
+            }
+
+
+
+            System.out.println(pAtacado.obtenerInformacionPersonaje());
+        }
+
+
+        return msj;
     }
 
     public ArrayList<PersonajeAbstracto> getArrayPersonajes() {
