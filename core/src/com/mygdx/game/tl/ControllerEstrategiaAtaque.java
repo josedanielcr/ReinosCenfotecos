@@ -35,7 +35,7 @@ public class ControllerEstrategiaAtaque {
                     report = atk.getStrategy().executeAttack();
                 }
                 else {
-                    report = "There is not an enemy unit within the range of attack.";
+                    report = "There is not an enemy unit inside the range of attack.";
                 }
             }
         }
@@ -55,7 +55,7 @@ public class ControllerEstrategiaAtaque {
                     report = atk.getStrategy().executeAttack();
                 }
                 else {
-                    report = "There is not an enemy unit within the range of attack.";
+                    report = "There is not an enemy unit inside the range of attack.";
                 }
             }
         }

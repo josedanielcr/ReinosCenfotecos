@@ -19,6 +19,7 @@ public class ControllerPersonaje {
     private static int idPersonaje;
     private static int contGeneral=0;
 
+
     //controller real
     public PersonajeAbstracto crearPersonaje(int id, int tipoPersonaje, int tipo, String jugadorActivo, Rectangle boundingBox){
 
@@ -103,6 +104,8 @@ public class ControllerPersonaje {
     //decorador principal
     public ArrayList<PersonajeAbstracto> aplicarAtaqueEspecial(int idPropietarie){
         int [] idExternos = obtenerIdActuales(idPropietarie);
+
+
         String ataque = retornarAtaqueEpropietarie(idPropietarie);
         ArrayList<PersonajeAbstracto> personajeDecorados = new ArrayList<>();
         switch (ataque) {
@@ -117,7 +120,7 @@ public class ControllerPersonaje {
                 break;
                 //este es el 5 casillas de distancia
             case "bajarDefensa":
-                personajeDecorados.add(decorarBajarDefensa(obtenerIdRandom(idPropietarie)));
+                decorarBajarDefensa(obtenerIdRandomEnemigo());//no esta funcionando
                 break;
             case "healer2":
                 personajeDecorados = decorarHealer2(idExternos);
@@ -142,7 +145,7 @@ public class ControllerPersonaje {
                 break;
             //este es el 5 casillas de distancia
             case "bajar2Defensa":
-                personajeDecorados.add(decorarBajar2Defensa(obtenerIdRandom(idPropietarie)));
+                decorarBajar2Defensa(obtenerIdRandomEnemigo());
                 break;
         }
         return personajeDecorados;
@@ -174,10 +177,10 @@ public class ControllerPersonaje {
     }
 
     private PersonajeAbstracto decorarBajarDefensa(int idExterno) {
-        PersonajeAbstracto personajeAbstracto = retornarPersonajeDecorador(idExterno);
-        int indexPersonaje = obtenerIndexPersonaje(personajeAbstracto);
+        PersonajeAbstracto personajeAbstracto = retornarPersonajeDecoradorEnemigue(idExterno);
+        int indexPersonaje = obtenerIndexPersonajeEnemigue(personajeAbstracto);
         personajeAbstracto= new InfanteriaBajarDefensa((Personaje) personajeAbstracto);
-        personajesArr.set(indexPersonaje,personajeAbstracto);
+        personajesArrEnemigo.set(indexPersonaje,personajeAbstracto);
         return personajeAbstracto;
     }
 
@@ -217,7 +220,7 @@ public class ControllerPersonaje {
         PersonajeAbstracto personajeAbstracto = retornarPersonajeDecoradorEnemigue(idExterno);
         int indexPersonaje = obtenerIndexPersonaje(personajeAbstracto);
         personajeAbstracto= new ArtilleriaBajarDefensa((Personaje) personajeAbstracto);
-        personajesArr.set(indexPersonaje,personajeAbstracto);
+        personajesArrEnemigo.set(indexPersonaje,personajeAbstracto);
         return personajeAbstracto;
     }
 
@@ -307,6 +310,8 @@ public class ControllerPersonaje {
         return id;
     }
 
+
+
     public int obtenerIndexPersonaje(PersonajeAbstracto p){
         for(int i = 0; i<personajesArr.size(); i++){
             if(personajesArr.get(i) == p){
@@ -336,6 +341,19 @@ public class ControllerPersonaje {
                 return id;
             }
         }
+        return 0;
+    }
+    public int obtenerIdRandomEnemigo(){
+        int random=ThreadLocalRandom.current().nextInt(1,personajesArrEnemigo.size()+1);
+        for (PersonajeAbstracto personajeAbstracto : personajesArrEnemigo) {
+            int id = personajeAbstracto.getIdPersonaje();
+            if (id == random) {
+                System.out.println(id);
+                return id;
+
+            }
+        }
+
         return 0;
     }
 
