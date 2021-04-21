@@ -127,4 +127,9 @@ public class InfanteriaSumar3Defensa extends ObjetoDecorado{//PUEDE DARLE 3 PUNT
     public void draw(Batch batch) {
         cPersonaje.draw(batch);
     }
+
+    @Override
+    public void setAtaqueEspecial(String ataque) {
+        this.cPersonaje.setAtaqueEspecial(ataque);
+    }
 }

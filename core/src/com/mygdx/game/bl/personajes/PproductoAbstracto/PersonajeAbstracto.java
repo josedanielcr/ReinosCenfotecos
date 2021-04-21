@@ -8,6 +8,7 @@ public interface PersonajeAbstracto  {
      String obtenerInformacionPersonaje();
      int getIdPersonaje();
      String getAtaqueEspecial();
+     void setAtaqueEspecial(String ataque);
      int getVida();
      void setVida(int vida);
      int getAtaque();

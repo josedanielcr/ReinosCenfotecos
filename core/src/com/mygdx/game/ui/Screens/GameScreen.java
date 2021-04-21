@@ -148,11 +148,18 @@ public class GameScreen implements Screen, InputProcessor {
     private int currentSummonType=1;
     boolean firstTurnPlayer2Summon = true;
 
+    //Variables de dados
     int cantDadosArtilleria = 0;
     int cantDadosInfanteria = 0;
     int cantDadosTanque = 0;
     int cantDadosAtk = 0;
     int cantDadosSpAtk = 0;
+
+    int extraDadosArtilleria=0;
+    int extraDadosInfanteria=0;
+    int extraDadosTanque=0;
+    int extraDadosAtk=0;
+    int extraDadosSpAtk=0;
 
     int currentAtk = 0;
     int currentDef = 0;
@@ -372,8 +379,9 @@ public class GameScreen implements Screen, InputProcessor {
         styleUp.up = padUpUp;
         styleUp.down = padUpDown;
         btnUp = new ImageButton(styleUp);
-        btnUp.setPosition(1124,483);
+        btnUp.setPosition(1124,481);
         btnUp.addListener(new ClickListener() {
+            //TODO validacion Successful move action.
             public void clicked(InputEvent event, float x, float y){
                 String report = gestorProxy.moveUnit(idPersonajeSeleccionado, currentCell, currentPlayer,"up");
                 if (report!=null) {
@@ -492,7 +500,7 @@ public class GameScreen implements Screen, InputProcessor {
                     gestorDado.rodarDado();
                     rolled=true;
                 }else{
-                    comm.setText("Solo puede tirar los dados 1 vez por turno.");
+                    comm.setText("You can only roll the dice once per turn.");
                 }
             }
         });
@@ -526,7 +534,26 @@ public class GameScreen implements Screen, InputProcessor {
         btnSpAtk.setPosition(1083,750);
         btnSpAtk.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
-                comm.setText("Action activated: SP ATTACK.");
+                //todo: validaciones
+                if(cantDadosSpAtk>0){
+                    if(gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado).getAtaqueEspecial().equals("")){
+                        comm.setText("SP ATTACK: already used");
+                    } else{
+                        if(personajes1.size()>1 && personajes2.size()>1){
+                            gestorPersonaje.aplicarAtaqueEspecial(idPersonajeSeleccionado);
+                            System.out.println(gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado));
+                            comm.setText("Action activated: SP ATTACK.");
+                            gestorPersonaje.eliminarAtaqueSP(idPersonajeSeleccionado);
+                            //System.out.println(gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado).obtenerInformacionPersonaje());
+                            cantDadosSpAtk--; // todo: restarle al rol del turno
+                        } else {
+                            //no tendria sentido aplicar un sp attack si solo hay una persona en el juego
+                            comm.setText("there aren't enough units");
+                        }
+                    }
+                } else{
+                    comm.setText("there aren't enough SP ATTACK dice");
+                }
             }
         });
 
@@ -545,6 +572,11 @@ public class GameScreen implements Screen, InputProcessor {
             public void clicked(InputEvent event, float x, float y){
                 comm.setText("");
                 addedToChest=false;
+                extraDadosArtilleria=0;
+                extraDadosInfanteria=0;
+                extraDadosTanque=0;
+                extraDadosAtk=0;
+                extraDadosSpAtk=0;
                 endTurn();
             }
         });
@@ -577,31 +609,108 @@ public class GameScreen implements Screen, InputProcessor {
         btnAddChest = new ImageButton(styleAdd);
         btnAddChest.setPosition(929,122);
         btnAddChest.addListener(new ClickListener() {
+            boolean added;
             public void clicked(InputEvent event, float x, float y){
+                int cont;
                 if(currentPlayer.equals("blue") && !addedToChest) {
-                    if(gestorDado.addToChest(1)) {
-                        summonDie = diceAtlas.findRegion("summon");
-                        summonDie2 = diceAtlas.findRegion("summon");
-                        if (notMovement) {
-                            actionDie = diceAtlas.findRegion("movement");
+                    if(extraDadosInfanteria>0) {
+                        cont=0;
+                        for (int i = 0; i < extraDadosInfanteria; i++) {
+                            added = gestorDado.addToChest(1);
+                            if (added) {
+                                cont++;
+                            } else {
+                                comm.setText("Error: Chest is full. At least 1 die was not saved.");
+                                addedToChest=false;
+                            }
                         }
-                        if(!fullChest) {
-                            comm.setText("Dados almacenados en el cofre.");
-                        }else{
-                            comm.setText("Error: Cofre lleno. Al menos 1 dado no se pudo guardar.");
+
+                        for (int i = 0; i < cont; i++) {
+                            if (summonDie.toString().equals("infanteria")) {
+                                summonDie = diceAtlas.findRegion("summon");
+                                extraDadosInfanteria--;
+                            } else if (summonDie2.toString().equals("infanteria")) {
+                                summonDie2 = diceAtlas.findRegion("summon");
+                                extraDadosInfanteria--;
+                            }
                         }
                         addedToChest=true;
-                    }else{
-                        comm.setText("No hay dados que almacenar.");
-                        addedToChest=false;
                     }
+
+                    if(extraDadosArtilleria>0) {
+                        cont=0;
+                        for (int i = 0; i < extraDadosArtilleria; i++) {
+                            added = gestorDado.addToChest(2);
+                            if (added) {
+                                cont++;
+                            } else {
+                                comm.setText("Error: Chest is full. At least 1 die was not saved.");
+                                addedToChest=false;
+                            }
+                        }
+
+                        for (int i = 0; i < cont; i++) {
+                            if (summonDie.toString().equals("artilleria")) {
+                                summonDie = diceAtlas.findRegion("summon");
+                                extraDadosArtilleria--;
+                            } else if (summonDie2.toString().equals("artilleria")) {
+                                summonDie2 = diceAtlas.findRegion("summon");
+                                extraDadosArtilleria--;
+                            }
+                        }
+                        addedToChest=true;
+                    }
+
+                    if(extraDadosTanque>0) {
+                        cont=0;
+                        for (int i = 0; i < extraDadosTanque; i++) {
+                            added = gestorDado.addToChest(3);
+                            if (added) {
+                                cont++;
+                            } else {
+                                comm.setText("Error: Chest is full. At least 1 die was not saved.");
+                                addedToChest=false;
+                            }
+                        }
+
+                        for (int i = 0; i < cont; i++) {
+                            if (summonDie.toString().equals("tanque")) {
+                                summonDie = diceAtlas.findRegion("summon");
+                                extraDadosTanque--;
+                            } else if (summonDie2.toString().equals("tanque")) {
+                                summonDie2 = diceAtlas.findRegion("summon");
+                                extraDadosTanque--;
+                            }
+                        }
+                        addedToChest=true;
+                    }
+
+                    if(notMovement){
+                        //TODO talvez a futuro implementacion para quitar esto si se usa?
+                        if(actionDie.toString().equals("Ataque")){
+                            added=gestorDado.addToChest(4);
+                        }else{
+                            added=gestorDado.addToChest(5);
+                        }
+                        if(added){
+                            actionDie = diceAtlas.findRegion("movement");
+                        }
+                    }
+
+                    if(!fullChest){
+                        comm.setText("Dice saved to chest successfully.");
+                    }
+
+                    if(!addedToChest){
+                        comm.setText("There are no dice to save.");
+                    }
+
                 }else{
                     if(!fullChest) {
-                        comm.setText("Solo se pueden guardar dados 1 vez por turno.");
+                        comm.setText("You've already put your dice in the chest this turn.");
                     }
                 }
-            }
-        });
+            }});
 
         //Inicializar patrones
 
@@ -968,7 +1077,6 @@ public class GameScreen implements Screen, InputProcessor {
     public void endTurn() {
         changeTurn();
         gestorObserver.resetTimer();
-        rolled=false;
         if(currentPlayer.equals("red")){
             startSummoning();
         }
@@ -985,10 +1093,9 @@ public class GameScreen implements Screen, InputProcessor {
 
         if (currentPlayer.equals("blue") ) {
             lTurnPlayer.setText("Player 1");
-        }else if (currentPlayer.equals("red") ) {
+        }else{
             lTurnPlayer.setText("Player 2");
         }
-
     }
 
     public void updateClock(int value){
@@ -1049,30 +1156,77 @@ public class GameScreen implements Screen, InputProcessor {
         cantDadosSpAtk=dice[4];
     }
 
+    public void setRolledDice(String proll1, String proll2, String proll3) {
+        switch (proll1) {
+            case "Infanteria":
+                extraDadosInfanteria++;
+                break;
+            case "Artilleria":
+                extraDadosArtilleria++;
+                break;
+            case "Tanque":
+                extraDadosTanque++;
+                break;
+        }
+
+        switch (proll2) {
+            case "Infanteria":
+                extraDadosInfanteria++;
+                break;
+            case "Artilleria":
+                extraDadosArtilleria++;
+                break;
+            case "Tanque":
+                extraDadosTanque++;
+                break;
+        }
+        if(proll3!=null) {
+            if (proll3.equals("Ataque")) {
+                extraDadosAtk++;
+            } else {
+                extraDadosSpAtk++;
+            }
+        }
+    }
+
     public String renderSpecialAttack(String type) {
         String renderType;
         switch (type) {
             case "healer1":
+                renderType = "H1";
+                break;
             case "healer2":
+                renderType = "H2";
+                break;
             case "unaVidaDobleM":
-                renderType = "+H";
+                renderType = "+M";
                 break;
             case "sumar3Ataque":
             case "doblePoderAtaque":
             case "ataqueDosCasillas":
                 renderType = "+A";
                 break;
+            case "ataqueDosCasillas": //significa que tiene mas rango
+                renderType = "+R";
+                break;
             case "sumar3Defensa":
+                renderType = "3D";
+                break;
             case "doblePoderDefensa":
+                renderType = "2D";
+                break;
             case "proteccionAliade":
-                renderType = "+D";
+                renderType = "PA";
                 break;
             case "bajarDefensa":
             case "bajar2Defensa":
                 renderType = "-D";
                 break;
+            case "ataqueBomba":
+                renderType="AB";
+                break;
             default:
-                renderType = "S";
+                renderType = "";
                 break;
         }
         return renderType;
@@ -1082,19 +1236,19 @@ public class GameScreen implements Screen, InputProcessor {
         fullChest=true;
     }
 
-    public boolean canSummon(int ptipo){ //TODO que cuente los dados del cofre y del rol
-        //TODO aqui en algun lado no puedo meter mas de 1 dado de ataque
+    public boolean canSummon(int ptipo){
+
         boolean canSummon=false;
         if(ptipo==1){
-            if(cantDadosInfanteria>=2){
+            if(cantDadosInfanteria+extraDadosInfanteria>=2){
                 canSummon=true;
             }
         }else if(ptipo==2){
-            if(cantDadosArtilleria>=3){
+            if(cantDadosArtilleria+extraDadosArtilleria>=3){
                 canSummon=true;
             }
         }else{
-            if(cantDadosTanque>=4){
+            if(cantDadosTanque+extraDadosTanque>=4){
                 canSummon=true;
             }
         }
@@ -1112,12 +1266,58 @@ public class GameScreen implements Screen, InputProcessor {
                     report = gestorProxy.startSummon(currentCell, currentPattern, currentPlayer, currentSummonType);
                 }
                 if (report.equals("Summoning successful.")) {
+                    fullChest=false;
                     gestorDado.summon(currentSummonType);
-                    updateChest();
+                    switch (currentSummonType) {
+                        case 1:
+                            if(extraDadosInfanteria!=0) {
+                                int tam = extraDadosInfanteria;
+                                for (int i = 0; i < tam; i++) {
+                                    if (summonDie.toString().equals("infanteria")) {
+                                        summonDie = diceAtlas.findRegion("summon");
+                                        extraDadosInfanteria--;
+                                    } else if (summonDie2.toString().equals("infanteria")) {
+                                        summonDie2 = diceAtlas.findRegion("summon");
+                                        extraDadosInfanteria--;
+                                    }
+                                }
+                            }
+                            break;
+                        case 2:
+                            if(extraDadosArtilleria!=0){
+                                int tam = extraDadosArtilleria;
+                                for(int i=0; i<tam;i++){
+                                    if (summonDie.toString().equals("artilleria")) {
+                                        summonDie = diceAtlas.findRegion("summon");
+                                        extraDadosArtilleria--;
+                                    } else if (summonDie2.toString().equals("artilleria")) {
+                                        summonDie2 = diceAtlas.findRegion("summon");
+                                        extraDadosArtilleria--;
+                                    }
+                                }
+                            }
+                            break;
+                        case 3:
+                            if(extraDadosTanque!=0){
+                                int tam = extraDadosTanque;
+                                for(int i=0; i<tam;i++){
+                                    if (summonDie.toString().equals("tanque")) {
+                                        summonDie = diceAtlas.findRegion("summon");
+                                        extraDadosTanque--;
+                                    } else if (summonDie2.toString().equals("tanque")) {
+                                        summonDie2 = diceAtlas.findRegion("summon");
+                                        extraDadosTanque--;
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                    fullChest=false;
                 }
             }else{
                 report = "Not enough dice to summon that unit.";
             }
+            updateChest();
         }else{
 
             Random rd = new Random();
@@ -1155,6 +1355,7 @@ public class GameScreen implements Screen, InputProcessor {
                 }
             },delay);
         }
+        updateChest();
     }
 
     public String getRandomPattern(){
@@ -1182,6 +1383,7 @@ public class GameScreen implements Screen, InputProcessor {
         }
         return prefa;
     }
+
 }
 
 

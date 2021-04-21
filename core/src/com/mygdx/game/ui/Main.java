@@ -44,7 +44,7 @@ public class Main {
         if(opcion == 5){
             int [] ids = {2,3};
             int id = 1;
-            controllerPersonaje.aplicarAtaqueEspecial(id,ids);
+            controllerPersonaje.aplicarAtaqueEspecial(id);
             System.out.println(controllerPersonaje.retornarPersonajes());
         }
 

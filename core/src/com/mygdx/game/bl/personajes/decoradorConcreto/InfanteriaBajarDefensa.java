@@ -126,4 +126,9 @@ public class InfanteriaBajarDefensa extends ObjetoDecorado{//le baja en 1 la def
     public void draw(Batch batch) {
         cPersonaje.draw(batch);
     }
+
+    @Override
+    public void setAtaqueEspecial(String ataque) {
+        this.cPersonaje.setAtaqueEspecial(ataque);
+    }
 }

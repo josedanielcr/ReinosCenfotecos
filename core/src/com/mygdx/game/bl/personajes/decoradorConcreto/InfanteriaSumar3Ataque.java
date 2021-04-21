@@ -129,4 +129,9 @@ public class InfanteriaSumar3Ataque extends ObjetoDecorado{
         cPersonaje.draw(batch);
     }
 
+    @Override
+    public void setAtaqueEspecial(String ataque) {
+        this.cPersonaje.setAtaqueEspecial(ataque);
+    }
+
 }
