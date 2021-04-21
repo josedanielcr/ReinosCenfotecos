@@ -3,6 +3,8 @@ package com.mygdx.game.ui.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -14,10 +16,15 @@ import com.mygdx.game.ui.MyGdxGame;
 
 public class MenuScreen implements Screen {
     private MyGdxGame parent;
+    private final SpriteBatch batchMain;
+    Texture backgroundMain;
     Stage stage = new Stage(new ScreenViewport());
 
     public MenuScreen(MyGdxGame myGame) {
         parent = myGame;
+
+        backgroundMain = new Texture("backgrounds/mainbg.png");
+        batchMain = new SpriteBatch();
 
         Gdx.input.setInputProcessor(stage);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
@@ -80,6 +87,9 @@ public class MenuScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //le dice al stage que ejecute acciones y que se autodibuje
+        batchMain.begin();
+        batchMain.draw(backgroundMain, 0,0);
+        batchMain.end();
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
