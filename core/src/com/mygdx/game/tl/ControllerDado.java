@@ -140,4 +140,5 @@ public class ControllerDado {
     public Cofre getCofreJugador(){
         return cofreJugador;
     }
+
 }
