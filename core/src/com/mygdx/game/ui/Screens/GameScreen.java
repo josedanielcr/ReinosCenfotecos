@@ -30,7 +30,6 @@ import com.mygdx.game.ui.MyGdxGame;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 
 public class GameScreen implements Screen, InputProcessor {
@@ -137,6 +136,9 @@ public class GameScreen implements Screen, InputProcessor {
     private static int time = 0;
     public int currentCell = 0;
     public int lastEnemySummonCell = 0;
+    public int summonedEnemyUnitsCont = 0;
+    public int summonedPlayerUnitsCont = 0;
+    public int enemyIdToMove = 0;
     public int startingCell1;
     public int startingCell2;
     public int firstPlayer1Cell;
@@ -1058,7 +1060,6 @@ public class GameScreen implements Screen, InputProcessor {
         gestorObserver.resetTimer();
         if(currentPlayer.equals("red")){
             startSummoning();
-            //TODO talvez meter movimiento aleatorio
         }
     }
 
@@ -1083,7 +1084,6 @@ public class GameScreen implements Screen, InputProcessor {
     }
 
     public void renderDice(String rollInvo, String rollInvo2, String rollAccion){
-        System.out.println("Action die: "+rollAccion);
         switch (rollInvo) {
             case "Infanteria":
                 summonDie = diceAtlas.findRegion("infanteria");
@@ -1299,6 +1299,7 @@ public class GameScreen implements Screen, InputProcessor {
                     }
                     fullChest=false;
                 }
+                summonedPlayerUnitsCont++;
             }else{
                 report = "Not enough dice to summon that unit.";
             }
@@ -1321,6 +1322,8 @@ public class GameScreen implements Screen, InputProcessor {
                         count++;
                     }while(!report.equals("Summoning successful.") && count < 10);
                 }
+                summonedEnemyUnitsCont++;
+                enemyIdToMove=summonedEnemyUnitsCont;
             }
 
             else {
@@ -1330,16 +1333,17 @@ public class GameScreen implements Screen, InputProcessor {
 
             comm.setText(report);
             lastEnemySummonCell=gestorCelda.getLastEnemySummonCell();
-            System.out.println(lastEnemySummonCell);
             comm.setText(report + ". Processing IA...");
             float delay=1;
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
                     comm.setText("Turn of Player 2 completed.");
+                    moveEnemy();
                     endTurn();
                 }
             },delay);
+
         }
         updateChest();
     }
@@ -1395,6 +1399,44 @@ public class GameScreen implements Screen, InputProcessor {
         }
     }
 
+    public void moveEnemy() {
+        String report;
+        int move = (int) (Math.random()*2);
+        if(move==1) {
+            if(summonedEnemyUnitsCont>0) {
+                int rnd = (int) (Math.random() * 2);
+                String enemyDir = "";
+                switch (rnd) {
+                    case 1:
+                        enemyDir = "up";
+                        break;
+                    case 2:
+                        enemyDir = "down";
+                        break;
+                    case 3:
+                        enemyDir = "left";
+                        break;
+                    case 4:
+                        enemyDir = "right";
+                        break;
+                }
+                report = gestorProxy.moveUnit(enemyIdToMove, lastEnemySummonCell, "red", enemyDir);
+                if(report.equals("Successful move action.")){
+                    comm.setText(report);
+                }
+            }
+        }
+
+        changeEnemyToMove();
+    }
+
+    public void changeEnemyToMove(){
+        enemyIdToMove++;
+        if(enemyIdToMove>summonedEnemyUnitsCont){
+            enemyIdToMove=1;
+        }
+    }
+
     public void attack() {
         String report;
         if (currentPlayer.equals("blue")) {
@@ -1421,8 +1463,9 @@ public class GameScreen implements Screen, InputProcessor {
         }
     }
 
+
     public void spAttack() {
-        if (currentPlayer.equals("blue")) {
+        if (currentPlayer.equals("blue") && summonedPlayerUnitsCont>=2) {
             String report;
             if (canSpAttack()) {
                 if (gestorPersonaje.retornarPersonajeDecorador(idPersonajeSeleccionado).getAtaqueEspecial().equals("")) {
@@ -1460,10 +1503,6 @@ public class GameScreen implements Screen, InputProcessor {
 
     public boolean canSpAttack(){
         return cantDadosSpAtk+extraDadosSpAtk > 0;
-    }
-
-    public void moveEnemy(int lastEnemySummonCell){
-
     }
 
     public void endOfGame() {
