@@ -248,7 +248,7 @@ public class SummonSystem implements ISummonSystem {
     }
 
     public int getNextMoveValue(String pMov) {
-        int nextMoveValue = 0;
+        int nextMoveValue;
         switch (pMov) {
             case "up":
                 nextMoveValue = 20;

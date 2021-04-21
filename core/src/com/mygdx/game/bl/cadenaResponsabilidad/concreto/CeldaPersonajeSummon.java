@@ -28,6 +28,7 @@ public class CeldaPersonajeSummon extends HandlerSummon {
             if (pTask.getColorJugador().equals("red")) {
                 gPer.crearPersonajeEnemigo(id, summonArea);
                 gCell.getCell(pTask.getCellsPattern().get(random).getId()).setIdPersonaje(id);
+                gPer.setLastEnemySummonId(id);
             }
 
             resultado = true;
@@ -41,10 +42,11 @@ public class CeldaPersonajeSummon extends HandlerSummon {
         return resultado;
     }
 
-    public int getRandomCell() {
+    private int getRandomCell() {
         Random rand = new Random();
         return rand.nextInt(5);
     }
+
 
 
 }
